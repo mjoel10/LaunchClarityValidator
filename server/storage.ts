@@ -72,7 +72,7 @@ export class DatabaseStorage implements IStorage {
   async createSprint(insertSprint: InsertSprint): Promise<Sprint> {
     const [sprint] = await db
       .insert(sprints)
-      .values(insertSprint)
+      .values([insertSprint])
       .returning();
     return sprint;
   }
@@ -117,7 +117,7 @@ export class DatabaseStorage implements IStorage {
   async createIntakeData(insertIntakeData: InsertIntakeData): Promise<IntakeData> {
     const [data] = await db
       .insert(intakeData)
-      .values(insertIntakeData)
+      .values([insertIntakeData])
       .returning();
     return data;
   }
