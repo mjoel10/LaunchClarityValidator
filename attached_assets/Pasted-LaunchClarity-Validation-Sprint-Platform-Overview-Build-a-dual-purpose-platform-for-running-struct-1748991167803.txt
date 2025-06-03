@@ -1,0 +1,302 @@
+LaunchClarity - Validation Sprint Platform
+Overview
+Build a dual-purpose platform for running structured validation sprints. The app serves consultants running sprints for clients AND allows clients to view progress and eventually self-serve. This is a FRESH BUILD, not an update to existing code.
+Business Context
+Three sprint tiers: Discovery ($5k/1 week), Feasibility ($15k/2 weeks), Validation ($35k/4 weeks)
+Each tier is additive - Feasibility includes all Discovery features, Validation includes everything
+Consultant-operated initially, but clients get portal access
+Post-sprint converts to $2k/month SaaS subscription
+Must support multiple concurrent sprints
+OpenAI API usage is expected to be significant ($50-100 per sprint for premium analysis quality)
+Validation interviews are fully outsourced via research partners (~$4-6k cost)
+Technical Requirements
+Use Replit's native PostgreSQL (not Firebase)
+Implement proper user roles (admin/consultant vs client)
+Mobile-responsive design (many clients will check on phones)
+Real-time updates when consultants add data
+Stripe payment integration
+OpenAI API for all AI-powered analysis
+User Interviews API integration for Feasibility sprint recruiting
+Respondent.io API integration for Validation sprint interview management
+Core User Flows
+1. Client Onboarding (Most Critical)
+Create a comprehensive intake form that collects necessary client information. To support structured AI analysis and reduce garbage-in/garbage-out risks, the intake form should use structured fields wherever possible. Free-text is reserved for critical GPT-required context.
+Break intake into 5 sections:
+Business Overview
+Company name
+Contact info
+Business model: dropdown (B2B, B2C, B2B2C, B2G, Marketplace)
+Product type: dropdown (SaaS, Service, Physical, Marketplace, App)
+Current stage: dropdown (Idea, Pre-launch, MVP, Revenue < $100K, Revenue > $100K)
+Industry: dropdown
+Geographic markets: multi-select
+Operational Complexity
+Sales complexity: dropdown (Low/Med/High)
+Sales motion: dropdown (Self-serve, Inside, Field, Hybrid)
+Delivery complexity: dropdown (Low/Med/High)
+Primary delivery model: dropdown (Digital, Physical, Service-heavy, Hybrid)
+Customer + Value Prop
+Target customer description: rich text
+Core problem being solved: rich text
+Value proposition: rich text
+Estimated price point: numeric text + currency
+Competitive Landscape
+Top 3 competitors: list (name + differentiator)
+Unique advantage: short text
+Validation Intent
+Top 3 assumptions to validate: free text
+Primary validation goals: multi-select (Problem Fit, Solution Fit, Pricing, Channel, Model)
+#1 critical question: free text
+Has this been tested before? (yes/no + optional description)
+Do you have an audience to test with? (yes/no)
+All data saved under sprint_data.module_name = "intake" for downstream AI use.
+1B. Optional Mode: Partnership Evaluation Sprints
+In addition to product/service validation, LaunchClarity must support a "Partnership Evaluation" mode to test strategic collaborations (e.g. HoneyBook × Xero). This can be toggled during sprint setup.
+Changes for Partnership Mode:
+Additional Intake Fields
+Evaluated partner: free text
+Partner type: dropdown (Platform, Reseller, Tech Integration, Co-Marketing, Other)
+Relationship status: dropdown (None, Early convo, Signed LOI, Beta)
+Integration type: dropdown (API, White-label, Co-built, Bundled Offer)
+Primary goal of partnership: dropdown (New Revenue, Churn Reduction, Market Entry, Strategic Leverage)
+Key risks or uncertainties: text
+AI Module Adjustments
+Market Simulation: prompt GPT to generate synthetic feedback from mutual customers
+Risk Assessment: includes dimensions like brand risk, integration failure, or channel conflict
+Go/Pivot/Kill engine: assesses partner fit across strategic, technical, and market criteria
+2. Consultant Dashboard
+See all active sprints in simple list view
+Quick-add data to any module
+Switch between sprints easily with dropdown
+View client dashboards directly
+3. Client Portal
+See their sprint progress (progress bar, timeline)
+View completed modules as interactive dashboards
+Add comments/feedback
+Download PDFs
+Get notifications of updates
+Feature Requirements by Sprint Tier
+Discovery Sprint (Desk Research Only)
+All features use AI to analyze the onboarding data:
+AI Market Simulation (Agent-based insights)
+Generate 100+ synthetic customer responses using calibrated prompts
+Simulate diverse personas including skeptics, early adopters, and critics
+Test assumptions without human interviews
+Present as "LaunchClarity Market Simulation" (not "OpenAI" or "GPT")
+Engineered to surface realistic objections and concerns
+Assumption Tracker
+List assumptions with risk scores
+AI analyzes risk level and suggests validation approaches
+Categorize by type (market/technical/operational)
+Competitive Intelligence
+Input competitor information
+AI analyzes positioning gaps
+Feature comparison matrix
+Pricing analysis
+Generate competitive battlecards
+Market Sizing (TAM/SAM/SOM)
+Use industry/geography from onboarding
+AI estimates market size with growth rates
+Visual market opportunity maps
+Penetration scenarios
+Risk Assessment
+5 dimensions: Technical/Market/Competitive/Execution/Financial
+AI generates mitigation strategies
+Risk matrix visualization
+Go/Defer Decision
+AI synthesizes all Discovery data
+Binary recommendation with rationale
+Resource requirements estimate
+Feasibility Sprint (Adds Light Validation)
+Includes ALL Discovery features plus:
+Async Interview Module
+GPT generates interview questions
+Integrated panel recruiting via User Interviews API (5-7 participants included)
+Automated participant screening and scheduling
+Async conducting of the interviews
+Log interview responses in platform
+Sentiment analysis and pattern extraction
+ICP refinement suggestions
+Single Demand Test (that the client does)
+Log results from one test (email/LinkedIn/ads)
+Basic conversion tracking
+Channel viability scoring
+Business Model Simulator
+Pricing scenarios
+Unit economics (CAC/LTV/margins)
+Break-even analysis
+Revenue projections
+Channel Recommender
+GPT suggests top 3 channels to test
+Expected CAC ranges
+30-day experiment plans
+Go/Pivot/Defer Decision
+Three-way decision framework
+Operational viability focus
+Validation Sprint (Full Feature Set)
+Includes ALL Discovery and Feasibility features plus:
+Full Interview Suite
+GPT-generated custom discussion guides based on validation goals
+Detailed interview scripts with follow-up prompts
+15 professionally conducted interviews via Respondent.io integration
+Automated recruiting, scheduling, and interview management
+Full-service research partner handles all logistics
+Transcript processing and import
+Quote extraction
+Cross-interview pattern synthesis
+Deep insights from real customer conversations and aggregated insights
+Multi-Channel Testing (client does with provided templates and tools and recommendations)
+Track 2-3 concurrent tests
+Channel comparison dashboard
+Full attribution and CAC analysis
+Enhanced Market Intelligence
+Market dynamics analysis
+Regulatory/compliance factors
+Seasonal patterns
+Technology shifts impact
+Strategic Analysis Tools
+Dynamic SWOT that updates with data & OpenAI analysis
+Blue ocean opportunity identification
+Full positioning strategy
+Complete Go/Pivot/Kill Engine
+Comprehensive decision framework
+Implementation roadmap
+Next steps generator
+90-day action plan
+Key UI/UX Requirements
+Navigation Structure
+Top nav: Sprint selector (dropdown) | User menu
+Side nav: Calibrate → Interviews → Tests → Decide → Analyze
+Each section shows locked/unlocked features based on tier
+Global sprint health dashboard always accessible
+Design Patterns
+Card-based layouts for all modules
+Interactive charts (not just static)
+Mobile-first responsive design
+Real-time save (no save buttons)
+Export to PDF button on every module
+Client vs Consultant Views
+Consultants see quick-entry forms
+Clients see polished dashboards
+Same data, different presentations
+Comments appear as sidebar threads
+OpenAI Integration Requirements
+Every AI-powered feature must:
+Make real API calls (no hardcoded responses)
+Use inputs from onboarding data
+Generate actionable insights, not generic advice
+Structure outputs for easy visualization
+Handle errors gracefully
+Be completely white-labeled - Never mention "GPT", "OpenAI", or "AI" in client-facing outputs
+Present as "LaunchClarity Analysis Engine" or similar proprietary branding
+Important: The platform will make extensive use of OpenAI's API. Expect $50-100 in API costs per sprint for premium analysis quality. Use GPT-4 as the default for all client-facing insights. This investment enables:
+100+ synthetic personas for market simulation
+Multiple analysis passes for deeper insights
+Richer competitive intelligence and battlecards
+More nuanced cross-module synthesis
+Longer, more detailed strategic recommendations
+Agent Simulation Prompting: For Discovery sprints, use carefully calibrated prompts to generate realistic market responses:
+Prime personas for skepticism and critical thinking
+Include failure scenarios and past disappointments
+Force realistic distribution (30% negative, 40% skeptical, 20% interested, 10% enthusiastic)
+Add context constraints (budget limits, existing vendors, risk-averse culture)
+Generate specific objections, not generic concerns
+Example modules needing AI:
+Market Simulation (100+ synthetic responses)
+Sprint timeline generator
+Messaging variants creator
+Interview question generator
+Insight synthesizer (multiple calls for cross-interview analysis)
+Channel recommender
+Risk analyzer
+Decision engine (comprehensive analysis)
+Next steps generator
+Competitive battlecards
+Market sizing calculator
+Business model scenario generator
+SWOT synthesis across all data
+Critical Success Factors
+Onboarding captures enough data to generate meaningful Discovery Sprint outputs immediately
+Consultants can run multiple sprints without context switching headaches
+Clients feel informed and engaged without ability to break things
+Payment → Sprint → SaaS conversion is seamless
+Mobile experience is actually good, not just "works on mobile"
+AI insights feel specific to their business, not generic
+MVP Focus
+Build the critical Discovery Sprint, Feasibility Sprint, and Validation Sprint features first that are mandatories to deliver the sprint experiences but the client facing side can be relatively bare-bones, overall app architecture should support all tiers from day one, but client facing and client management features can be added as needed.
+What This Is NOT
+Not a generic form builder
+Not just PDF reports (interactive dashboards are key)
+Not a one-size-fits-all tool (must adapt to sprint tier)
+Not a replacement for consultant expertise (augments it)
+Single Consultant MVP Simplifications
+Since this platform will have only ONE consultant (me) for the first 6 months, simplify accordingly:
+Simplified Features:
+Simple email/password login - no complex auth system
+Hardcode consultant account - no consultant signup flow
+Sprint list instead of kanban view
+Basic sprint switching via dropdown
+No bulk operations needed
+No "impersonate client" feature - just use test accounts
+No consultant settings or profile management
+Must Still Support:
+5-10 concurrent client sprints
+Full sprint management functionality
+All tier features (Discovery, Feasibility, Validation)
+Easy switching between active sprints
+Sprint status tracking and timeline views
+Focus Development Time On:
+Beautiful client-facing dashboards (80% of effort here)
+Smooth intake form experience
+Rock-solid AI integration
+Clean PDF exports
+Fast, efficient data entry interface
+Database Simplifications:
+No consultant_id needed on most tables (only one consultant)
+Simple is_client boolean for user roles
+No audit trails or activity logs initially
+No complex permission hierarchies
+Simplicity Requirements (IMPORTANT)
+Client Responsibilities:
+Clients fill out the comprehensive intake form (this is critical - it powers all AI analysis!)
+After intake, client portal is mostly read-only (view progress, dashboards, add comments)
+Clients can update/refine their intake data if needed during the sprint
+Basic Payment Flow (Keep Simple):
+Consultant creates sprint → System generates Stripe payment link
+Send payment link to client via email (not in-app)
+Client pays → Stripe webhook updates sprint status to "active"
+Client then receives intake form link
+Just track: Paid/Unpaid status and payment date
+One-time sprint payments: Discovery $5k, Feasibility $15k, Validation $35k
+Accept credit cards and ACH transfers via Stripe
+Future: $2k/month subscription (not in MVP)
+What NOT to build (avoid scope creep):
+No complex team management - one login per client company is fine
+No in-app messaging/chat system - email communication works fine
+No elaborate notification system - basic email triggers only
+No client self-service signup flow - consultants create accounts and send intake links
+No billing/invoice management beyond basic payment status
+No complex permissions system - just consultant vs client views
+No version control or change tracking - keep it simple
+Core Flow to Focus On:
+Consultant creates client account → generates payment link
+Client pays → receives intake form link
+Client fills comprehensive intake form
+Consultant runs sprint (adding data, triggering AI analysis)
+Client views beautiful dashboards and progress
+Both can add comments, client can download PDFs
+MVP Reality Check:
+Build for 1 consultant initially (me)
+Support 5-10 concurrent clients maximum to start
+80% of effort on: intake form → AI analysis → api integrations + stunning output dashboards
+20% of effort on: efficient consultant data entry
+Think "intake + beautiful dashboard delivery" not "collaboration platform"
+Database Simplicity:
+Users table (consultants and clients)
+Sprints table (with tier, status, dates, payment info)
+Sprint_data table (flexible JSON for all module data)
+Comments table
+Keep it flat and simple - no complex relationships
+Final Note
+This platform should feel like a premium, full-service experience that justifies the pricing. At $35k for Validation, clients receive professionally conducted research, AI-powered analysis, and strategic recommendations - a complete "done-for-you" validation sprint. The combination of beautiful UI, intelligent AI analysis, professional research management, and seamless consultant/client collaboration should make it obvious why this costs $5-35k instead of using free tools. This platform must be flexible enough to support both product launches and strategic partnership evaluations. Whether a client is validating a new SaaS idea or considering a high-stakes B2B integration, LaunchClarity should deliver rigorous, structured clarity to inform Go/Pivot/Kill decisions.
+
