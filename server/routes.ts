@@ -1,0 +1,346 @@
+import type { Express } from "express";
+import { createServer, type Server } from "http";
+import Stripe from "stripe";
+import bcrypt from "bcrypt";
+import { storage } from "./storage";
+import { insertUserSchema, insertSprintSchema, insertIntakeDataSchema, insertCommentSchema } from "@shared/schema";
+import { z } from "zod";
+import { generateMarketSimulation, generateAssumptionAnalysis, generateCompetitiveIntelligence, generateMarketSizing, generateRiskAssessment, generateGoDecision } from "./openai";
+
+if (!process.env.STRIPE_SECRET_KEY) {
+  throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
+}
+const stripe = new Stripe(process.env.STRIPE_SECRET_KEY, {
+  apiVersion: "2023-10-16",
+});
+
+// Sprint tier pricing in cents
+const SPRINT_PRICING = {
+  discovery: 500000, // $5,000
+  feasibility: 1500000, // $15,000
+  validation: 3500000, // $35,000
+};
+
+export async function registerRoutes(app: Express): Promise<Server> {
+  // Auth routes
+  app.post("/api/register", async (req, res) => {
+    try {
+      const userData = insertUserSchema.parse(req.body);
+      const hashedPassword = await bcrypt.hash(userData.password, 10);
+      
+      const user = await storage.createUser({
+        ...userData,
+        password: hashedPassword,
+      });
+      
+      // Remove password from response
+      const { password, ...userWithoutPassword } = user;
+      res.json(userWithoutPassword);
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  app.post("/api/login", async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      const user = await storage.getUserByEmail(email);
+      
+      if (!user || !await bcrypt.compare(password, user.password)) {
+        return res.status(401).json({ message: "Invalid credentials" });
+      }
+      
+      // Remove password from response
+      const { password: _, ...userWithoutPassword } = user;
+      res.json(userWithoutPassword);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Sprint routes
+  app.get("/api/sprints", async (req, res) => {
+    try {
+      const { userId, isConsultant } = req.query;
+      const sprints = await storage.getSprintsByUser(Number(userId), Boolean(isConsultant));
+      res.json(sprints);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/sprints/:id", async (req, res) => {
+    try {
+      const sprint = await storage.getSprintById(Number(req.params.id));
+      if (!sprint) {
+        return res.status(404).json({ message: "Sprint not found" });
+      }
+      res.json(sprint);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.post("/api/sprints", async (req, res) => {
+    try {
+      const sprintData = insertSprintSchema.parse({
+        ...req.body,
+        price: SPRINT_PRICING[req.body.tier as keyof typeof SPRINT_PRICING],
+      });
+      
+      const sprint = await storage.createSprint(sprintData);
+      res.json(sprint);
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  // Stripe payment route
+  app.post("/api/create-payment-intent", async (req, res) => {
+    try {
+      const { sprintId } = req.body;
+      const sprint = await storage.getSprintById(sprintId);
+      
+      if (!sprint) {
+        return res.status(404).json({ message: "Sprint not found" });
+      }
+      
+      const paymentIntent = await stripe.paymentIntents.create({
+        amount: sprint.price,
+        currency: "usd",
+        metadata: {
+          sprintId: sprint.id.toString(),
+        },
+      });
+      
+      // Update sprint with payment intent ID
+      await storage.updateSprint(sprint.id, {
+        stripePaymentIntentId: paymentIntent.id,
+      });
+      
+      res.json({ clientSecret: paymentIntent.client_secret });
+    } catch (error: any) {
+      res.status(500).json({ message: "Error creating payment intent: " + error.message });
+    }
+  });
+
+  // Stripe webhook for payment confirmation
+  app.post("/api/stripe-webhook", async (req, res) => {
+    try {
+      const event = req.body;
+      
+      if (event.type === 'payment_intent.succeeded') {
+        const paymentIntent = event.data.object;
+        const sprintId = paymentIntent.metadata.sprintId;
+        
+        if (sprintId) {
+          await storage.updateSprint(Number(sprintId), {
+            status: 'active',
+            paidAt: new Date(),
+          });
+          
+          // Initialize sprint modules based on tier
+          await storage.initializeSprintModules(Number(sprintId));
+        }
+      }
+      
+      res.json({ received: true });
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  // Intake form routes
+  app.post("/api/sprints/:id/intake", async (req, res) => {
+    try {
+      const sprintId = Number(req.params.id);
+      const intakeDataPayload = insertIntakeDataSchema.parse({
+        ...req.body,
+        sprintId,
+      });
+      
+      const intake = await storage.createIntakeData(intakeDataPayload);
+      
+      // Generate initial AI analysis based on intake data
+      const sprint = await storage.getSprintById(sprintId);
+      if (sprint && sprint.tier) {
+        await generateInitialAnalysis(sprintId, intake, sprint.tier);
+      }
+      
+      res.json(intake);
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/sprints/:id/intake", async (req, res) => {
+    try {
+      const sprintId = Number(req.params.id);
+      const intake = await storage.getIntakeDataBySprintId(sprintId);
+      res.json(intake);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  // Sprint modules routes
+  app.get("/api/sprints/:id/modules", async (req, res) => {
+    try {
+      const sprintId = Number(req.params.id);
+      const modules = await storage.getSprintModules(sprintId);
+      res.json(modules);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.get("/api/modules/:id", async (req, res) => {
+    try {
+      const moduleId = Number(req.params.id);
+      const module = await storage.getSprintModuleById(moduleId);
+      if (!module) {
+        return res.status(404).json({ message: "Module not found" });
+      }
+      res.json(module);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.put("/api/modules/:id", async (req, res) => {
+    try {
+      const moduleId = Number(req.params.id);
+      const { data, isCompleted } = req.body;
+      
+      const module = await storage.updateSprintModule(moduleId, {
+        data,
+        isCompleted,
+        updatedAt: new Date(),
+      });
+      
+      res.json(module);
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  // Comments routes
+  app.get("/api/sprints/:id/comments", async (req, res) => {
+    try {
+      const sprintId = Number(req.params.id);
+      const comments = await storage.getCommentsBySprintId(sprintId);
+      res.json(comments);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  app.post("/api/comments", async (req, res) => {
+    try {
+      const commentData = insertCommentSchema.parse(req.body);
+      const comment = await storage.createComment(commentData);
+      res.json(comment);
+    } catch (error: any) {
+      res.status(400).json({ message: error.message });
+    }
+  });
+
+  // AI Analysis routes
+  app.post("/api/modules/:id/regenerate-analysis", async (req, res) => {
+    try {
+      const moduleId = Number(req.params.id);
+      const module = await storage.getSprintModuleById(moduleId);
+      
+      if (!module) {
+        return res.status(404).json({ message: "Module not found" });
+      }
+      
+      const sprint = await storage.getSprintById(module.sprintId);
+      const intake = await storage.getIntakeDataBySprintId(module.sprintId);
+      
+      if (!sprint || !intake) {
+        return res.status(400).json({ message: "Missing sprint or intake data" });
+      }
+      
+      let aiAnalysis;
+      switch (module.moduleType) {
+        case 'market_simulation':
+          aiAnalysis = await generateMarketSimulation(intake);
+          break;
+        case 'assumptions':
+          aiAnalysis = await generateAssumptionAnalysis(intake);
+          break;
+        case 'competitive_intel':
+          aiAnalysis = await generateCompetitiveIntelligence(intake);
+          break;
+        case 'market_sizing':
+          aiAnalysis = await generateMarketSizing(intake);
+          break;
+        case 'risk_assessment':
+          aiAnalysis = await generateRiskAssessment(intake);
+          break;
+        default:
+          return res.status(400).json({ message: "Unknown module type" });
+      }
+      
+      const updatedModule = await storage.updateSprintModule(moduleId, {
+        aiAnalysis,
+        updatedAt: new Date(),
+      });
+      
+      res.json(updatedModule);
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
+  const httpServer = createServer(app);
+  return httpServer;
+}
+
+async function generateInitialAnalysis(sprintId: number, intake: any, tier: string) {
+  try {
+    // Generate market simulation for all tiers
+    const marketSimulation = await generateMarketSimulation(intake);
+    await storage.updateSprintModuleByType(sprintId, 'market_simulation', {
+      aiAnalysis: marketSimulation,
+      isCompleted: true,
+    });
+
+    // Generate assumption analysis for all tiers
+    const assumptionAnalysis = await generateAssumptionAnalysis(intake);
+    await storage.updateSprintModuleByType(sprintId, 'assumptions', {
+      aiAnalysis: assumptionAnalysis,
+      isCompleted: true,
+    });
+
+    // Generate competitive intelligence for all tiers
+    const competitiveIntel = await generateCompetitiveIntelligence(intake);
+    await storage.updateSprintModuleByType(sprintId, 'competitive_intel', {
+      aiAnalysis: competitiveIntel,
+      isCompleted: true,
+    });
+
+    // Generate market sizing for all tiers
+    const marketSizing = await generateMarketSizing(intake);
+    await storage.updateSprintModuleByType(sprintId, 'market_sizing', {
+      aiAnalysis: marketSizing,
+      isCompleted: true,
+    });
+
+    // Generate risk assessment for all tiers
+    const riskAssessment = await generateRiskAssessment(intake);
+    await storage.updateSprintModuleByType(sprintId, 'risk_assessment', {
+      aiAnalysis: riskAssessment,
+      isCompleted: true,
+    });
+
+    // Update sprint progress
+    await storage.updateSprint(sprintId, {
+      progress: 65, // Reflects completion of 5 out of 7 discovery modules
+    });
+
+  } catch (error) {
+    console.error('Error generating initial analysis:', error);
+  }
+}
