@@ -9,13 +9,13 @@ import Login from "@/pages/login";
 import Dashboard from "@/pages/dashboard";
 import SprintView from "@/pages/sprint-view";
 import IntakeForm from "@/pages/intake-form";
-import SprintSelection from "@/pages/sprint-selection";
+import ConsultantDashboard from "@/pages/consultant-dashboard";
 
 function Router() {
   return (
     <Switch>
       <Route path="/login" component={Login} />
-      <Route path="/sprint-selection" component={SprintSelection} />
+      <Route path="/consultant" component={ConsultantDashboard} />
       <Route path="/" component={Dashboard} />
       <Route path="/sprints/:id" component={SprintView} />
       <Route path="/sprints/:id/intake" component={IntakeForm} />

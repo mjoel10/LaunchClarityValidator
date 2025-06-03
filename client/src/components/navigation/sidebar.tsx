@@ -30,6 +30,9 @@ const moduleConfig = {
     { key: 'multi_channel_tests', title: 'Multi-Channel Tests', icon: '🔬', section: 'Validation', tier: 'validation', locked: true },
     { key: 'strategic_analysis', title: 'Strategic Analysis Tools', icon: '🧠', section: 'Strategic', tier: 'validation', locked: true },
     { key: 'battlecards', title: 'Competitive Battlecards', icon: '⚔', section: 'Strategic', tier: 'validation', locked: true },
+    { key: 'implementation_roadmap', title: 'Implementation Roadmap', icon: '🗺', section: 'Strategic', tier: 'validation', locked: true },
+    { key: 'action_plans', title: '90-Day Action Plan', icon: '📝', section: 'Strategic', tier: 'validation', locked: true },
+    { key: 'partnership_evaluation', title: 'Partnership Evaluation', icon: '🤝', section: 'Strategic', tier: 'validation', locked: true },
     
     // Decision Section
     { key: 'go_defer_decision', title: 'Go/Defer Decision', icon: '🚦', section: 'Decision', tier: 'discovery' },
@@ -59,6 +62,9 @@ const moduleConfig = {
     { key: 'multi_channel_tests', title: 'Multi-Channel Tests', icon: '🔬', section: 'Validation', tier: 'validation', locked: true },
     { key: 'strategic_analysis', title: 'Strategic Analysis Tools', icon: '🧠', section: 'Strategic', tier: 'validation', locked: true },
     { key: 'battlecards', title: 'Competitive Battlecards', icon: '⚔', section: 'Strategic', tier: 'validation', locked: true },
+    { key: 'implementation_roadmap', title: 'Implementation Roadmap', icon: '🗺', section: 'Strategic', tier: 'validation', locked: true },
+    { key: 'action_plans', title: '90-Day Action Plan', icon: '📝', section: 'Strategic', tier: 'validation', locked: true },
+    { key: 'partnership_evaluation', title: 'Partnership Evaluation', icon: '🤝', section: 'Strategic', tier: 'validation', locked: true },
     
     // Decision Section
     { key: 'go_pivot_defer', title: 'Go/Pivot/Defer', icon: '🚦', section: 'Decision', tier: 'feasibility' },
@@ -84,9 +90,11 @@ const moduleConfig = {
     // Strategic Section (Premium Features)
     { key: 'strategic_analysis', title: 'Strategic Analysis Tools', icon: '🧠', section: 'Strategic', tier: 'validation' },
     { key: 'battlecards', title: 'Competitive Battlecards', icon: '⚔', section: 'Strategic', tier: 'validation' },
+    { key: 'implementation_roadmap', title: 'Implementation Roadmap', icon: '🗺', section: 'Strategic', tier: 'validation' },
+    { key: 'action_plans', title: '90-Day Action Plan', icon: '📝', section: 'Strategic', tier: 'validation' },
+    { key: 'partnership_evaluation', title: 'Partnership Evaluation', icon: '🤝', section: 'Strategic', tier: 'validation' },
     { key: 'business_model_simulator', title: 'Business Model Simulator', icon: '🧮', section: 'Strategic', tier: 'feasibility' },
     { key: 'channel_recommender', title: 'Channel Recommender', icon: '📤', section: 'Strategic', tier: 'feasibility' },
-    { key: 'action_plans', title: 'Action Plans Generator', icon: '📝', section: 'Strategic', tier: 'validation' },
     
     // Decision Section
     { key: 'go_pivot_kill', title: 'Go/Pivot/Kill Engine', icon: '🚦', section: 'Decision', tier: 'validation' },
