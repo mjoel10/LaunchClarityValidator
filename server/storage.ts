@@ -90,12 +90,12 @@ export class DatabaseStorage implements IStorage {
   }
 
   async initializeSprintModules(sprintId: number, tier: string): Promise<void> {
-    const moduleTypes = this.getModuleTypesForTier(tier);
+    const allModules = this.getAllModulesWithTierInfo(tier);
     
-    const modulesToInsert = moduleTypes.map((moduleType, index) => ({
+    const modulesToInsert = allModules.map((module: {type: string, isLocked: boolean, requiredTier: string}) => ({
       sprintId,
-      moduleType,
-      isLocked: index > 0, // First module (intake) is unlocked
+      moduleType: module.type,
+      isLocked: module.isLocked,
       isCompleted: false,
       data: null,
     }));
@@ -103,18 +103,40 @@ export class DatabaseStorage implements IStorage {
     await db.insert(sprintModules).values(modulesToInsert);
   }
 
-  private getModuleTypesForTier(tier: string): string[] {
-    const baseModules = ['intake', 'market_simulation', 'assumptions', 'competitive_intel', 'market_sizing', 'risk_assessment', 'swot_analysis'];
-    
-    if (tier === 'discovery') {
-      return [...baseModules, 'go_defer_decision'];
-    } else if (tier === 'feasibility') {
-      return [...baseModules, 'business_model_simulator', 'channel_recommender', 'async_interviews', 'demand_test', 'go_pivot_defer'];
-    } else if (tier === 'validation') {
-      return [...baseModules, 'full_interviews', 'multi_channel_tests', 'enhanced_market_intel', 'strategic_analysis', 'blue_ocean_strategy', 'implementation_roadmap', 'action_plans', 'async_interviews', 'demand_test', 'business_model_simulator', 'channel_recommender', 'battlecards', 'partnership_evaluation', 'go_pivot_kill'];
-    }
-    
-    return baseModules;
+  private getAllModulesWithTierInfo(tier: string): Array<{type: string, isLocked: boolean, requiredTier: string}> {
+    const discoveryModules = [
+      { type: 'intake', isLocked: false, requiredTier: 'discovery' },
+      { type: 'market_simulation', isLocked: false, requiredTier: 'discovery' },
+      { type: 'assumptions', isLocked: false, requiredTier: 'discovery' },
+      { type: 'competitive_intel', isLocked: false, requiredTier: 'discovery' },
+      { type: 'market_sizing', isLocked: false, requiredTier: 'discovery' },
+      { type: 'risk_assessment', isLocked: false, requiredTier: 'discovery' },
+      { type: 'swot_analysis', isLocked: false, requiredTier: 'discovery' },
+      { type: 'go_defer_decision', isLocked: false, requiredTier: 'discovery' }
+    ];
+
+    const feasibilityModules = [
+      { type: 'business_model_simulator', isLocked: tier === 'discovery', requiredTier: 'feasibility' },
+      { type: 'channel_recommender', isLocked: tier === 'discovery', requiredTier: 'feasibility' },
+      { type: 'async_interviews', isLocked: tier === 'discovery', requiredTier: 'feasibility' },
+      { type: 'demand_test', isLocked: tier === 'discovery', requiredTier: 'feasibility' },
+      { type: 'go_pivot_defer', isLocked: tier === 'discovery', requiredTier: 'feasibility' }
+    ];
+
+    const validationModules = [
+      { type: 'full_interviews', isLocked: tier !== 'validation', requiredTier: 'validation' },
+      { type: 'multi_channel_tests', isLocked: tier !== 'validation', requiredTier: 'validation' },
+      { type: 'enhanced_market_intel', isLocked: tier !== 'validation', requiredTier: 'validation' },
+      { type: 'strategic_analysis', isLocked: tier !== 'validation', requiredTier: 'validation' },
+      { type: 'blue_ocean_strategy', isLocked: tier !== 'validation', requiredTier: 'validation' },
+      { type: 'implementation_roadmap', isLocked: tier !== 'validation', requiredTier: 'validation' },
+      { type: 'action_plans', isLocked: tier !== 'validation', requiredTier: 'validation' },
+      { type: 'battlecards', isLocked: tier !== 'validation', requiredTier: 'validation' },
+      { type: 'partnership_evaluation', isLocked: tier !== 'validation', requiredTier: 'validation' },
+      { type: 'go_pivot_kill', isLocked: tier !== 'validation', requiredTier: 'validation' }
+    ];
+
+    return [...discoveryModules, ...feasibilityModules, ...validationModules];
   }
 
   async createIntakeData(insertIntakeData: InsertIntakeData): Promise<IntakeData> {

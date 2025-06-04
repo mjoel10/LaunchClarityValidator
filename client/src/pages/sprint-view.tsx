@@ -43,6 +43,7 @@ import EnhancedMarketIntel from '@/components/sprint/enhanced-market-intel';
 import BlueOceanStrategy from '@/components/sprint/blue-ocean-strategy';
 import ImplementationRoadmap from '@/components/sprint/implementation-roadmap';
 import ActionPlans from '@/components/sprint/action-plans';
+import DecisionEngine from '@/components/sprint/decision-engine';
 import { cn } from '@/lib/utils';
 
 const FEATURE_COMPONENTS = {

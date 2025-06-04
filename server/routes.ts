@@ -184,7 +184,10 @@ export async function registerRoutes(app: Express): Promise<Server> {
           });
           
           // Initialize sprint modules based on tier
-          await storage.initializeSprintModules(Number(sprintId));
+          const sprint = await storage.getSprintById(Number(sprintId));
+          if (sprint) {
+            await storage.initializeSprintModules(Number(sprintId), sprint.tier);
+          }
         }
       }
       
