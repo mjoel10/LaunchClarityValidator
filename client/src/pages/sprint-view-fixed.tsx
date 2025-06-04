@@ -358,11 +358,29 @@ export default function SprintView() {
                 ${sprint?.tier === 'discovery' ? '5,000' : sprint?.tier === 'feasibility' ? '15,000' : '35,000'}
               </p>
             </div>
-            <div className="text-right">
-              <div className="text-2xl font-bold">
-                {Math.round(((modules?.filter((m: any) => m.isCompleted).length || 0) / (modules?.length || 1)) * 100)}%
+            
+            {/* Decision Engine Header Element */}
+            <div className="flex items-center gap-6">
+              <Link href={`/sprints/${sprintId}/decision-engine`}>
+                <div className="bg-white/10 hover:bg-white/20 transition-colors rounded-lg px-4 py-3 cursor-pointer border border-white/20">
+                  <div className="flex items-center gap-3">
+                    <Zap className="w-5 h-5 text-white" />
+                    <div>
+                      <div className="text-sm font-medium text-white">Decision Engine</div>
+                      <div className={`text-xs ${decisionPreview.color}`}>
+                        {decisionPreview.text} • {decisionPreview.confidence}% Confidence
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+              
+              <div className="text-right">
+                <div className="text-2xl font-bold">
+                  {Math.round(((modules?.filter((m: any) => m.isCompleted).length || 0) / (modules?.length || 1)) * 100)}%
+                </div>
+                <div className="text-blue-100">Complete</div>
               </div>
-              <div className="text-blue-100">Complete</div>
             </div>
           </div>
         </div>
@@ -414,14 +432,6 @@ export default function SprintView() {
               </TabsList>
 
               <TabsContent value="overview" className="space-y-6">
-                {/* Decision Engine - Replaces Investment Display */}
-                <DecisionEngine 
-                  sprintId={sprintId}
-                  tier={sprint.tier}
-                  modules={modules || []}
-                  intakeData={intakeData}
-                />
-
                 <Card className="rounded-xl shadow-sm">
                   <CardHeader>
                     <CardTitle>Sprint Progress</CardTitle>

@@ -9,6 +9,7 @@ import Login from "@/pages/login";
 import Dashboard from "@/pages/dashboard";
 import SprintView from "@/pages/sprint-view-fixed";
 import IntakeForm from "@/pages/intake-form";
+import DecisionEnginePage from "@/pages/decision-engine";
 import ConsultantDashboard from "@/pages/consultant-dashboard";
 import FeatureDemo from "@/pages/feature-demo";
 import UnifiedDashboard from "@/pages/unified-dashboard";
@@ -23,6 +24,7 @@ function Router() {
       <Route path="/" component={UnifiedDashboard} />
       <Route path="/sprints/:id" component={SprintView} />
       <Route path="/sprints/:id/intake" component={IntakeForm} />
+      <Route path="/sprints/:id/decision-engine" component={DecisionEnginePage} />
       <Route component={NotFound} />
     </Switch>
   );
