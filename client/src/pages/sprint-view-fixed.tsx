@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { 
   Building2, 
   Brain, 
@@ -70,6 +71,7 @@ export default function SprintView() {
     feasibility: false,
     validation: false
   });
+  const [isDecisionEngineOpen, setIsDecisionEngineOpen] = useState(false);
 
   const toggleSection = (section: 'discovery' | 'feasibility' | 'validation') => {
     setExpandedSections(prev => ({
@@ -301,6 +303,27 @@ export default function SprintView() {
   const isDiscoveryUnlocked = true; // Always unlocked for paid sprints
   const isFeasibilityUnlocked = sprint.tier === 'feasibility' || sprint.tier === 'validation';
   const isValidationUnlocked = sprint.tier === 'validation';
+
+  // Get decision preview for header
+  const getDecisionPreview = () => {
+    const completedModules = modules?.filter(m => m.isCompleted) || [];
+    const totalModules = modules?.length || 1;
+    const completionRate = (completedModules.length / totalModules) * 100;
+    
+    if (completionRate < 30) {
+      return { text: 'Insufficient Data', confidence: Math.round(completionRate), color: 'text-gray-300' };
+    }
+    
+    if (completionRate >= 70) {
+      return { text: 'Ready for Decision', confidence: 85, color: 'text-green-300' };
+    } else if (completionRate >= 50) {
+      return { text: 'Gathering Data', confidence: 65, color: 'text-yellow-300' };
+    }
+    
+    return { text: 'Early Analysis', confidence: Math.round(completionRate + 20), color: 'text-blue-300' };
+  };
+
+  const decisionPreview = getDecisionPreview();
 
   return (
     <div className="min-h-screen bg-gray-50">
