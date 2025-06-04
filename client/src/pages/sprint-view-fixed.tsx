@@ -179,9 +179,9 @@ export default function SprintView() {
   const getModulesByTier = () => {
     if (!modules) return { discovery: [], feasibility: [], validation: [] };
     
-    const discoveryModules = ['intake', 'market_simulation', 'assumptions', 'competitive_intel', 'market_sizing', 'risk_assessment', 'swot_analysis', 'go_defer_decision'];
-    const feasibilityModules = ['business_model_simulator', 'channel_recommender', 'async_interviews', 'demand_test', 'go_pivot_defer'];
-    const validationModules = ['full_interviews', 'multi_channel_tests', 'enhanced_market_intel', 'strategic_analysis', 'blue_ocean_strategy', 'implementation_roadmap', 'action_plans', 'battlecards', 'partnership_evaluation', 'go_pivot_kill'];
+    const discoveryModules = ['intake', 'market_simulation', 'assumptions', 'competitive_intel', 'market_sizing', 'risk_assessment', 'swot_analysis'];
+    const feasibilityModules = ['business_model_simulator', 'channel_recommender', 'async_interviews', 'demand_test'];
+    const validationModules = ['full_interviews', 'multi_channel_tests', 'enhanced_market_intel', 'strategic_analysis', 'blue_ocean_strategy', 'implementation_roadmap', 'action_plans', 'battlecards', 'partnership_evaluation'];
 
     return {
       discovery: modules.filter((m: any) => discoveryModules.includes(m.moduleType)),
