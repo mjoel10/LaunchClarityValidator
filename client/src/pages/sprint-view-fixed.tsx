@@ -348,63 +348,113 @@ export default function SprintView() {
       </div>
 
       {/* Sprint Banner */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
+      <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg">
         <div className="max-w-none mx-6 px-4 py-8">
           <div className="flex items-center justify-between">
-            <div>
-              <h1 className="text-3xl font-bold mb-2">{intakeData?.companyName || 'Company Name'}</h1>
-              <p className="text-blue-100">
+            {/* Left Section - Company & Sprint Info */}
+            <div className="flex-1">
+              <h1 className="text-4xl font-bold mb-1 tracking-tight">{intakeData?.companyName || 'Company Name'}</h1>
+              <p className="text-lg text-blue-100 font-medium">
                 {sprint?.tier?.charAt(0).toUpperCase() + sprint?.tier?.slice(1)} Sprint • 
                 ${sprint?.tier === 'discovery' ? '5,000' : sprint?.tier === 'feasibility' ? '15,000' : '35,000'}
               </p>
             </div>
             
-            {/* Decision Engine Header Element */}
-            <div className="flex items-center gap-6">
+            {/* Center Section - Decision Engine (Star Feature) */}
+            <div className="flex-1 flex justify-center">
               <Link href={`/sprints/${sprintId}/decision-engine`}>
-                <div className={`relative group rounded-xl px-6 py-4 cursor-pointer border-2 transition-all duration-300 ${
-                  decisionPreview.confidence >= 70 
-                    ? 'bg-emerald-500/20 border-emerald-400/40 hover:bg-emerald-500/30 hover:border-emerald-400/60' 
-                    : decisionPreview.confidence >= 50 
-                    ? 'bg-amber-500/20 border-amber-400/40 hover:bg-amber-500/30 hover:border-amber-400/60'
-                    : 'bg-slate-500/20 border-slate-400/40 hover:bg-slate-500/30 hover:border-slate-400/60'
-                }`}>
-                  <div className="flex items-center gap-4">
-                    <div className={`p-2 rounded-lg ${
+                <div className={`relative group bg-white/10 backdrop-blur-sm rounded-2xl px-8 py-6 cursor-pointer border border-white/20 
+                  hover:bg-white/15 hover:border-white/30 transition-all duration-300 shadow-xl hover:shadow-2xl transform hover:scale-105`}>
+                  <div className="flex items-center gap-5">
+                    <div className={`p-3 rounded-xl shadow-lg ${
                       decisionPreview.confidence >= 70 
-                        ? 'bg-emerald-400/30' 
+                        ? 'bg-emerald-500/30 shadow-emerald-500/20' 
                         : decisionPreview.confidence >= 50 
-                        ? 'bg-amber-400/30'
-                        : 'bg-slate-400/30'
+                        ? 'bg-amber-500/30 shadow-amber-500/20'
+                        : 'bg-slate-500/30 shadow-slate-500/20'
                     }`}>
-                      <BarChart3 className="w-6 h-6 text-white" />
+                      <Target className="w-7 h-7 text-white" />
                     </div>
                     <div className="text-left">
-                      <div className="text-base font-semibold text-white mb-1">Decision Engine</div>
-                      <div className="text-sm text-white/90 font-medium">
-                        {decisionPreview.text}
-                      </div>
-                      <div className="text-xs text-white/70">
-                        {decisionPreview.confidence}% Analysis Complete
+                      <div className="text-xl font-bold text-white mb-1">Decision Engine</div>
+                      <div className="flex items-center gap-3">
+                        <span className={`text-sm font-semibold ${
+                          decisionPreview.confidence >= 70 
+                            ? 'text-emerald-200' 
+                            : decisionPreview.confidence >= 50 
+                            ? 'text-amber-200'
+                            : 'text-slate-200'
+                        }`}>
+                          {decisionPreview.text}
+                        </span>
+                        <div className="flex items-center gap-1">
+                          <div className={`w-2 h-2 rounded-full ${
+                            decisionPreview.confidence >= 70 
+                              ? 'bg-emerald-400' 
+                              : decisionPreview.confidence >= 50 
+                              ? 'bg-amber-400'
+                              : 'bg-slate-400'
+                          }`}></div>
+                          <span className="text-xs text-white/80 font-medium">{decisionPreview.confidence}%</span>
+                        </div>
                       </div>
                     </div>
-                    <div className="ml-2 group-hover:translate-x-1 transition-transform">
-                      <ChevronRight className="w-5 h-5 text-white/70" />
+                    <div className="ml-3 group-hover:translate-x-1 transition-transform">
+                      <ChevronRight className="w-6 h-6 text-white/60" />
                     </div>
                   </div>
                   
-                  {/* Subtle pulse animation for high confidence */}
+                  {/* Subtle glow effect for high confidence */}
                   {decisionPreview.confidence >= 70 && (
-                    <div className="absolute inset-0 rounded-xl bg-emerald-400/20 animate-pulse opacity-50"></div>
+                    <div className="absolute inset-0 rounded-2xl bg-emerald-400/10 animate-pulse"></div>
                   )}
                 </div>
               </Link>
-              
-              <div className="text-right">
-                <div className="text-2xl font-bold">
-                  {Math.round(((modules?.filter((m: any) => m.isCompleted).length || 0) / (modules?.length || 1)) * 100)}%
+            </div>
+            
+            {/* Right Section - Sprint Progress */}
+            <div className="flex-1 flex justify-end">
+              <div className="text-center">
+                <div className="relative inline-flex items-center justify-center">
+                  {/* Circular Progress Ring */}
+                  <svg className="w-20 h-20 transform -rotate-90" viewBox="0 0 36 36">
+                    <path
+                      className="text-white/20"
+                      stroke="currentColor"
+                      strokeWidth="3"
+                      fill="transparent"
+                      d="M18 2.0845
+                        a 15.9155 15.9155 0 0 1 0 31.831
+                        a 15.9155 15.9155 0 0 1 0 -31.831"
+                    />
+                    <path
+                      className={`${
+                        ((modules?.filter((m: any) => m.isCompleted).length || 0) / (modules?.length || 1)) * 100 >= 70 
+                          ? 'text-emerald-400' 
+                          : ((modules?.filter((m: any) => m.isCompleted).length || 0) / (modules?.length || 1)) * 100 >= 50 
+                          ? 'text-amber-400'
+                          : 'text-blue-400'
+                      }`}
+                      stroke="currentColor"
+                      strokeWidth="3"
+                      strokeLinecap="round"
+                      fill="transparent"
+                      strokeDasharray={`${((modules?.filter((m: any) => m.isCompleted).length || 0) / (modules?.length || 1)) * 100}, 100`}
+                      d="M18 2.0845
+                        a 15.9155 15.9155 0 0 1 0 31.831
+                        a 15.9155 15.9155 0 0 1 0 -31.831"
+                    />
+                  </svg>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-2xl font-bold text-white">
+                      {Math.round(((modules?.filter((m: any) => m.isCompleted).length || 0) / (modules?.length || 1)) * 100)}%
+                    </span>
+                  </div>
                 </div>
-                <div className="text-blue-100">Complete</div>
+                <div className="text-sm text-blue-100 font-medium mt-2">Sprint Complete</div>
+                <div className="text-xs text-blue-200 mt-1">
+                  {modules?.filter((m: any) => m.isCompleted).length || 0} of {modules?.length || 0} modules
+                </div>
               </div>
             </div>
           </div>
