@@ -10,12 +10,14 @@ import Dashboard from "@/pages/dashboard";
 import SprintView from "@/pages/sprint-view";
 import IntakeForm from "@/pages/intake-form";
 import ConsultantDashboard from "@/pages/consultant-dashboard";
+import FeatureDemo from "@/pages/feature-demo";
 
 function Router() {
   return (
     <Switch>
       <Route path="/login" component={Login} />
       <Route path="/consultant" component={ConsultantDashboard} />
+      <Route path="/demo" component={FeatureDemo} />
       <Route path="/" component={Dashboard} />
       <Route path="/sprints/:id" component={SprintView} />
       <Route path="/sprints/:id/intake" component={IntakeForm} />
