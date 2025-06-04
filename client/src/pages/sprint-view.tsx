@@ -37,6 +37,8 @@ import ChannelRecommender from '@/components/sprint/channel-recommender';
 import StrategicAnalysisTools from '@/components/sprint/strategic-analysis-tools';
 import AsyncInterviews from '@/components/sprint/async-interviews';
 import DemandTestTracker from '@/components/sprint/demand-test-tracker';
+import FullInterviewSuite from '@/components/sprint/full-interview-suite';
+import MultiChannelTesting from '@/components/sprint/multi-channel-testing';
 import { cn } from '@/lib/utils';
 
 const FEATURE_COMPONENTS = {
@@ -46,6 +48,8 @@ const FEATURE_COMPONENTS = {
   strategic_analysis: StrategicAnalysisTools,
   async_interviews: AsyncInterviews,
   demand_test: DemandTestTracker,
+  full_interviews: FullInterviewSuite,
+  multi_channel_tests: MultiChannelTesting,
 };
 
 export default function SprintView() {

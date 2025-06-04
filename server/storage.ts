@@ -109,9 +109,9 @@ export class DatabaseStorage implements IStorage {
     if (tier === 'discovery') {
       return [...baseModules, 'go_defer_decision'];
     } else if (tier === 'feasibility') {
-      return [...baseModules, 'async_interviews', 'demand_test', 'business_model_simulator', 'channel_recommender', 'go_pivot_defer'];
+      return [...baseModules, 'business_model_simulator', 'channel_recommender', 'async_interviews', 'demand_test', 'go_pivot_defer'];
     } else if (tier === 'validation') {
-      return [...baseModules, 'full_interviews', 'multi_channel_tests', 'async_interviews', 'demand_test', 'strategic_analysis', 'battlecards', 'business_model_simulator', 'channel_recommender', 'action_plans', 'go_pivot_kill'];
+      return [...baseModules, 'full_interviews', 'multi_channel_tests', 'enhanced_market_intel', 'strategic_analysis', 'blue_ocean_strategy', 'implementation_roadmap', 'action_plans', 'async_interviews', 'demand_test', 'business_model_simulator', 'channel_recommender', 'battlecards', 'partnership_evaluation', 'go_pivot_kill'];
     }
     
     return baseModules;
