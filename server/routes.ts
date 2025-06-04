@@ -61,8 +61,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Sprint routes
   app.get("/api/sprints", async (req, res) => {
     try {
-      const { userId, isConsultant } = req.query;
-      const sprints = await storage.getSprintsByUser(Number(userId), Boolean(isConsultant));
+      // For unified dashboard, return all sprints for consultant ID 1
+      const consultantId = 1;
+      const sprints = await storage.getSprintsByUser(consultantId, true);
       res.json(sprints);
     } catch (error: any) {
       res.status(500).json({ message: error.message });

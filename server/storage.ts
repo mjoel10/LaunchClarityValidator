@@ -61,6 +61,9 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getSprintsByUser(userId: number, isConsultant: boolean = false): Promise<Sprint[]> {
+    if (isConsultant) {
+      return await db.select().from(sprints).where(eq(sprints.consultantId, userId));
+    }
     return await db.select().from(sprints).where(eq(sprints.clientId, userId));
   }
 
