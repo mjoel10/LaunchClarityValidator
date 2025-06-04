@@ -345,7 +345,9 @@ export default function IntakeForm() {
                     />
                   </div>
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="border-t pt-6">
+                    <h3 className="text-lg font-medium text-gray-900 mb-4">Business Details</h3>
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                     <FormField
                       control={form.control}
                       name="businessModel"
@@ -492,6 +494,7 @@ export default function IntakeForm() {
                       </FormItem>
                     )}
                   />
+                  </div>
                 </CardContent>
               </Card>
             )}
