@@ -256,7 +256,7 @@ export default function SprintView() {
                       )}
                     </div>
                   </div>
-                  {!isAvailable && <Lock className="w-3.5 h-3.5 text-gray-400" />}
+                  {!isAvailable && <Lock className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />}
                 </button>
               );
             })}
@@ -348,9 +348,9 @@ export default function SprintView() {
       </div>
 
       <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
           {/* Sidebar - All Features by Tier */}
-          <div className="lg:col-span-1">
+          <div className="lg:col-span-4">
             <Card className="rounded-xl shadow-sm sticky top-4">
               <CardHeader>
                 <CardTitle className="text-lg">Validation Features</CardTitle>
@@ -384,7 +384,7 @@ export default function SprintView() {
           </div>
 
           {/* Main Content */}
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-8">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
               <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="overview">Overview</TabsTrigger>
