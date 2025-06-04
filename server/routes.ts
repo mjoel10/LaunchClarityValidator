@@ -3,7 +3,9 @@ import { createServer, type Server } from "http";
 import Stripe from "stripe";
 import bcrypt from "bcrypt";
 import { storage } from "./storage";
-import { insertUserSchema, insertSprintSchema, insertIntakeDataSchema, insertCommentSchema } from "@shared/schema";
+import { insertUserSchema, insertSprintSchema, insertIntakeDataSchema, insertCommentSchema, sprintModules } from "@shared/schema";
+import { db } from "./db";
+import { eq } from "drizzle-orm";
 import { z } from "zod";
 import { generateMarketSimulation, generateAssumptionAnalysis, generateCompetitiveIntelligence, generateMarketSizing, generateRiskAssessment, generateGoDecision } from "./openai";
 
@@ -194,6 +196,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json({ received: true });
     } catch (error: any) {
       res.status(400).json({ message: error.message });
+    }
+  });
+
+  // Regenerate sprint modules with correct tier access
+  app.post("/api/sprints/:id/regenerate-modules", async (req, res) => {
+    try {
+      const sprintId = Number(req.params.id);
+      const sprint = await storage.getSprintById(sprintId);
+      
+      if (!sprint) {
+        return res.status(404).json({ message: "Sprint not found" });
+      }
+
+      // Delete existing modules
+      await db.delete(sprintModules).where(eq(sprintModules.sprintId, sprintId));
+      
+      // Reinitialize with correct tier access
+      await storage.initializeSprintModules(sprintId, sprint.tier);
+      
+      // Get updated modules
+      const updatedModules = await storage.getSprintModules(sprintId);
+      
+      res.json(updatedModules);
+    } catch (error: any) {
+      res.status(500).json({ message: "Error regenerating modules: " + error.message });
     }
   });
 

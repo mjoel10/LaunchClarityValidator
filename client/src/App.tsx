@@ -7,7 +7,7 @@ import { AuthProvider } from "./lib/auth.tsx";
 import NotFound from "@/pages/not-found";
 import Login from "@/pages/login";
 import Dashboard from "@/pages/dashboard";
-import SprintView from "@/pages/sprint-view";
+import SprintView from "@/pages/sprint-view-fixed";
 import IntakeForm from "@/pages/intake-form";
 import ConsultantDashboard from "@/pages/consultant-dashboard";
 import FeatureDemo from "@/pages/feature-demo";
