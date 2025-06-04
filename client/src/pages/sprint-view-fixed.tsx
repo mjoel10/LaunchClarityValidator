@@ -153,7 +153,7 @@ export default function SprintView() {
       // Feasibility Sprint Features
       business_model_simulator: 'Business Model Simulator',
       channel_recommender: 'Channel Recommender',
-      async_interviews: 'Async Interview Suite (5-7 interviews)',
+      async_interviews: 'Async Interview Suite',
       demand_test: 'Demand Test Tracker',
       
       // Validation Sprint Features
@@ -162,7 +162,7 @@ export default function SprintView() {
       implementation_roadmap: 'Implementation Roadmap',
       action_plans: '90-Day Action Plans',
       partnership_evaluation: 'Partnership Evaluation',
-      full_interviews: 'Full Interview Suite (15+ interviews)',
+      full_interviews: 'Full Interview Suite',
       multi_channel_tests: 'Multi-Channel Testing Dashboard',
       enhanced_market_intel: 'Enhanced Market Intelligence',
       blue_ocean_strategy: 'Blue Ocean Strategy Analysis',
