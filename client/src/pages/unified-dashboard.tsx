@@ -170,7 +170,7 @@ export default function UnifiedDashboard() {
     }
   };
 
-  const sprints = sprintsQuery.data || [];
+  const sprints = Array.isArray(sprintsQuery.data) ? sprintsQuery.data : [];
 
   return (
     <div className="min-h-screen bg-gray-50">
