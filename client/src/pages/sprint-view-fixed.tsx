@@ -43,6 +43,7 @@ import EnhancedMarketIntel from '@/components/sprint/enhanced-market-intel';
 import BlueOceanStrategy from '@/components/sprint/blue-ocean-strategy';
 import ImplementationRoadmap from '@/components/sprint/implementation-roadmap';
 import ActionPlans from '@/components/sprint/action-plans';
+import EmbeddedIntakeForm from '@/components/sprint/embedded-intake-form';
 import { cn } from '@/lib/utils';
 
 const FEATURE_COMPONENTS = {
@@ -384,8 +385,9 @@ export default function SprintView() {
           {/* Main Content */}
           <div className="lg:col-span-8">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-              <TabsList className="grid w-full grid-cols-3">
+              <TabsList className="grid w-full grid-cols-4">
                 <TabsTrigger value="overview">Overview</TabsTrigger>
+                <TabsTrigger value="intake">Initial Intake</TabsTrigger>
                 <TabsTrigger value="modules">Active Modules</TabsTrigger>
                 <TabsTrigger value="reports">Reports</TabsTrigger>
               </TabsList>
@@ -424,6 +426,23 @@ export default function SprintView() {
                         <div className="text-sm text-gray-600">Validation Completed</div>
                       </div>
                     </div>
+                  </CardContent>
+                </Card>
+              </TabsContent>
+
+              <TabsContent value="intake" className="space-y-6">
+                <Card className="rounded-xl shadow-sm">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-3">
+                      <FileText className="w-6 h-6 text-blue-600" />
+                      Initial Client Intake
+                    </CardTitle>
+                    <CardDescription>
+                      Complete this comprehensive intake form to provide essential business context for your validation sprint
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <EmbeddedIntakeForm />
                   </CardContent>
                 </Card>
               </TabsContent>
