@@ -362,16 +362,41 @@ export default function SprintView() {
             {/* Decision Engine Header Element */}
             <div className="flex items-center gap-6">
               <Link href={`/sprints/${sprintId}/decision-engine`}>
-                <div className="bg-white/10 hover:bg-white/20 transition-colors rounded-lg px-4 py-3 cursor-pointer border border-white/20">
-                  <div className="flex items-center gap-3">
-                    <Zap className="w-5 h-5 text-white" />
-                    <div>
-                      <div className="text-sm font-medium text-white">Decision Engine</div>
-                      <div className={`text-xs ${decisionPreview.color}`}>
-                        {decisionPreview.text} • {decisionPreview.confidence}% Confidence
+                <div className={`relative group rounded-xl px-6 py-4 cursor-pointer border-2 transition-all duration-300 ${
+                  decisionPreview.confidence >= 70 
+                    ? 'bg-emerald-500/20 border-emerald-400/40 hover:bg-emerald-500/30 hover:border-emerald-400/60' 
+                    : decisionPreview.confidence >= 50 
+                    ? 'bg-amber-500/20 border-amber-400/40 hover:bg-amber-500/30 hover:border-amber-400/60'
+                    : 'bg-slate-500/20 border-slate-400/40 hover:bg-slate-500/30 hover:border-slate-400/60'
+                }`}>
+                  <div className="flex items-center gap-4">
+                    <div className={`p-2 rounded-lg ${
+                      decisionPreview.confidence >= 70 
+                        ? 'bg-emerald-400/30' 
+                        : decisionPreview.confidence >= 50 
+                        ? 'bg-amber-400/30'
+                        : 'bg-slate-400/30'
+                    }`}>
+                      <BarChart3 className="w-6 h-6 text-white" />
+                    </div>
+                    <div className="text-left">
+                      <div className="text-base font-semibold text-white mb-1">Decision Engine</div>
+                      <div className="text-sm text-white/90 font-medium">
+                        {decisionPreview.text}
+                      </div>
+                      <div className="text-xs text-white/70">
+                        {decisionPreview.confidence}% Analysis Complete
                       </div>
                     </div>
+                    <div className="ml-2 group-hover:translate-x-1 transition-transform">
+                      <ChevronRight className="w-5 h-5 text-white/70" />
+                    </div>
                   </div>
+                  
+                  {/* Subtle pulse animation for high confidence */}
+                  {decisionPreview.confidence >= 70 && (
+                    <div className="absolute inset-0 rounded-xl bg-emerald-400/20 animate-pulse opacity-50"></div>
+                  )}
                 </div>
               </Link>
               
