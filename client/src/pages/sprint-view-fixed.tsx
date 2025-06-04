@@ -181,7 +181,7 @@ export default function SprintView() {
     
     const discoveryModules = ['intake', 'market_simulation', 'assumptions', 'competitive_intel', 'market_sizing', 'risk_assessment', 'swot_analysis'];
     const feasibilityModules = ['business_model_simulator', 'channel_recommender', 'async_interviews', 'demand_test'];
-    const validationModules = ['full_interviews', 'multi_channel_tests', 'enhanced_market_intel', 'strategic_analysis', 'blue_ocean_strategy', 'implementation_roadmap', 'action_plans', 'battlecards', 'partnership_evaluation'];
+    const validationModules = ['full_interviews', 'multi_channel_tests', 'enhanced_market_intel', 'implementation_roadmap', 'battlecards'];
 
     return {
       discovery: modules.filter((m: any) => discoveryModules.includes(m.moduleType)),
@@ -306,10 +306,10 @@ export default function SprintView() {
   // Get correct module counts based on tier
   const getTierModuleCounts = () => {
     switch (sprint?.tier) {
-      case 'discovery': return 8;
-      case 'feasibility': return 12;
-      case 'validation': return 19;
-      default: return 8;
+      case 'discovery': return 7;
+      case 'feasibility': return 11;
+      case 'validation': return 16;
+      default: return 7;
     }
   };
 
@@ -478,7 +478,7 @@ export default function SprintView() {
               <CardHeader>
                 <CardTitle className="text-lg">Validation Features</CardTitle>
                 <CardDescription>
-                  {modules?.length || 0} total modules • {modules?.filter((m: any) => m.isCompleted).length || 0} completed
+                  16 total modules • {modules?.filter((m: any) => m.isCompleted).length || 0} completed
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-2">
@@ -511,7 +511,7 @@ export default function SprintView() {
             <div className="space-y-6">
               {selectedModule ? (
                 <Card className="rounded-xl shadow-sm">
-                  <CardHeader>
+                  <CardHeader className="px-8 pt-8">
                     <div className="flex items-center justify-between">
                       <CardTitle>{getModuleName(selectedModule)}</CardTitle>
                       <Button 
@@ -523,22 +523,20 @@ export default function SprintView() {
                       </Button>
                     </div>
                   </CardHeader>
-                  <CardContent>
+                  <CardContent className="px-8 pb-8">
                     {renderSelectedModule()}
                   </CardContent>
                 </Card>
               ) : (
-                <Card className="rounded-xl shadow-sm">
-                  <CardHeader>
-                    <CardTitle>Select a Module</CardTitle>
-                    <CardDescription>
+                <Card className="rounded-xl shadow-sm h-[600px] flex items-center justify-center">
+                  <CardContent className="text-center">
+                    <Target className="w-16 h-16 mx-auto mb-6 text-gray-300" />
+                    <CardTitle className="mb-4 text-xl">Select a Module</CardTitle>
+                    <CardDescription className="text-base mb-6 max-w-md">
                       Choose a module from the sidebar to begin or continue your analysis
                     </CardDescription>
-                  </CardHeader>
-                  <CardContent>
-                    <div className="text-center py-12 text-gray-500">
-                      <Target className="w-12 h-12 mx-auto mb-4 text-gray-300" />
-                      <p>Select any unlocked module from the sidebar to get started</p>
+                    <div className="text-sm text-gray-500">
+                      Select any unlocked module from the sidebar to get started
                     </div>
                   </CardContent>
                 </Card>
