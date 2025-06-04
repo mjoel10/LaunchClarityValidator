@@ -140,6 +140,34 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Bypass payment for testing (mark sprint as paid)
+  app.post("/api/sprints/:id/mark-paid", async (req, res) => {
+    try {
+      const sprintId = Number(req.params.id);
+      const sprint = await storage.getSprintById(sprintId);
+      
+      if (!sprint) {
+        return res.status(404).json({ message: "Sprint not found" });
+      }
+      
+      // Mark sprint as paid and active
+      await storage.updateSprint(sprint.id, {
+        status: 'active',
+        paidAt: new Date(),
+      });
+      
+      // Initialize sprint modules based on tier
+      await storage.initializeSprintModules(sprint.id, sprint.tier);
+      
+      res.json({ 
+        message: "Sprint marked as paid and activated",
+        sprint: await storage.getSprintById(sprint.id)
+      });
+    } catch (error: any) {
+      res.status(500).json({ message: "Error marking sprint as paid: " + error.message });
+    }
+  });
+
   // Stripe webhook for payment confirmation
   app.post("/api/stripe-webhook", async (req, res) => {
     try {

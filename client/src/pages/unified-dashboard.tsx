@@ -123,6 +123,28 @@ export default function UnifiedDashboard() {
     },
   });
 
+  // Mark as paid mutation (for testing)
+  const markPaidMutation = useMutation({
+    mutationFn: async (sprintId: number) => {
+      const response = await apiRequest('POST', `/api/sprints/${sprintId}/mark-paid`);
+      return response.json();
+    },
+    onSuccess: () => {
+      toast({
+        title: 'Sprint Activated',
+        description: 'Sprint marked as paid and activated for testing.',
+      });
+      sprintsQuery.refetch();
+    },
+    onError: (error: any) => {
+      toast({
+        title: 'Error',
+        description: error.message || 'Failed to mark sprint as paid',
+        variant: 'destructive',
+      });
+    },
+  });
+
   const onSubmit = (data: CreateSprintForm) => {
     createSprintMutation.mutate(data);
   };
@@ -383,30 +405,56 @@ export default function UnifiedDashboard() {
                         <span className="text-2xl font-bold">{tierInfo.price}</span>
                         <div className="flex gap-2">
                           {sprint.status === 'draft' && (
-                            <Button
-                              size="sm"
-                              onClick={() => generatePaymentLinkMutation.mutate(sprint.id)}
-                              disabled={generatePaymentLinkMutation.isPending}
-                              className="flex items-center gap-1"
-                            >
-                              <CreditCard className="w-3 h-3" />
-                              Payment Link
-                            </Button>
+                            <>
+                              <Button
+                                size="sm"
+                                onClick={() => generatePaymentLinkMutation.mutate(sprint.id)}
+                                disabled={generatePaymentLinkMutation.isPending}
+                                className="flex items-center gap-1"
+                              >
+                                <CreditCard className="w-3 h-3" />
+                                Payment Link
+                              </Button>
+                              <Button
+                                size="sm"
+                                variant="secondary"
+                                onClick={() => markPaidMutation.mutate(sprint.id)}
+                                disabled={markPaidMutation.isPending}
+                                className="flex items-center gap-1"
+                              >
+                                <CheckCircle2 className="w-3 h-3" />
+                                Mark Paid
+                              </Button>
+                            </>
                           )}
                           
-                          {sprint.stripePaymentUrl && (
-                            <Button
-                              size="sm"
-                              variant="outline"
-                              onClick={() => {
-                                navigator.clipboard.writeText(sprint.stripePaymentUrl);
-                                toast({ title: 'Link Copied', description: 'Payment link copied to clipboard' });
-                              }}
-                              className="flex items-center gap-1"
-                            >
-                              <Copy className="w-3 h-3" />
-                              Copy Link
-                            </Button>
+                          {sprint.status === 'payment_pending' && (
+                            <>
+                              {sprint.stripePaymentUrl && (
+                                <Button
+                                  size="sm"
+                                  variant="outline"
+                                  onClick={() => {
+                                    navigator.clipboard.writeText(sprint.stripePaymentUrl);
+                                    toast({ title: 'Link Copied', description: 'Payment link copied to clipboard' });
+                                  }}
+                                  className="flex items-center gap-1"
+                                >
+                                  <Copy className="w-3 h-3" />
+                                  Copy Link
+                                </Button>
+                              )}
+                              <Button
+                                size="sm"
+                                variant="secondary"
+                                onClick={() => markPaidMutation.mutate(sprint.id)}
+                                disabled={markPaidMutation.isPending}
+                                className="flex items-center gap-1"
+                              >
+                                <CheckCircle2 className="w-3 h-3" />
+                                Mark Paid
+                              </Button>
+                            </>
                           )}
                           
                           <Button size="sm" variant="outline" asChild>
