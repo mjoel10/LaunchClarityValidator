@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Separator } from '@/components/ui/separator';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { 
   Building2, 
@@ -64,7 +64,6 @@ const FEATURE_COMPONENTS = {
 export default function SprintView() {
   const params = useParams();
   const sprintId = Number(params.id);
-  const [activeTab, setActiveTab] = useState('overview');
   const [selectedModule, setSelectedModule] = useState<string | null>(null);
   const [expandedSections, setExpandedSections] = useState({
     discovery: true,
@@ -304,10 +303,20 @@ export default function SprintView() {
   const isFeasibilityUnlocked = sprint.tier === 'feasibility' || sprint.tier === 'validation';
   const isValidationUnlocked = sprint.tier === 'validation';
 
+  // Get correct module counts based on tier
+  const getTierModuleCounts = () => {
+    switch (sprint?.tier) {
+      case 'discovery': return 8;
+      case 'feasibility': return 12;
+      case 'validation': return 19;
+      default: return 8;
+    }
+  };
+
   // Get decision preview for header
   const getDecisionPreview = () => {
     const completedModules = modules?.filter(m => m.isCompleted) || [];
-    const totalModules = modules?.length || 1;
+    const totalModules = getTierModuleCounts();
     const completionRate = (completedModules.length / totalModules) * 100;
     
     if (completionRate < 30) {
@@ -429,9 +438,9 @@ export default function SprintView() {
                     />
                     <path
                       className={`${
-                        ((modules?.filter((m: any) => m.isCompleted).length || 0) / (modules?.length || 1)) * 100 >= 70 
+                        ((modules?.filter((m: any) => m.isCompleted).length || 0) / getTierModuleCounts()) * 100 >= 70 
                           ? 'text-emerald-400' 
-                          : ((modules?.filter((m: any) => m.isCompleted).length || 0) / (modules?.length || 1)) * 100 >= 50 
+                          : ((modules?.filter((m: any) => m.isCompleted).length || 0) / getTierModuleCounts()) * 100 >= 50 
                           ? 'text-amber-400'
                           : 'text-blue-400'
                       }`}
@@ -439,7 +448,7 @@ export default function SprintView() {
                       strokeWidth="3"
                       strokeLinecap="round"
                       fill="transparent"
-                      strokeDasharray={`${((modules?.filter((m: any) => m.isCompleted).length || 0) / (modules?.length || 1)) * 100}, 100`}
+                      strokeDasharray={`${((modules?.filter((m: any) => m.isCompleted).length || 0) / getTierModuleCounts()) * 100}, 100`}
                       d="M18 2.0845
                         a 15.9155 15.9155 0 0 1 0 31.831
                         a 15.9155 15.9155 0 0 1 0 -31.831"
@@ -447,13 +456,13 @@ export default function SprintView() {
                   </svg>
                   <div className="absolute inset-0 flex items-center justify-center">
                     <span className="text-2xl font-bold text-white">
-                      {Math.round(((modules?.filter((m: any) => m.isCompleted).length || 0) / (modules?.length || 1)) * 100)}%
+                      {Math.round(((modules?.filter((m: any) => m.isCompleted).length || 0) / getTierModuleCounts()) * 100)}%
                     </span>
                   </div>
                 </div>
                 <div className="text-sm text-blue-100 font-medium mt-2">Sprint Complete</div>
                 <div className="text-xs text-blue-200 mt-1">
-                  {modules?.filter((m: any) => m.isCompleted).length || 0} of {modules?.length || 0} modules
+                  {modules?.filter((m: any) => m.isCompleted).length || 0} of {getTierModuleCounts()} modules
                 </div>
               </div>
             </div>
@@ -499,95 +508,42 @@ export default function SprintView() {
 
           {/* Main Content */}
           <div className="lg:col-span-9">
-            <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-              <TabsList className="grid w-full grid-cols-3">
-                <TabsTrigger value="overview">Overview</TabsTrigger>
-                <TabsTrigger value="modules">Active Modules</TabsTrigger>
-                <TabsTrigger value="reports">Reports</TabsTrigger>
-              </TabsList>
-
-              <TabsContent value="overview" className="space-y-6">
+            <div className="space-y-6">
+              {selectedModule ? (
                 <Card className="rounded-xl shadow-sm">
                   <CardHeader>
-                    <CardTitle>Sprint Progress</CardTitle>
+                    <div className="flex items-center justify-between">
+                      <CardTitle>{getModuleName(selectedModule)}</CardTitle>
+                      <Button 
+                        variant="outline" 
+                        size="sm"
+                        onClick={() => setSelectedModule(null)}
+                      >
+                        Back to Overview
+                      </Button>
+                    </div>
                   </CardHeader>
                   <CardContent>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                      <div className="text-center">
-                        <div className="text-2xl font-bold text-green-600">
-                          {modulesByTier.discovery?.filter((m: any) => m.isCompleted).length || 0}
-                        </div>
-                        <div className="text-sm text-gray-600">Discovery Completed</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-2xl font-bold text-blue-600">
-                          {modulesByTier.feasibility?.filter((m: any) => m.isCompleted).length || 0}
-                        </div>
-                        <div className="text-sm text-gray-600">Feasibility Completed</div>
-                      </div>
-                      <div className="text-center">
-                        <div className="text-2xl font-bold text-purple-600">
-                          {modulesByTier.validation?.filter((m: any) => m.isCompleted).length || 0}
-                        </div>
-                        <div className="text-sm text-gray-600">Validation Completed</div>
-                      </div>
-                    </div>
+                    {renderSelectedModule()}
                   </CardContent>
                 </Card>
-              </TabsContent>
-
-              <TabsContent value="modules" className="space-y-6">
-                {selectedModule ? (
-                  <Card className="rounded-xl shadow-sm">
-                    <CardHeader>
-                      <div className="flex items-center justify-between">
-                        <CardTitle>{getModuleName(selectedModule)}</CardTitle>
-                        <Button 
-                          variant="outline" 
-                          size="sm"
-                          onClick={() => setSelectedModule(null)}
-                        >
-                          Back to Overview
-                        </Button>
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      {renderSelectedModule()}
-                    </CardContent>
-                  </Card>
-                ) : (
-                  <Card className="rounded-xl shadow-sm">
-                    <CardHeader>
-                      <CardTitle>Select a Module</CardTitle>
-                      <CardDescription>
-                        Choose a module from the sidebar to begin or continue your analysis
-                      </CardDescription>
-                    </CardHeader>
-                    <CardContent>
-                      <div className="text-center py-12 text-gray-500">
-                        Select any unlocked module from the sidebar to get started
-                      </div>
-                    </CardContent>
-                  </Card>
-                )}
-              </TabsContent>
-
-              <TabsContent value="reports" className="space-y-6">
+              ) : (
                 <Card className="rounded-xl shadow-sm">
                   <CardHeader>
-                    <CardTitle>Sprint Reports</CardTitle>
+                    <CardTitle>Select a Module</CardTitle>
                     <CardDescription>
-                      Comprehensive analysis and recommendations
+                      Choose a module from the sidebar to begin or continue your analysis
                     </CardDescription>
                   </CardHeader>
                   <CardContent>
                     <div className="text-center py-12 text-gray-500">
-                      Reports will be available as you complete more modules
+                      <Target className="w-12 h-12 mx-auto mb-4 text-gray-300" />
+                      <p>Select any unlocked module from the sidebar to get started</p>
                     </div>
                   </CardContent>
                 </Card>
-              </TabsContent>
-            </Tabs>
+              )}
+            </div>
           </div>
         </div>
       </div>
