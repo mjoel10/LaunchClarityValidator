@@ -95,32 +95,54 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Stripe payment route
-  app.post("/api/create-payment-intent", async (req, res) => {
+  // Generate Stripe payment link for sprint
+  app.post("/api/sprints/:id/payment-link", async (req, res) => {
     try {
-      const { sprintId } = req.body;
+      const sprintId = Number(req.params.id);
       const sprint = await storage.getSprintById(sprintId);
       
       if (!sprint) {
         return res.status(404).json({ message: "Sprint not found" });
       }
       
-      const paymentIntent = await stripe.paymentIntents.create({
-        amount: sprint.price,
-        currency: "usd",
+      // Create Stripe payment link
+      const paymentLink = await stripe.paymentLinks.create({
+        line_items: [
+          {
+            price_data: {
+              currency: 'usd',
+              product_data: {
+                name: `${sprint.tier.charAt(0).toUpperCase() + sprint.tier.slice(1)} Sprint - ${sprint.companyName}`,
+                description: `LaunchClarity ${sprint.tier} validation sprint for ${sprint.companyName}`,
+              },
+              unit_amount: sprint.price,
+            },
+            quantity: 1,
+          },
+        ],
         metadata: {
           sprintId: sprint.id.toString(),
         },
+        after_completion: {
+          type: 'redirect',
+          redirect: {
+            url: `${process.env.FRONTEND_URL || 'http://localhost:5000'}/payment-success?sprint=${sprint.id}`,
+          },
+        },
       });
       
-      // Update sprint with payment intent ID
+      // Update sprint with payment link
       await storage.updateSprint(sprint.id, {
-        stripePaymentIntentId: paymentIntent.id,
+        stripePaymentLinkId: paymentLink.id,
+        stripePaymentUrl: paymentLink.url,
       });
       
-      res.json({ clientSecret: paymentIntent.client_secret });
+      res.json({ 
+        paymentUrl: paymentLink.url,
+        paymentLinkId: paymentLink.id 
+      });
     } catch (error: any) {
-      res.status(500).json({ message: "Error creating payment intent: " + error.message });
+      res.status(500).json({ message: "Error creating payment link: " + error.message });
     }
   });
 

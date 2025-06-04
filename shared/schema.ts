@@ -32,6 +32,8 @@ export const sprints = pgTable("sprints", {
   price: integer("price").notNull(), // in cents
   paidAt: timestamp("paid_at"),
   stripePaymentIntentId: text("stripe_payment_intent_id"),
+  stripePaymentLinkId: text("stripe_payment_link_id"),
+  stripePaymentUrl: text("stripe_payment_url"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });

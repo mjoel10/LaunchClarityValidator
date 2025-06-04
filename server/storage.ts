@@ -60,7 +60,7 @@ export class DatabaseStorage implements IStorage {
     return user;
   }
 
-  async getSprintsByUser(userId: number): Promise<Sprint[]> {
+  async getSprintsByUser(userId: number, isConsultant: boolean = false): Promise<Sprint[]> {
     return await db.select().from(sprints).where(eq(sprints.clientId, userId));
   }
 

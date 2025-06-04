@@ -1,0 +1,50 @@
+Based on our discussion, let's simplify the platform to a single unified experience that I'll use to run sprints on behalf of clients. Here's what we need:
+
+UNIFIED EXPERIENCE APPROACH:
+- Remove the distinction between consultant and client views for now
+- Build ONE interface where I can:
+  1. Create and manage sprints
+  2. Fill out intake forms on behalf of clients
+  3. Run all AI analysis and add data
+  4. View the beautiful dashboards and reports
+  5. Export PDFs to share with clients
+
+KEY CHANGES:
+1. Remove the "Client Intake Form" as a separate client-facing page
+2. Instead, make it accessible from the main sprint dashboard as "Sprint Setup" or "Initial Data"
+3. I'll fill it out myself during client onboarding calls
+4. Remove any client login/authentication - just one admin account (me)
+5. Keep all the beautiful dashboard views but assume I'm viewing them to share with clients
+
+WORKFLOW SIMPLIFICATION:
+1. I create a new sprint (selecting tier: Discovery/Feasibility/Validation)
+2. I enter client company details
+3. I fill out the comprehensive intake form during our kickoff call
+4. I run the sprint, triggering AI analysis and adding data as needed
+5. I view dashboards and export PDFs to share with clients
+6. Clients receive PDF reports and screen shares during calls (no login needed)
+
+WHAT TO KEEP:
+- All tier-based features (Discovery, Feasibility, Validation)
+- The comprehensive intake form (but as part of my workflow)
+- All AI-powered analysis features
+- Beautiful dashboard visualizations
+- PDF export functionality
+- Sprint progress tracking
+- The modern UI design we just implemented
+
+WHAT TO REMOVE/SIMPLIFY:
+- Client authentication/login system
+- Separate client vs consultant views
+- Client portal concept
+- Comment system (I'll track notes elsewhere)
+- Complex permissions
+
+FOCUS ON:
+- Making data entry efficient for me as the operator
+- Ensuring AI analysis runs smoothly with intake data
+- Creating stunning visualizations I can share
+- Quick sprint switching between my 5-10 concurrent clients
+- Professional PDF exports
+
+This approach lets me start using the platform immediately for real clients while we validate the core functionality. We can always add client self-service features later once we understand the workflow better.

@@ -11,6 +11,7 @@ import SprintView from "@/pages/sprint-view";
 import IntakeForm from "@/pages/intake-form";
 import ConsultantDashboard from "@/pages/consultant-dashboard";
 import FeatureDemo from "@/pages/feature-demo";
+import UnifiedDashboard from "@/pages/unified-dashboard";
 
 function Router() {
   return (
@@ -18,7 +19,8 @@ function Router() {
       <Route path="/login" component={Login} />
       <Route path="/consultant" component={ConsultantDashboard} />
       <Route path="/demo" component={FeatureDemo} />
-      <Route path="/" component={Dashboard} />
+      <Route path="/unified" component={UnifiedDashboard} />
+      <Route path="/" component={UnifiedDashboard} />
       <Route path="/sprints/:id" component={SprintView} />
       <Route path="/sprints/:id/intake" component={IntakeForm} />
       <Route component={NotFound} />
