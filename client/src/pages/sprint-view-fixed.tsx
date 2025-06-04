@@ -306,7 +306,7 @@ export default function SprintView() {
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <div className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl ml-2 mr-auto px-4 py-4">
+        <div className="max-w-none mx-6 px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-4">
               <Link href="/dashboard">
@@ -326,7 +326,7 @@ export default function SprintView() {
 
       {/* Sprint Banner */}
       <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white">
-        <div className="max-w-7xl ml-2 mr-auto px-4 py-8">
+        <div className="max-w-none mx-6 px-4 py-8">
           <div className="flex items-center justify-between">
             <div>
               <h1 className="text-3xl font-bold mb-2">{intakeData?.companyName || 'Company Name'}</h1>
@@ -345,10 +345,10 @@ export default function SprintView() {
         </div>
       </div>
 
-      <div className="max-w-7xl ml-2 mr-auto pl-2 pr-4 py-8">
+      <div className="max-w-none mx-6 pl-2 pr-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Sidebar - All Features by Tier */}
-          <div className="lg:col-span-4">
+          <div className="lg:col-span-3">
             <Card className="rounded-xl shadow-sm sticky top-4">
               <CardHeader>
                 <CardTitle className="text-lg">Validation Features</CardTitle>
@@ -382,7 +382,7 @@ export default function SprintView() {
           </div>
 
           {/* Main Content */}
-          <div className="lg:col-span-8">
+          <div className="lg:col-span-9">
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
               <TabsList className="grid w-full grid-cols-3">
                 <TabsTrigger value="overview">Overview</TabsTrigger>
