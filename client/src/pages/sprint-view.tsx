@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { useParams, Link } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -35,6 +35,8 @@ import MarketSimulation from '@/components/sprint/market-simulation';
 import BusinessModelSimulator from '@/components/sprint/business-model-simulator';
 import ChannelRecommender from '@/components/sprint/channel-recommender';
 import StrategicAnalysisTools from '@/components/sprint/strategic-analysis-tools';
+import AsyncInterviews from '@/components/sprint/async-interviews';
+import DemandTestTracker from '@/components/sprint/demand-test-tracker';
 import { cn } from '@/lib/utils';
 
 const FEATURE_COMPONENTS = {
@@ -42,6 +44,8 @@ const FEATURE_COMPONENTS = {
   business_model_simulator: BusinessModelSimulator,
   channel_recommender: ChannelRecommender,
   strategic_analysis: StrategicAnalysisTools,
+  async_interviews: AsyncInterviews,
+  demand_test: DemandTestTracker,
 };
 
 export default function SprintView() {
@@ -131,6 +135,15 @@ export default function SprintView() {
       implementation_roadmap: MapPin,
       action_plans: Calendar,
       partnership_evaluation: Handshake,
+      async_interviews: Users,
+      demand_test: BarChart3,
+      full_interviews: Users,
+      multi_channel_tests: Target,
+      blue_ocean_strategy: Brain,
+      enhanced_market_intel: BarChart3,
+      go_defer_decision: CheckCircle2,
+      go_pivot_defer: CheckCircle2,
+      go_pivot_kill: CheckCircle2,
     };
     return iconMap[moduleType] || FileText;
   };
@@ -144,15 +157,30 @@ export default function SprintView() {
       market_sizing: 'Market Sizing Analysis',
       risk_assessment: 'Risk Assessment',
       swot_analysis: 'SWOT Analysis',
+      
+      // Feasibility Sprint Features
       business_model_simulator: 'Business Model Simulator',
       channel_recommender: 'Channel Recommender',
+      async_interviews: 'Async Interview Suite (5-7 interviews)',
+      demand_test: 'Demand Test Tracker',
+      
+      // Validation Sprint Features
       strategic_analysis: 'Strategic Analysis Tools',
       battlecards: 'Competitive Battlecards',
       implementation_roadmap: 'Implementation Roadmap',
       action_plans: '90-Day Action Plans',
       partnership_evaluation: 'Partnership Evaluation',
+      full_interviews: 'Full Interview Suite (15+ interviews)',
+      multi_channel_tests: 'Multi-Channel Testing Dashboard',
+      enhanced_market_intel: 'Enhanced Market Intelligence',
+      blue_ocean_strategy: 'Blue Ocean Strategy Analysis',
+      
+      // Decision Points
+      go_defer_decision: 'Go/Defer Decision Framework',
+      go_pivot_defer: 'Go/Pivot/Defer Decision',
+      go_pivot_kill: 'Go/Pivot/Kill Decision',
     };
-    return nameMap[moduleType] || moduleType.replace('_', ' ');
+    return nameMap[moduleType] || moduleType.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
   };
 
   if (isLoading) {
