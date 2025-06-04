@@ -139,7 +139,7 @@ export default function Sidebar({ sprint, modules }: SidebarProps) {
         const tierInfo = getTierLabel(module.tier);
         return (
           <div className="flex items-center gap-1">
-            <Lock className="w-4 h-4 text-gray-400" />
+            <Lock className="w-3.5 h-3.5 text-gray-400" />
             <div className={cn("px-1.5 py-0.5 rounded text-xs font-medium flex items-center gap-1", tierInfo.color)}>
               {tierInfo.icon}
               {tierInfo.label}
@@ -147,7 +147,7 @@ export default function Sidebar({ sprint, modules }: SidebarProps) {
           </div>
         );
       case 'locked':
-        return <Lock className="w-4 h-4 text-gray-400" />;
+        return <Lock className="w-3.5 h-3.5 text-gray-400" />;
       default:
         return <Clock className="w-4 h-4 text-gray-400" />;
     }
