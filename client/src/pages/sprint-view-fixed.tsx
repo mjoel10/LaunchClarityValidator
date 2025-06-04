@@ -248,12 +248,15 @@ export default function SprintView() {
                       )}>
                         {getModuleName(module.moduleType)}
                       </div>
-                      <div className="text-xs text-gray-500">
-                        {module.isCompleted ? 'Completed' : isAvailable ? 'Available' : 'Locked'}
-                      </div>
+                      {module.isCompleted && (
+                        <div className="text-xs text-green-600">Completed</div>
+                      )}
+                      {!module.isCompleted && isAvailable && (
+                        <div className="text-xs text-blue-600">Available</div>
+                      )}
                     </div>
                   </div>
-                  {!isAvailable && <Lock className="w-4 h-4 text-gray-400" />}
+                  {!isAvailable && <Lock className="w-3.5 h-3.5 text-gray-400" />}
                 </button>
               );
             })}
