@@ -16,37 +16,146 @@ export default function DecisionEngine({ sprintId, tier, modules, intakeData }: 
   const totalModules = modules?.length || 1;
   const completionRate = (completedModules.length / totalModules) * 100;
   
-  // Calculate decision based on tier and completion
+  // Analyze key signals from completed modules
+  const analyzeSignals = () => {
+    const signals = {
+      marketValidation: 0,
+      customerDemand: 0,
+      businessViability: 0,
+      riskLevel: 0
+    };
+
+    completedModules.forEach(module => {
+      const data = module.generatedData;
+      if (!data) return;
+
+      // Extract signals based on module type
+      switch (module.moduleType) {
+        case 'market_simulation':
+          signals.marketValidation += data.marketSize > 1000000 ? 20 : 10;
+          break;
+        case 'demand_test_tracker':
+          signals.customerDemand += data.conversionRate > 0.05 ? 25 : 5;
+          break;
+        case 'business_model_simulator':
+          signals.businessViability += data.breakEvenMonths < 18 ? 20 : 0;
+          break;
+        case 'enhanced_market_intel':
+          signals.marketValidation += data.competitorCount < 5 ? 15 : 5;
+          break;
+        case 'async_interviews':
+          signals.customerDemand += data.positiveResponses > 70 ? 20 : 10;
+          break;
+        case 'full_interview_suite':
+          signals.customerDemand += data.willingnessToPay > 0.6 ? 25 : 10;
+          break;
+      }
+    });
+
+    // Calculate risk based on negative indicators
+    signals.riskLevel = Math.max(0, 100 - signals.marketValidation - signals.customerDemand);
+    
+    return signals;
+  };
+
+  // Calculate decision based on tier, completion, and signal analysis
   const getDecision = () => {
     if (completionRate < 30) {
-      return { recommendation: 'Insufficient Data', confidence: completionRate, color: 'gray' };
+      return { 
+        recommendation: 'Insufficient Data', 
+        confidence: Math.round(completionRate), 
+        color: 'gray',
+        reasoning: 'Complete more validation modules to get actionable insights'
+      };
     }
+
+    const signals = analyzeSignals();
+    const totalSignal = signals.marketValidation + signals.customerDemand + signals.businessViability;
     
     if (tier === 'discovery') {
-      if (completionRate >= 70) {
-        return { recommendation: 'Go to Feasibility', confidence: 85, color: 'green' };
-      } else if (completionRate >= 50) {
-        return { recommendation: 'Pivot Strategy', confidence: 65, color: 'yellow' };
+      if (totalSignal >= 60 && completionRate >= 70) {
+        return { 
+          recommendation: 'Go to Feasibility', 
+          confidence: 85, 
+          color: 'green',
+          reasoning: 'Strong market signals detected, ready for deeper validation'
+        };
+      } else if (totalSignal >= 40 || completionRate >= 50) {
+        return { 
+          recommendation: 'Pivot Strategy', 
+          confidence: 65, 
+          color: 'yellow',
+          reasoning: 'Mixed signals suggest strategic adjustments needed'
+        };
+      } else {
+        return { 
+          recommendation: 'Kill Project', 
+          confidence: 70, 
+          color: 'red',
+          reasoning: 'Insufficient market validation and customer demand'
+        };
       }
     } else if (tier === 'feasibility') {
-      if (completionRate >= 80) {
-        return { recommendation: 'Go to Validation', confidence: 88, color: 'green' };
-      } else if (completionRate >= 60) {
-        return { recommendation: 'Pivot Business Model', confidence: 72, color: 'yellow' };
+      if (totalSignal >= 80 && completionRate >= 80) {
+        return { 
+          recommendation: 'Go to Validation', 
+          confidence: 88, 
+          color: 'green',
+          reasoning: 'Business model validated, ready for market testing'
+        };
+      } else if (totalSignal >= 50 && completionRate >= 60) {
+        return { 
+          recommendation: 'Pivot Business Model', 
+          confidence: 72, 
+          color: 'yellow',
+          reasoning: 'Core concept valid but business model needs refinement'
+        };
       } else if (completionRate >= 40) {
-        return { recommendation: 'Defer Decision', confidence: 58, color: 'orange' };
+        return { 
+          recommendation: 'Defer Decision', 
+          confidence: 58, 
+          color: 'orange',
+          reasoning: 'Inconclusive results, gather more data before proceeding'
+        };
+      } else {
+        return { 
+          recommendation: 'Kill Project', 
+          confidence: 75, 
+          color: 'red',
+          reasoning: 'Poor feasibility indicators across multiple dimensions'
+        };
       }
     } else if (tier === 'validation') {
-      if (completionRate >= 85) {
-        return { recommendation: 'Go to Market', confidence: 92, color: 'green' };
-      } else if (completionRate >= 70) {
-        return { recommendation: 'Pivot Strategy', confidence: 78, color: 'yellow' };
-      } else if (completionRate >= 50) {
-        return { recommendation: 'Kill Project', confidence: 65, color: 'red' };
+      if (totalSignal >= 90 && completionRate >= 85) {
+        return { 
+          recommendation: 'Go to Market', 
+          confidence: 92, 
+          color: 'green',
+          reasoning: 'Strong validation across all metrics, ready for launch'
+        };
+      } else if (totalSignal >= 60 && completionRate >= 70) {
+        return { 
+          recommendation: 'Pivot Strategy', 
+          confidence: 78, 
+          color: 'yellow',
+          reasoning: 'Good foundation but execution strategy needs adjustment'
+        };
+      } else {
+        return { 
+          recommendation: 'Kill Project', 
+          confidence: 80, 
+          color: 'red',
+          reasoning: 'Failed to achieve validation benchmarks despite extensive testing'
+        };
       }
     }
     
-    return { recommendation: 'Continue Analysis', confidence: Math.min(completionRate + 20, 75), color: 'blue' };
+    return { 
+      recommendation: 'Continue Analysis', 
+      confidence: Math.min(completionRate + 20, 75), 
+      color: 'blue',
+      reasoning: 'Gather more data to reach a confident decision'
+    };
   };
 
   const decision = getDecision();
@@ -151,6 +260,11 @@ export default function DecisionEngine({ sprintId, tier, modules, intakeData }: 
             <Progress value={completionRate} className="h-2" />
           </div>
 
+          <div className="bg-gray-50 p-3 rounded-lg">
+            <h4 className="font-medium mb-2">Strategic Reasoning</h4>
+            <p className="text-sm text-gray-700">{decision.reasoning}</p>
+          </div>
+
           <div>
             <h4 className="font-medium mb-2">Key Decision Factors</h4>
             <div className="space-y-1">
@@ -165,10 +279,10 @@ export default function DecisionEngine({ sprintId, tier, modules, intakeData }: 
 
           <div className="flex gap-2 pt-2">
             <Button className="flex-1">
-              View Full Analysis
+              View Detailed Analysis
             </Button>
             <Button variant="outline">
-              Export Report
+              Generate Report
             </Button>
           </div>
 
