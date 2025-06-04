@@ -163,7 +163,7 @@ export default function SprintView() {
       action_plans: '90-Day Action Plans',
       partnership_evaluation: 'Partnership Evaluation',
       full_interviews: 'Full Interview Suite',
-      multi_channel_tests: 'Multi-Channel Testing Dashboard',
+      multi_channel_tests: 'Multi-Channel Testing',
       enhanced_market_intel: 'Enhanced Market Intelligence',
       blue_ocean_strategy: 'Blue Ocean Strategy Analysis',
       
@@ -251,9 +251,7 @@ export default function SprintView() {
                       {module.isCompleted && (
                         <div className="text-xs text-green-600">Completed</div>
                       )}
-                      {!module.isCompleted && isAvailable && (
-                        <div className="text-xs text-blue-600">Available</div>
-                      )}
+
                     </div>
                   </div>
                   {!isAvailable && <Lock className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />}
