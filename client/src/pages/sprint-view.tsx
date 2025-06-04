@@ -39,6 +39,10 @@ import AsyncInterviews from '@/components/sprint/async-interviews';
 import DemandTestTracker from '@/components/sprint/demand-test-tracker';
 import FullInterviewSuite from '@/components/sprint/full-interview-suite';
 import MultiChannelTesting from '@/components/sprint/multi-channel-testing';
+import EnhancedMarketIntel from '@/components/sprint/enhanced-market-intel';
+import BlueOceanStrategy from '@/components/sprint/blue-ocean-strategy';
+import ImplementationRoadmap from '@/components/sprint/implementation-roadmap';
+import ActionPlans from '@/components/sprint/action-plans';
 import { cn } from '@/lib/utils';
 
 const FEATURE_COMPONENTS = {
@@ -50,6 +54,10 @@ const FEATURE_COMPONENTS = {
   demand_test: DemandTestTracker,
   full_interviews: FullInterviewSuite,
   multi_channel_tests: MultiChannelTesting,
+  enhanced_market_intel: EnhancedMarketIntel,
+  blue_ocean_strategy: BlueOceanStrategy,
+  implementation_roadmap: ImplementationRoadmap,
+  action_plans: ActionPlans,
 };
 
 export default function SprintView() {
