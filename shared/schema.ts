@@ -74,12 +74,13 @@ export const intakeData = pgTable("intake_data", {
   hasTestingAudience: boolean("has_testing_audience"),
   
   // Partnership Evaluation (optional)
+  isPartnershipEvaluation: boolean("is_partnership_evaluation").default(false),
   evaluatedPartner: text("evaluated_partner"),
   partnerType: text("partner_type"), // Platform, Reseller, Tech Integration, Co-Marketing, Other
   relationshipStatus: text("relationship_status"), // None, Early convo, Signed LOI, Beta
   integrationType: text("integration_type"), // API, White-label, Co-built, Bundled Offer
-  primaryPartnershipGoal: text("primary_partnership_goal"), // New Revenue, Churn Reduction, Market Entry, Strategic Leverage
-  keyRisks: text("key_risks"),
+  partnershipGoal: text("partnership_goal"), // New Revenue, Churn Reduction, Market Entry, Strategic Leverage
+  keyRisksOrUncertainties: text("key_risks_or_uncertainties"),
   
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),

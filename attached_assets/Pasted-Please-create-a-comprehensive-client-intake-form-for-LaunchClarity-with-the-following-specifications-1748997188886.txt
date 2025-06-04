@@ -1,0 +1,90 @@
+Please create a comprehensive client intake form for LaunchClarity with the following specifications:
+
+STRUCTURE:
+- Multi-step form with 5 sections
+- Progress indicator showing current section
+- Save data to sprint_data with module_name = "intake"
+- Match the modern UI design we just implemented (gradients, cards, etc.)
+
+IMPORTANT REQUIREMENTS:
+1. This data needs to be viewable by the consultant (me) in the consultant dashboard
+2. All structured data will be fed into AI analysis for the Discovery Sprint features
+3. Design fields to minimize garbage-in/garbage-out for AI processing
+4. Create a consultant view to review submitted intake forms
+
+SECTION 1: Business Overview
+- Company name (text)
+- Contact name, email, phone (text fields)
+- Business model (dropdown): B2B, B2C, B2B2C, B2G, Marketplace
+- Product type (dropdown): SaaS, Service, Physical, Marketplace, App
+- Current stage (dropdown): Idea, Pre-launch, MVP, Revenue < $100K, Revenue > $100K
+- Industry (dropdown with common industries)
+- Geographic markets (multi-select checkboxes)
+
+SECTION 2: Operational Complexity
+- Sales complexity (dropdown): Low, Medium, High
+- Sales motion (dropdown): Self-serve, Inside Sales, Field Sales, Hybrid
+- Delivery complexity (dropdown): Low, Medium, High
+- Primary delivery model (dropdown): Digital, Physical, Service-heavy, Hybrid
+
+SECTION 3: Customer & Value Prop
+- Target customer description (rich text area)
+- Core problem being solved (rich text area)
+- Value proposition (rich text area)
+- Estimated price point (number input + currency dropdown)
+
+SECTION 4: Competitive Landscape
+- Top 3 competitors (dynamic list with name + differentiator fields)
+- Unique advantage (text area)
+
+SECTION 5: Validation Intent
+- Top 3 assumptions to validate (text areas)
+- Primary validation goals (multi-select): Problem Fit, Solution Fit, Pricing, Channel, Model
+- #1 critical question (text area)
+- Has this been tested before? (yes/no radio + optional description)
+- Do you have an audience to test with? (yes/no radio)
+
+PARTNERSHIP MODE:
+Add a toggle for "Partnership Evaluation Sprint" that shows these additional fields:
+- Evaluated partner (text)
+- Partner type (dropdown): Platform, Reseller, Tech Integration, Co-Marketing, Other
+- Relationship status (dropdown): None, Early Conversations, Signed LOI, Beta
+- Integration type (dropdown): API, White-label, Co-built, Bundled Offer
+- Primary goal (dropdown): New Revenue, Churn Reduction, Market Entry, Strategic Leverage
+- Key risks or uncertainties (text area)
+
+CONSULTANT FEATURES NEEDED:
+- Add an "Intake Forms" section to the consultant dashboard
+- Show completed intake forms with client name, date, and sprint type
+- Allow consultant to view/review all submitted data
+- Add status indicators (Pending Review, Reviewed, In Progress)
+- Ability to export intake data or copy key fields
+
+AI INTEGRATION CONSIDERATIONS:
+- Structure data in clean JSON format for AI consumption
+- Use consistent field names that AI prompts can reference
+- Ensure dropdown values are standardized (not free text)
+- Rich text fields should be clearly labeled for context
+- All data should be accessible via sprint_data.intake object
+
+UI REQUIREMENTS:
+- Use the same gradient styling as the main dashboard
+- Show section progress (1 of 5, 2 of 5, etc.)
+- Next/Previous buttons
+- Form validation before moving sections
+- Review screen before final submission
+- Save to database on completion
+
+WORKFLOW:
+1. Consultant creates sprint → generates payment link
+2. Client pays → receives intake form link
+3. Client completes intake form
+4. Consultant reviews in dashboard
+5. Data automatically feeds into AI analysis modules
+
+DATA USAGE:
+This intake data will power the Discovery Sprint AI features:
+- AI Market Simulation (100+ synthetic customer responses)
+- Assumption Tracker with risk scoring
+- Competitive Intelligence & battlecards
+-

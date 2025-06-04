@@ -173,6 +173,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Get consultant intake forms
+  app.get("/api/consultant/intake-forms", async (req, res) => {
+    try {
+      const consultantId = 1; // Mock consultant ID
+      const sprints = await storage.getSprintsByUser(consultantId, true);
+      
+      // Get intake data for each sprint
+      const sprintsWithIntake = await Promise.all(
+        sprints.map(async (sprint) => {
+          const intake = await storage.getIntakeDataBySprintId(sprint.id);
+          return {
+            ...sprint,
+            intakeData: intake,
+            hasIntake: !!intake,
+            intakeStatus: intake ? 'completed' : 'pending'
+          };
+        })
+      );
+      
+      res.json(sprintsWithIntake.filter(s => s.hasIntake));
+    } catch (error: any) {
+      res.status(500).json({ message: error.message });
+    }
+  });
+
   app.get("/api/sprints/:id/intake", async (req, res) => {
     try {
       const sprintId = Number(req.params.id);
