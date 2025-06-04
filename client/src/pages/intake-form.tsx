@@ -8,11 +8,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Switch } from '@/components/ui/switch';
 import { Progress } from '@/components/ui/progress';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -32,7 +30,7 @@ import { apiRequest } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
 import { cn } from '@/lib/utils';
 
-// Form validation schema
+// Comprehensive form validation schema
 const intakeFormSchema = z.object({
   // Section 1: Business Overview
   companyName: z.string().min(1, 'Company name is required'),
@@ -103,8 +101,6 @@ export default function IntakeForm() {
   const [, setLocation] = useLocation();
   const { toast } = useToast();
   const [currentSection, setCurrentSection] = useState(1);
-  const [competitors, setCompetitors] = useState([{ name: '', differentiator: '' }]);
-  const [assumptions, setAssumptions] = useState(['']);
 
   const form = useForm<IntakeFormData>({
     resolver: zodResolver(intakeFormSchema),
@@ -147,7 +143,7 @@ export default function IntakeForm() {
     onSuccess: () => {
       toast({
         title: 'Intake Form Submitted',
-        description: 'Your information has been submitted successfully. Your consultant will review it shortly.',
+        description: 'Your information has been submitted successfully.',
       });
       setLocation('/');
     },
@@ -161,59 +157,7 @@ export default function IntakeForm() {
   });
 
   const onSubmit = (data: IntakeFormData) => {
-    // Clean and format data
-    const cleanedData = {
-      ...data,
-      competitors: competitors.filter(c => c.name && c.differentiator),
-      assumptionsToValidate: assumptions.filter(a => a.trim()),
-    };
-    
-    submitIntakeMutation.mutate(cleanedData);
-  };
-
-  const nextSection = async () => {
-    const sectionsToValidate = {
-      1: ['companyName', 'contactName', 'contactEmail', 'contactPhone', 'businessModel', 'productType', 'currentStage', 'industry', 'geographicMarkets'],
-      2: ['salesComplexity', 'salesMotion', 'deliveryComplexity', 'primaryDeliveryModel'],
-      3: ['targetCustomerDescription', 'coreProblem', 'valueProposition', 'estimatedPricePoint'],
-      4: ['uniqueAdvantage'],
-      5: ['criticalQuestion', 'primaryValidationGoals']
-    };
-
-    const fieldsToValidate = sectionsToValidate[currentSection as keyof typeof sectionsToValidate];
-    const isValid = await form.trigger(fieldsToValidate as any);
-    
-    if (isValid) {
-      setCurrentSection(prev => Math.min(prev + 1, 5));
-    }
-  };
-
-  const prevSection = () => {
-    setCurrentSection(prev => Math.max(prev - 1, 1));
-  };
-
-  const addCompetitor = () => {
-    if (competitors.length < 3) {
-      setCompetitors([...competitors, { name: '', differentiator: '' }]);
-    }
-  };
-
-  const removeCompetitor = (index: number) => {
-    if (competitors.length > 1) {
-      setCompetitors(competitors.filter((_, i) => i !== index));
-    }
-  };
-
-  const addAssumption = () => {
-    if (assumptions.length < 3) {
-      setAssumptions([...assumptions, '']);
-    }
-  };
-
-  const removeAssumption = (index: number) => {
-    if (assumptions.length > 1) {
-      setAssumptions(assumptions.filter((_, i) => i !== index));
-    }
+    submitIntakeMutation.mutate(data);
   };
 
   const sectionTitles = {
@@ -348,24 +292,100 @@ export default function IntakeForm() {
                   <div className="border-t pt-6">
                     <h3 className="text-lg font-medium text-gray-900 mb-4">Business Details</h3>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                      <FormField
+                        control={form.control}
+                        name="businessModel"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Business Model *</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select model" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="B2B">B2B</SelectItem>
+                                <SelectItem value="B2C">B2C</SelectItem>
+                                <SelectItem value="B2B2C">B2B2C</SelectItem>
+                                <SelectItem value="B2G">B2G</SelectItem>
+                                <SelectItem value="Marketplace">Marketplace</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="productType"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Product Type *</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select type" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="SaaS">SaaS</SelectItem>
+                                <SelectItem value="Service">Service</SelectItem>
+                                <SelectItem value="Physical">Physical</SelectItem>
+                                <SelectItem value="Marketplace">Marketplace</SelectItem>
+                                <SelectItem value="App">App</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="currentStage"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel>Current Stage *</FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger>
+                                  <SelectValue placeholder="Select stage" />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                <SelectItem value="Idea">Idea</SelectItem>
+                                <SelectItem value="Pre-launch">Pre-launch</SelectItem>
+                                <SelectItem value="MVP">MVP</SelectItem>
+                                <SelectItem value="Revenue < $100K">Revenue &lt; $100K</SelectItem>
+                                <SelectItem value="Revenue > $100K">Revenue &gt; $100K</SelectItem>
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
                     <FormField
                       control={form.control}
-                      name="businessModel"
+                      name="industry"
                       render={({ field }) => (
                         <FormItem>
-                          <FormLabel>Business Model *</FormLabel>
+                          <FormLabel>Industry *</FormLabel>
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger>
-                                <SelectValue placeholder="Select model" />
+                                <SelectValue placeholder="Select your industry" />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="B2B">B2B</SelectItem>
-                              <SelectItem value="B2C">B2C</SelectItem>
-                              <SelectItem value="B2B2C">B2B2C</SelectItem>
-                              <SelectItem value="B2G">B2G</SelectItem>
-                              <SelectItem value="Marketplace">Marketplace</SelectItem>
+                              {INDUSTRIES.map((industry) => (
+                                <SelectItem key={industry} value={industry}>
+                                  {industry}
+                                </SelectItem>
+                              ))}
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -375,125 +395,49 @@ export default function IntakeForm() {
 
                     <FormField
                       control={form.control}
-                      name="productType"
-                      render={({ field }) => (
+                      name="geographicMarkets"
+                      render={() => (
                         <FormItem>
-                          <FormLabel>Product Type *</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select type" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="SaaS">SaaS</SelectItem>
-                              <SelectItem value="Service">Service</SelectItem>
-                              <SelectItem value="Physical">Physical</SelectItem>
-                              <SelectItem value="Marketplace">Marketplace</SelectItem>
-                              <SelectItem value="App">App</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="currentStage"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>Current Stage *</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="Select stage" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              <SelectItem value="Idea">Idea</SelectItem>
-                              <SelectItem value="Pre-launch">Pre-launch</SelectItem>
-                              <SelectItem value="MVP">MVP</SelectItem>
-                              <SelectItem value="Revenue < $100K">Revenue &lt; $100K</SelectItem>
-                              <SelectItem value="Revenue > $100K">Revenue &gt; $100K</SelectItem>
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  <FormField
-                    control={form.control}
-                    name="industry"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Industry *</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
-                          <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="Select your industry" />
-                            </SelectTrigger>
-                          </FormControl>
-                          <SelectContent>
-                            {INDUSTRIES.map((industry) => (
-                              <SelectItem key={industry} value={industry}>
-                                {industry}
-                              </SelectItem>
-                            ))}
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="geographicMarkets"
-                    render={() => (
-                      <FormItem>
-                        <FormLabel>Geographic Markets *</FormLabel>
-                        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                          {GEOGRAPHIC_MARKETS.map((market) => (
-                            <FormField
-                              key={market}
-                              control={form.control}
-                              name="geographicMarkets"
-                              render={({ field }) => {
-                                return (
-                                  <FormItem
-                                    key={market}
-                                    className="flex flex-row items-start space-x-3 space-y-0"
-                                  >
-                                    <FormControl>
-                                      <Checkbox
-                                        checked={field.value?.includes(market)}
-                                        onCheckedChange={(checked) => {
-                                          return checked
-                                            ? field.onChange([...field.value, market])
-                                            : field.onChange(
-                                                field.value?.filter(
-                                                  (value) => value !== market
+                          <FormLabel>Geographic Markets *</FormLabel>
+                          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            {GEOGRAPHIC_MARKETS.map((market) => (
+                              <FormField
+                                key={market}
+                                control={form.control}
+                                name="geographicMarkets"
+                                render={({ field }) => {
+                                  return (
+                                    <FormItem
+                                      key={market}
+                                      className="flex flex-row items-start space-x-3 space-y-0"
+                                    >
+                                      <FormControl>
+                                        <Checkbox
+                                          checked={field.value?.includes(market)}
+                                          onCheckedChange={(checked) => {
+                                            return checked
+                                              ? field.onChange([...field.value, market])
+                                              : field.onChange(
+                                                  field.value?.filter(
+                                                    (value) => value !== market
+                                                  )
                                                 )
-                                              )
-                                        }}
-                                      />
-                                    </FormControl>
-                                    <FormLabel className="text-sm font-normal">
-                                      {market}
-                                    </FormLabel>
-                                  </FormItem>
-                                )
-                              }}
-                            />
-                          ))}
-                        </div>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                                          }}
+                                        />
+                                      </FormControl>
+                                      <FormLabel className="text-sm font-normal">
+                                        {market}
+                                      </FormLabel>
+                                    </FormItem>
+                                  )
+                                }}
+                              />
+                            ))}
+                          </div>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                   </div>
                 </CardContent>
               </Card>
@@ -523,9 +467,9 @@ export default function IntakeForm() {
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="Low">Low (Simple, self-explanatory)</SelectItem>
-                              <SelectItem value="Medium">Medium (Some explanation needed)</SelectItem>
-                              <SelectItem value="High">High (Complex, needs demos/consultations)</SelectItem>
+                              <SelectItem value="Low">Low</SelectItem>
+                              <SelectItem value="Medium">Medium</SelectItem>
+                              <SelectItem value="High">High</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -556,7 +500,9 @@ export default function IntakeForm() {
                         </FormItem>
                       )}
                     />
+                  </div>
 
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField
                       control={form.control}
                       name="deliveryComplexity"
@@ -570,9 +516,9 @@ export default function IntakeForm() {
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
-                              <SelectItem value="Low">Low (Automated/minimal touch)</SelectItem>
-                              <SelectItem value="Medium">Medium (Some manual work)</SelectItem>
-                              <SelectItem value="High">High (Heavy customization/services)</SelectItem>
+                              <SelectItem value="Low">Low</SelectItem>
+                              <SelectItem value="Medium">Medium</SelectItem>
+                              <SelectItem value="High">High</SelectItem>
                             </SelectContent>
                           </Select>
                           <FormMessage />
@@ -625,10 +571,10 @@ export default function IntakeForm() {
                       <FormItem>
                         <FormLabel>Target Customer Description *</FormLabel>
                         <FormControl>
-                          <Textarea
-                            placeholder="Describe your ideal customer in detail - who they are, what they do, their pain points, etc."
-                            className="min-h-[120px]"
-                            {...field}
+                          <Textarea 
+                            placeholder="Describe your ideal customer in detail - demographics, behaviors, pain points, current solutions they use..."
+                            rows={4}
+                            {...field} 
                           />
                         </FormControl>
                         <FormMessage />
@@ -643,10 +589,10 @@ export default function IntakeForm() {
                       <FormItem>
                         <FormLabel>Core Problem Being Solved *</FormLabel>
                         <FormControl>
-                          <Textarea
-                            placeholder="What specific problem does your product/service solve? How do people currently handle this problem?"
-                            className="min-h-[120px]"
-                            {...field}
+                          <Textarea 
+                            placeholder="What specific problem does your product/service solve? How painful is this problem for your customers?"
+                            rows={4}
+                            {...field} 
                           />
                         </FormControl>
                         <FormMessage />
@@ -661,10 +607,10 @@ export default function IntakeForm() {
                       <FormItem>
                         <FormLabel>Value Proposition *</FormLabel>
                         <FormControl>
-                          <Textarea
-                            placeholder="What unique value do you provide? Why should customers choose you over alternatives?"
-                            className="min-h-[120px]"
-                            {...field}
+                          <Textarea 
+                            placeholder="Describe the unique value your solution provides and why customers should choose you over alternatives..."
+                            rows={4}
+                            {...field} 
                           />
                         </FormControl>
                         <FormMessage />
@@ -672,28 +618,26 @@ export default function IntakeForm() {
                     )}
                   />
 
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    <div className="md:col-span-2">
-                      <FormField
-                        control={form.control}
-                        name="estimatedPricePoint"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Estimated Price Point *</FormLabel>
-                            <FormControl>
-                              <Input
-                                type="number"
-                                placeholder="Enter price"
-                                {...field}
-                                onChange={(e) => field.onChange(Number(e.target.value))}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                    
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <FormField
+                      control={form.control}
+                      name="estimatedPricePoint"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Estimated Price Point *</FormLabel>
+                          <FormControl>
+                            <Input 
+                              type="number" 
+                              placeholder="100"
+                              {...field}
+                              onChange={(e) => field.onChange(Number(e.target.value))}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
                     <FormField
                       control={form.control}
                       name="currency"
@@ -703,7 +647,7 @@ export default function IntakeForm() {
                           <Select onValueChange={field.onChange} defaultValue={field.value}>
                             <FormControl>
                               <SelectTrigger>
-                                <SelectValue />
+                                <SelectValue placeholder="Select currency" />
                               </SelectTrigger>
                             </FormControl>
                             <SelectContent>
@@ -734,59 +678,86 @@ export default function IntakeForm() {
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div>
-                    <Label className="text-base font-medium mb-4 block">
-                      Top 3 Competitors *
-                    </Label>
-                    <div className="space-y-4">
-                      {competitors.map((competitor, index) => (
-                        <div key={index} className="flex gap-4 items-start">
-                          <div className="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
-                            <Input
-                              placeholder="Competitor name"
-                              value={competitor.name}
-                              onChange={(e) => {
-                                const newCompetitors = [...competitors];
-                                newCompetitors[index].name = e.target.value;
-                                setCompetitors(newCompetitors);
-                                form.setValue('competitors', newCompetitors);
-                              }}
-                            />
-                            <Input
-                              placeholder="How you differentiate from them"
-                              value={competitor.differentiator}
-                              onChange={(e) => {
-                                const newCompetitors = [...competitors];
-                                newCompetitors[index].differentiator = e.target.value;
-                                setCompetitors(newCompetitors);
-                                form.setValue('competitors', newCompetitors);
-                              }}
-                            />
-                          </div>
-                          <div className="flex gap-2">
-                            {competitors.length > 1 && (
-                              <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                onClick={() => removeCompetitor(index)}
-                              >
-                                <Minus className="w-4 h-4" />
-                              </Button>
-                            )}
-                            {index === competitors.length - 1 && competitors.length < 3 && (
-                              <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                onClick={addCompetitor}
-                              >
-                                <Plus className="w-4 h-4" />
-                              </Button>
-                            )}
-                          </div>
-                        </div>
-                      ))}
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-lg font-medium text-gray-900">Top 3 Competitors</h3>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const currentCompetitors = form.getValues('competitors') || [];
+                          if (currentCompetitors.length < 3) {
+                            form.setValue('competitors', [...currentCompetitors, { name: '', differentiator: '' }]);
+                          }
+                        }}
+                        disabled={form.watch('competitors')?.length >= 3}
+                      >
+                        <Plus className="w-4 h-4 mr-2" />
+                        Add Competitor
+                      </Button>
                     </div>
+
+                    {form.watch('competitors')?.map((_, index) => (
+                      <div key={index} className="grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border rounded-lg">
+                        <FormField
+                          control={form.control}
+                          name={`competitors.${index}.name`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Competitor Name</FormLabel>
+                              <FormControl>
+                                <Input placeholder="Company name" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        <FormField
+                          control={form.control}
+                          name={`competitors.${index}.differentiator`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Your Differentiator</FormLabel>
+                              <FormControl>
+                                <Input placeholder="How are you different?" {...field} />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        {form.watch('competitors')?.length > 1 && (
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              const currentCompetitors = form.getValues('competitors') || [];
+                              form.setValue('competitors', currentCompetitors.filter((_, i) => i !== index));
+                            }}
+                            className="col-span-2 justify-start text-red-600"
+                          >
+                            <Minus className="w-4 h-4 mr-2" />
+                            Remove Competitor
+                          </Button>
+                        )}
+                      </div>
+                    ))}
+
+                    {(!form.watch('competitors') || form.watch('competitors')?.length === 0) && (
+                      <div className="text-center py-8 border-2 border-dashed border-gray-300 rounded-lg">
+                        <p className="text-gray-500 mb-4">No competitors added yet</p>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => form.setValue('competitors', [{ name: '', differentiator: '' }])}
+                        >
+                          <Plus className="w-4 h-4 mr-2" />
+                          Add First Competitor
+                        </Button>
+                      </div>
+                    )}
                   </div>
 
                   <FormField
@@ -794,12 +765,12 @@ export default function IntakeForm() {
                     name="uniqueAdvantage"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Your Unique Advantage *</FormLabel>
+                        <FormLabel>Unique Advantage *</FormLabel>
                         <FormControl>
-                          <Textarea
-                            placeholder="What makes your solution fundamentally different or better? What's your unfair advantage?"
-                            className="min-h-[120px]"
-                            {...field}
+                          <Textarea 
+                            placeholder="What makes your solution uniquely positioned to win in this market?"
+                            rows={3}
+                            {...field} 
                           />
                         </FormControl>
                         <FormMessage />
@@ -821,48 +792,75 @@ export default function IntakeForm() {
                 </CardHeader>
                 <CardContent className="space-y-6">
                   <div>
-                    <Label className="text-base font-medium mb-4 block">
-                      Top 3 Assumptions to Validate *
-                    </Label>
-                    <div className="space-y-4">
-                      {assumptions.map((assumption, index) => (
-                        <div key={index} className="flex gap-4 items-start">
-                          <Textarea
-                            placeholder={`Assumption ${index + 1} - What do you believe to be true that needs validation?`}
-                            value={assumption}
-                            onChange={(e) => {
-                              const newAssumptions = [...assumptions];
-                              newAssumptions[index] = e.target.value;
-                              setAssumptions(newAssumptions);
-                              form.setValue('assumptionsToValidate', newAssumptions);
-                            }}
-                            className="min-h-[80px]"
-                          />
-                          <div className="flex gap-2 pt-2">
-                            {assumptions.length > 1 && (
-                              <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                onClick={() => removeAssumption(index)}
-                              >
-                                <Minus className="w-4 h-4" />
-                              </Button>
-                            )}
-                            {index === assumptions.length - 1 && assumptions.length < 3 && (
-                              <Button
-                                type="button"
-                                variant="outline"
-                                size="sm"
-                                onClick={addAssumption}
-                              >
-                                <Plus className="w-4 h-4" />
-                              </Button>
-                            )}
-                          </div>
-                        </div>
-                      ))}
+                    <div className="flex items-center justify-between mb-4">
+                      <h3 className="text-lg font-medium text-gray-900">Top 3 Assumptions to Validate</h3>
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        onClick={() => {
+                          const currentAssumptions = form.getValues('assumptionsToValidate') || [];
+                          if (currentAssumptions.length < 3) {
+                            form.setValue('assumptionsToValidate', [...currentAssumptions, '']);
+                          }
+                        }}
+                        disabled={form.watch('assumptionsToValidate')?.length >= 3}
+                      >
+                        <Plus className="w-4 h-4 mr-2" />
+                        Add Assumption
+                      </Button>
                     </div>
+
+                    {form.watch('assumptionsToValidate')?.map((_, index) => (
+                      <div key={index} className="space-y-2">
+                        <FormField
+                          control={form.control}
+                          name={`assumptionsToValidate.${index}`}
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel>Assumption {index + 1}</FormLabel>
+                              <FormControl>
+                                <Textarea 
+                                  placeholder="Describe a key assumption you need to validate..."
+                                  {...field} 
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+
+                        {form.watch('assumptionsToValidate')?.length > 1 && (
+                          <Button
+                            type="button"
+                            variant="ghost"
+                            size="sm"
+                            onClick={() => {
+                              const currentAssumptions = form.getValues('assumptionsToValidate') || [];
+                              form.setValue('assumptionsToValidate', currentAssumptions.filter((_, i) => i !== index));
+                            }}
+                            className="text-red-600"
+                          >
+                            <Minus className="w-4 h-4 mr-2" />
+                            Remove
+                          </Button>
+                        )}
+                      </div>
+                    ))}
+
+                    {(!form.watch('assumptionsToValidate') || form.watch('assumptionsToValidate')?.length === 0) && (
+                      <div className="text-center py-8 border-2 border-dashed border-gray-300 rounded-lg">
+                        <p className="text-gray-500 mb-4">No assumptions added yet</p>
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => form.setValue('assumptionsToValidate', [''])}
+                        >
+                          <Plus className="w-4 h-4 mr-2" />
+                          Add First Assumption
+                        </Button>
+                      </div>
+                    )}
                   </div>
 
                   <FormField
@@ -885,7 +883,7 @@ export default function IntakeForm() {
                                   >
                                     <FormControl>
                                       <Checkbox
-                                        checked={field.value?.includes(goal as any)}
+                                        checked={field.value?.includes(goal)}
                                         onCheckedChange={(checked) => {
                                           return checked
                                             ? field.onChange([...field.value, goal])
@@ -918,10 +916,10 @@ export default function IntakeForm() {
                       <FormItem>
                         <FormLabel>#1 Critical Question *</FormLabel>
                         <FormControl>
-                          <Textarea
-                            placeholder="What is the single most important question you need answered to move forward with confidence?"
-                            className="min-h-[100px]"
-                            {...field}
+                          <Textarea 
+                            placeholder="What is the single most important question you need answered from this validation sprint?"
+                            rows={3}
+                            {...field} 
                           />
                         </FormControl>
                         <FormMessage />
@@ -929,95 +927,16 @@ export default function IntakeForm() {
                     )}
                   />
 
-                  <div className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <FormField
                       control={form.control}
                       name="previouslyTested"
                       render={({ field }) => (
-                        <FormItem className="space-y-3">
-                          <FormLabel>Has this been tested before?</FormLabel>
-                          <FormControl>
-                            <RadioGroup
-                              onValueChange={(value) => field.onChange(value === 'true')}
-                              defaultValue={field.value ? 'true' : 'false'}
-                              className="flex flex-row space-x-6"
-                            >
-                              <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="true" id="tested-yes" />
-                                <Label htmlFor="tested-yes">Yes</Label>
-                              </div>
-                              <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="false" id="tested-no" />
-                                <Label htmlFor="tested-no">No</Label>
-                              </div>
-                            </RadioGroup>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    {form.watch('previouslyTested') && (
-                      <FormField
-                        control={form.control}
-                        name="previousTestingDescription"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel>Describe previous testing</FormLabel>
-                            <FormControl>
-                              <Textarea
-                                placeholder="What testing was done and what were the results?"
-                                {...field}
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    )}
-
-                    <FormField
-                      control={form.control}
-                      name="hasTestingAudience"
-                      render={({ field }) => (
-                        <FormItem className="space-y-3">
-                          <FormLabel>Do you have an audience to test with?</FormLabel>
-                          <FormControl>
-                            <RadioGroup
-                              onValueChange={(value) => field.onChange(value === 'true')}
-                              defaultValue={field.value ? 'true' : 'false'}
-                              className="flex flex-row space-x-6"
-                            >
-                              <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="true" id="audience-yes" />
-                                <Label htmlFor="audience-yes">Yes</Label>
-                              </div>
-                              <div className="flex items-center space-x-2">
-                                <RadioGroupItem value="false" id="audience-no" />
-                                <Label htmlFor="audience-no">No</Label>
-                              </div>
-                            </RadioGroup>
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  {/* Partnership Evaluation Toggle */}
-                  <div className="border-t pt-6 mt-8">
-                    <FormField
-                      control={form.control}
-                      name="isPartnershipEvaluation"
-                      render={({ field }) => (
                         <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
                           <div className="space-y-0.5">
                             <FormLabel className="text-base">
-                              Partnership Evaluation Sprint
+                              Has this been tested before?
                             </FormLabel>
-                            <div className="text-sm text-muted-foreground">
-                              Include partnership-specific validation questions
-                            </div>
                           </div>
                           <FormControl>
                             <Switch
@@ -1029,195 +948,121 @@ export default function IntakeForm() {
                       )}
                     />
 
-                    {form.watch('isPartnershipEvaluation') && (
-                      <div className="mt-6 space-y-6 bg-blue-50 p-6 rounded-lg">
-                        <h4 className="font-medium text-blue-900">Partnership Details</h4>
-                        
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                          <FormField
-                            control={form.control}
-                            name="evaluatedPartner"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Partner Being Evaluated</FormLabel>
-                                <FormControl>
-                                  <Input placeholder="Partner company name" {...field} />
-                                </FormControl>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
+                    <FormField
+                      control={form.control}
+                      name="hasTestingAudience"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                          <div className="space-y-0.5">
+                            <FormLabel className="text-base">
+                              Do you have an audience to test with?
+                            </FormLabel>
+                          </div>
+                          <FormControl>
+                            <Switch
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
+                  </div>
 
-                          <FormField
-                            control={form.control}
-                            name="partnerType"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Partner Type</FormLabel>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                  <FormControl>
-                                    <SelectTrigger>
-                                      <SelectValue placeholder="Select type" />
-                                    </SelectTrigger>
-                                  </FormControl>
-                                  <SelectContent>
-                                    <SelectItem value="Platform">Platform</SelectItem>
-                                    <SelectItem value="Reseller">Reseller</SelectItem>
-                                    <SelectItem value="Tech Integration">Tech Integration</SelectItem>
-                                    <SelectItem value="Co-Marketing">Co-Marketing</SelectItem>
-                                    <SelectItem value="Other">Other</SelectItem>
-                                  </SelectContent>
-                                </Select>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
+                  {form.watch('previouslyTested') && (
+                    <FormField
+                      control={form.control}
+                      name="previousTestingDescription"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Previous Testing Description</FormLabel>
+                          <FormControl>
+                            <Textarea 
+                              placeholder="Describe what you've tested before and what you learned..."
+                              rows={3}
+                              {...field} 
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  )}
 
-                          <FormField
-                            control={form.control}
-                            name="relationshipStatus"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Relationship Status</FormLabel>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                  <FormControl>
-                                    <SelectTrigger>
-                                      <SelectValue placeholder="Select status" />
-                                    </SelectTrigger>
-                                  </FormControl>
-                                  <SelectContent>
-                                    <SelectItem value="None">None</SelectItem>
-                                    <SelectItem value="Early Conversations">Early Conversations</SelectItem>
-                                    <SelectItem value="Signed LOI">Signed LOI</SelectItem>
-                                    <SelectItem value="Beta">Beta</SelectItem>
-                                  </SelectContent>
-                                </Select>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-
-                          <FormField
-                            control={form.control}
-                            name="integrationType"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Integration Type</FormLabel>
-                                <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                  <FormControl>
-                                    <SelectTrigger>
-                                      <SelectValue placeholder="Select type" />
-                                    </SelectTrigger>
-                                  </FormControl>
-                                  <SelectContent>
-                                    <SelectItem value="API">API</SelectItem>
-                                    <SelectItem value="White-label">White-label</SelectItem>
-                                    <SelectItem value="Co-built">Co-built</SelectItem>
-                                    <SelectItem value="Bundled Offer">Bundled Offer</SelectItem>
-                                  </SelectContent>
-                                </Select>
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                        </div>
-
-                        <FormField
-                          control={form.control}
-                          name="partnershipGoal"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Primary Partnership Goal</FormLabel>
-                              <Select onValueChange={field.onChange} defaultValue={field.value}>
-                                <FormControl>
-                                  <SelectTrigger>
-                                    <SelectValue placeholder="Select primary goal" />
-                                  </SelectTrigger>
-                                </FormControl>
-                                <SelectContent>
-                                  <SelectItem value="New Revenue">New Revenue</SelectItem>
-                                  <SelectItem value="Churn Reduction">Churn Reduction</SelectItem>
-                                  <SelectItem value="Market Entry">Market Entry</SelectItem>
-                                  <SelectItem value="Strategic Leverage">Strategic Leverage</SelectItem>
-                                </SelectContent>
-                              </Select>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-
-                        <FormField
-                          control={form.control}
-                          name="keyRisksOrUncertainties"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormLabel>Key Risks or Uncertainties</FormLabel>
-                              <FormControl>
-                                <Textarea
-                                  placeholder="What are your main concerns or uncertainties about this partnership?"
-                                  className="min-h-[100px]"
-                                  {...field}
-                                />
-                              </FormControl>
-                              <FormMessage />
-                            </FormItem>
-                          )}
-                        />
-                      </div>
-                    )}
+                  <div className="border-t pt-6">
+                    <FormField
+                      control={form.control}
+                      name="isPartnershipEvaluation"
+                      render={({ field }) => (
+                        <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
+                          <div className="space-y-0.5">
+                            <FormLabel className="text-base">
+                              Partnership Evaluation Mode
+                            </FormLabel>
+                            <p className="text-sm text-muted-foreground">
+                              Enable if this sprint focuses on evaluating a strategic partnership
+                            </p>
+                          </div>
+                          <FormControl>
+                            <Switch
+                              checked={field.value}
+                              onCheckedChange={field.onChange}
+                            />
+                          </FormControl>
+                        </FormItem>
+                      )}
+                    />
                   </div>
                 </CardContent>
               </Card>
             )}
 
             {/* Navigation */}
-            <div className="flex justify-between items-center">
+            <div className="flex justify-between items-center pt-6">
               <Button
                 type="button"
                 variant="outline"
-                onClick={prevSection}
+                onClick={() => setCurrentSection(prev => Math.max(prev - 1, 1))}
                 disabled={currentSection === 1}
                 className="flex items-center gap-2"
               >
                 <ChevronLeft className="w-4 h-4" />
                 Previous
               </Button>
-
+              
               <div className="flex items-center gap-2">
-                {Array.from({ length: 5 }, (_, i) => (
+                {[1, 2, 3, 4, 5].map((section) => (
                   <div
-                    key={i}
+                    key={section}
                     className={cn(
-                      "w-2 h-2 rounded-full",
-                      i + 1 <= currentSection ? "bg-blue-600" : "bg-gray-300"
+                      "w-3 h-3 rounded-full",
+                      section === currentSection 
+                        ? "bg-blue-600" 
+                        : section < currentSection 
+                        ? "bg-green-500" 
+                        : "bg-gray-300"
                     )}
                   />
                 ))}
               </div>
 
-              {currentSection < 5 ? (
-                <Button
-                  type="button"
-                  onClick={nextSection}
-                  className="flex items-center gap-2"
-                >
-                  Next
-                  <ChevronRight className="w-4 h-4" />
-                </Button>
-              ) : (
+              {currentSection === 5 ? (
                 <Button
                   type="submit"
                   disabled={submitIntakeMutation.isPending}
                   className="flex items-center gap-2"
                 >
-                  {submitIntakeMutation.isPending ? (
-                    <>Submitting...</>
-                  ) : (
-                    <>
-                      <Check className="w-4 h-4" />
-                      Submit Intake
-                    </>
-                  )}
+                  {submitIntakeMutation.isPending ? 'Submitting...' : 'Submit Intake'}
+                  <Check className="w-4 h-4" />
+                </Button>
+              ) : (
+                <Button
+                  type="button"
+                  onClick={() => setCurrentSection(prev => Math.min(prev + 1, 5))}
+                  className="flex items-center gap-2"
+                >
+                  Next
+                  <ChevronRight className="w-4 h-4" />
                 </Button>
               )}
             </div>
