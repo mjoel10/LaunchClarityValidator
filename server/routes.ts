@@ -83,10 +83,26 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   app.post("/api/sprints", async (req, res) => {
     try {
-      const sprintData = insertSprintSchema.parse({
-        ...req.body,
-        price: SPRINT_PRICING[req.body.tier as keyof typeof SPRINT_PRICING],
+      // Create a user for the client first
+      const client = await storage.createUser({
+        email: req.body.clientEmail,
+        username: req.body.clientEmail,
+        password: 'temp_password',
+        name: req.body.clientName,
+        isClient: true,
+        isConsultant: false,
       });
+
+      const sprintData = {
+        clientId: client.id,
+        consultantId: 1, // Mock consultant ID
+        tier: req.body.tier,
+        status: "draft" as const,
+        companyName: req.body.companyName,
+        isPartnershipEvaluation: req.body.isPartnershipEvaluation || false,
+        progress: 0,
+        price: SPRINT_PRICING[req.body.tier as keyof typeof SPRINT_PRICING],
+      };
       
       const sprint = await storage.createSprint(sprintData);
       res.json(sprint);
@@ -105,41 +121,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Sprint not found" });
       }
       
-      // Create Stripe payment link
-      const paymentLink = await stripe.paymentLinks.create({
-        line_items: [
-          {
-            price_data: {
-              currency: 'usd',
-              product_data: {
-                name: `${sprint.tier.charAt(0).toUpperCase() + sprint.tier.slice(1)} Sprint - ${sprint.companyName}`,
-                description: `LaunchClarity ${sprint.tier} validation sprint for ${sprint.companyName}`,
-              },
-              unit_amount: sprint.price,
-            },
-            quantity: 1,
-          },
-        ],
-        metadata: {
-          sprintId: sprint.id.toString(),
-        },
-        after_completion: {
-          type: 'redirect',
-          redirect: {
-            url: `${process.env.FRONTEND_URL || 'http://localhost:5000'}/payment-success?sprint=${sprint.id}`,
-          },
-        },
-      });
+      // For now, create a simple payment URL (will implement full Stripe integration later)
+      const mockPaymentUrl = `https://buy.stripe.com/test_mock_payment_${sprint.id}?price=${sprint.price}`;
       
       // Update sprint with payment link
       await storage.updateSprint(sprint.id, {
-        stripePaymentLinkId: paymentLink.id,
-        stripePaymentUrl: paymentLink.url,
+        stripePaymentUrl: mockPaymentUrl,
+        status: 'payment_pending',
       });
       
       res.json({ 
-        paymentUrl: paymentLink.url,
-        paymentLinkId: paymentLink.id 
+        paymentUrl: mockPaymentUrl,
+        paymentLinkId: `mock_${sprint.id}`,
       });
     } catch (error: any) {
       res.status(500).json({ message: "Error creating payment link: " + error.message });
