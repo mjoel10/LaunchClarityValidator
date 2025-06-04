@@ -345,8 +345,8 @@ export default function SprintView() {
         </div>
       </div>
 
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+      <div className="max-w-7xl mx-auto pl-2 pr-4 py-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* Sidebar - All Features by Tier */}
           <div className="lg:col-span-4">
             <Card className="rounded-xl shadow-sm sticky top-4">
