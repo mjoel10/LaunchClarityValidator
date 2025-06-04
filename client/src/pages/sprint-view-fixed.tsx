@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { ChevronDown, ChevronRight } from 'lucide-react';
 import { useParams, Link } from 'wouter';
 import { useQuery, useMutation } from '@tanstack/react-query';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -64,6 +65,18 @@ export default function SprintView() {
   const sprintId = Number(params.id);
   const [activeTab, setActiveTab] = useState('overview');
   const [selectedModule, setSelectedModule] = useState<string | null>(null);
+  const [expandedSections, setExpandedSections] = useState({
+    discovery: true,
+    feasibility: false,
+    validation: false
+  });
+
+  const toggleSection = (section: 'discovery' | 'feasibility' | 'validation') => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
 
   const { data: sprint, isLoading, error } = useQuery({
     queryKey: [`/api/sprints/${sprintId}`],
@@ -176,55 +189,79 @@ export default function SprintView() {
     };
   };
 
-  const renderModuleGroup = (title: string, modules: any[], tierPrice: string, isUnlocked: boolean) => (
-    <div className="mb-6">
-      <div className="flex items-center justify-between mb-3">
-        <h3 className="text-lg font-semibold text-gray-900">{title}</h3>
-        <Badge variant={isUnlocked ? "default" : "secondary"}>
-          {tierPrice} {isUnlocked ? "• Unlocked" : "• Locked"}
-        </Badge>
-      </div>
-      <div className="space-y-2">
-        {modules.map((module: any) => {
-          const Icon = getModuleIcon(module.moduleType);
-          const isAvailable = !module.isLocked;
-          
-          return (
-            <button
-              key={module.id}
-              onClick={() => isAvailable && setSelectedModule(module.moduleType)}
-              className={cn(
-                "w-full flex items-center justify-between p-3 rounded-lg border text-left transition-colors",
-                isAvailable 
-                  ? "bg-white hover:bg-blue-50 border-gray-200 cursor-pointer" 
-                  : "bg-gray-50 border-gray-100 cursor-not-allowed opacity-60"
-              )}
-            >
-              <div className="flex items-center gap-3">
-                <div className={cn(
-                  "p-2 rounded-lg",
-                  module.isCompleted 
-                    ? "bg-green-100 text-green-600"
-                    : isAvailable
-                    ? "bg-blue-100 text-blue-600"
-                    : "bg-gray-100 text-gray-400"
-                )}>
-                  {module.isCompleted ? <CheckCircle2 className="w-4 h-4" /> : <Icon className="w-4 h-4" />}
-                </div>
-                <div>
-                  <div className="font-medium text-sm">{getModuleName(module.moduleType)}</div>
-                  <div className="text-xs text-gray-500">
-                    {module.isCompleted ? 'Completed' : isAvailable ? 'Available' : 'Locked'}
+  const renderModuleGroup = (
+    title: string, 
+    modules: any[], 
+    sectionKey: 'discovery' | 'feasibility' | 'validation',
+    isUnlocked: boolean
+  ) => {
+    const isExpanded = expandedSections[sectionKey];
+    const ChevronIcon = isExpanded ? ChevronDown : ChevronRight;
+    
+    return (
+      <div className="mb-4">
+        <button
+          onClick={() => toggleSection(sectionKey)}
+          className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors"
+        >
+          <div className="flex items-center gap-2">
+            <ChevronIcon className="w-4 h-4 text-gray-500" />
+            <h3 className="text-sm font-semibold text-gray-900">
+              {title} ({modules.length})
+            </h3>
+          </div>
+        </button>
+        
+        {isExpanded && (
+          <div className="ml-6 space-y-2 mt-2">
+            {modules.map((module: any) => {
+              const Icon = getModuleIcon(module.moduleType);
+              const isAvailable = !module.isLocked;
+              
+              return (
+                <button
+                  key={module.id}
+                  onClick={() => isAvailable && setSelectedModule(module.moduleType)}
+                  title={!isAvailable ? `Available in ${sectionKey.charAt(0).toUpperCase() + sectionKey.slice(1)} Sprint` : ''}
+                  className={cn(
+                    "w-full flex items-center justify-between p-3 rounded-lg border text-left transition-colors",
+                    isAvailable 
+                      ? "bg-white hover:bg-blue-50 border-gray-200 cursor-pointer" 
+                      : "bg-gray-50 border-gray-100 cursor-not-allowed"
+                  )}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className={cn(
+                      "p-2 rounded-lg",
+                      module.isCompleted 
+                        ? "bg-green-100 text-green-600"
+                        : isAvailable
+                        ? "bg-blue-100 text-blue-600"
+                        : "bg-gray-100 text-gray-400"
+                    )}>
+                      {module.isCompleted ? <CheckCircle2 className="w-4 h-4" /> : <Icon className="w-4 h-4" />}
+                    </div>
+                    <div>
+                      <div className={cn(
+                        "font-medium text-sm",
+                        !isAvailable && "text-gray-500"
+                      )}>
+                        {getModuleName(module.moduleType)}
+                      </div>
+                      <div className="text-xs text-gray-500">
+                        {module.isCompleted ? 'Completed' : isAvailable ? 'Available' : 'Locked'}
+                      </div>
+                    </div>
                   </div>
-                </div>
-              </div>
-              {!isAvailable && <Lock className="w-4 h-4 text-gray-400" />}
-            </button>
-          );
-        })}
+                  {!isAvailable && <Lock className="w-4 h-4 text-gray-400" />}
+                </button>
+              );
+            })}
+          </div>
+        )}
       </div>
-    </div>
-  );
+    );
+  };
 
   const renderSelectedModule = () => {
     if (!selectedModule || !FEATURE_COMPONENTS[selectedModule as keyof typeof FEATURE_COMPONENTS]) {
@@ -291,10 +328,10 @@ export default function SprintView() {
         <div className="max-w-7xl mx-auto px-4 py-8">
           <div className="flex items-center justify-between">
             <div>
-              <h1 className="text-3xl font-bold mb-2">{intakeData?.companyName || 'Validation Sprint'}</h1>
+              <h1 className="text-3xl font-bold mb-2">{intakeData?.companyName || 'Company Name'}</h1>
               <p className="text-blue-100">
-                {sprint.tier.charAt(0).toUpperCase() + sprint.tier.slice(1)} Sprint • 
-                ${sprint.tier === 'discovery' ? '5,000' : sprint.tier === 'feasibility' ? '15,000' : '35,000'}
+                {sprint?.tier?.charAt(0).toUpperCase() + sprint?.tier?.slice(1)} Sprint • 
+                ${sprint?.tier === 'discovery' ? '5,000' : sprint?.tier === 'feasibility' ? '15,000' : '35,000'}
               </p>
             </div>
             <div className="text-right">
@@ -318,25 +355,25 @@ export default function SprintView() {
                   {modules?.length || 0} total modules • {modules?.filter((m: any) => m.isCompleted).length || 0} completed
                 </CardDescription>
               </CardHeader>
-              <CardContent className="space-y-6">
+              <CardContent className="space-y-2">
                 {renderModuleGroup(
                   "Discovery Sprint",
                   modulesByTier.discovery,
-                  "$5k",
+                  "discovery",
                   isDiscoveryUnlocked
                 )}
                 
                 {renderModuleGroup(
                   "Feasibility Sprint",
                   modulesByTier.feasibility,
-                  "$15k",
+                  "feasibility",
                   isFeasibilityUnlocked
                 )}
                 
                 {renderModuleGroup(
                   "Validation Sprint",
                   modulesByTier.validation,
-                  "$35k",
+                  "validation",
                   isValidationUnlocked
                 )}
               </CardContent>
@@ -369,19 +406,19 @@ export default function SprintView() {
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                       <div className="text-center">
                         <div className="text-2xl font-bold text-green-600">
-                          {modulesByTier.discovery.filter((m: any) => m.isCompleted).length}
+                          {modulesByTier.discovery?.filter((m: any) => m.isCompleted).length || 0}
                         </div>
                         <div className="text-sm text-gray-600">Discovery Completed</div>
                       </div>
                       <div className="text-center">
                         <div className="text-2xl font-bold text-blue-600">
-                          {modulesByTier.feasibility.filter((m: any) => m.isCompleted).length}
+                          {modulesByTier.feasibility?.filter((m: any) => m.isCompleted).length || 0}
                         </div>
                         <div className="text-sm text-gray-600">Feasibility Completed</div>
                       </div>
                       <div className="text-center">
                         <div className="text-2xl font-bold text-purple-600">
-                          {modulesByTier.validation.filter((m: any) => m.isCompleted).length}
+                          {modulesByTier.validation?.filter((m: any) => m.isCompleted).length || 0}
                         </div>
                         <div className="text-sm text-gray-600">Validation Completed</div>
                       </div>
