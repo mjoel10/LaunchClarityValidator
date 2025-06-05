@@ -106,11 +106,11 @@ export class DatabaseStorage implements IStorage {
   private getAllModulesWithTierInfo(tier: string): Array<{type: string, isLocked: boolean, requiredTier: string}> {
     const discoveryModules = [
       { type: 'intake', isLocked: false, requiredTier: 'discovery' },
-      { type: 'market_simulation', isLocked: false, requiredTier: 'discovery' },
       { type: 'assumptions', isLocked: false, requiredTier: 'discovery' },
-      { type: 'competitive_intel', isLocked: false, requiredTier: 'discovery' },
       { type: 'market_sizing', isLocked: false, requiredTier: 'discovery' },
+      { type: 'competitive_intel', isLocked: false, requiredTier: 'discovery' },
       { type: 'risk_assessment', isLocked: false, requiredTier: 'discovery' },
+      { type: 'market_simulation', isLocked: false, requiredTier: 'discovery' },
       { type: 'swot_analysis', isLocked: false, requiredTier: 'discovery' },
       { type: 'go_defer_decision', isLocked: false, requiredTier: 'discovery' }
     ];
