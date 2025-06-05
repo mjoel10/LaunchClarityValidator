@@ -362,7 +362,7 @@ export default function SprintView() {
           <div className="flex items-center justify-between">
             {/* Left Section - Company & Sprint Info */}
             <div className="flex-1">
-              <h1 className="text-4xl font-bold mb-1 tracking-tight">{intakeData?.companyName || 'Company Name'}</h1>
+              <h1 className="text-4xl font-bold mb-1 tracking-tight">{sprint?.companyName || 'Company Name'}</h1>
               <p className="text-lg text-blue-100 font-medium">
                 {sprint?.tier?.charAt(0).toUpperCase() + sprint?.tier?.slice(1)} Sprint • 
                 ${sprint?.tier === 'discovery' ? '5,000' : sprint?.tier === 'feasibility' ? '15,000' : '35,000'}
