@@ -48,7 +48,8 @@ export default function DecisionEnginePage() {
   }
 
   const getDecisionPreview = () => {
-    const completionRate = ((modules?.filter((m: any) => m.isCompleted).length || 0) / (modules?.length || 1)) * 100;
+    const moduleArray = Array.isArray(modules) ? modules : [];
+    const completionRate = ((moduleArray.filter((m: any) => m.isCompleted).length) / (moduleArray.length || 1)) * 100;
     
     if (completionRate >= 70) {
       return { text: 'Ready for Analysis', confidence: Math.round(completionRate), color: 'text-emerald-300' };
@@ -63,16 +64,17 @@ export default function DecisionEnginePage() {
 
   // Module organization functions (copied from sprint-view-fixed.tsx)
   const getModulesByTier = () => {
-    if (!modules) return { discovery: [], feasibility: [], validation: [] };
+    const moduleArray = Array.isArray(modules) ? modules : [];
+    if (moduleArray.length === 0) return { discovery: [], feasibility: [], validation: [] };
     
     const discoveryModules = ['intake', 'market_simulation', 'assumptions', 'competitive_intel', 'market_sizing', 'risk_assessment', 'swot_analysis'];
     const feasibilityModules = ['business_model_simulator', 'channel_recommender', 'async_interviews', 'demand_test'];
     const validationModules = ['full_interviews', 'multi_channel_tests', 'enhanced_market_intel', 'implementation_roadmap', 'battlecards'];
 
     return {
-      discovery: modules.filter((m: any) => discoveryModules.includes(m.moduleType)),
-      feasibility: modules.filter((m: any) => feasibilityModules.includes(m.moduleType)),
-      validation: modules.filter((m: any) => validationModules.includes(m.moduleType))
+      discovery: moduleArray.filter((m: any) => discoveryModules.includes(m.moduleType)),
+      feasibility: moduleArray.filter((m: any) => feasibilityModules.includes(m.moduleType)),
+      validation: moduleArray.filter((m: any) => validationModules.includes(m.moduleType))
     };
   };
 
@@ -151,7 +153,7 @@ export default function DecisionEnginePage() {
           <div className="flex items-center justify-between">
             {/* Left Section - Company & Sprint Info */}
             <div className="flex-1">
-              <h1 className="text-4xl font-bold mb-1 tracking-tight">{intakeData?.companyName || 'Company Name'}</h1>
+              <h1 className="text-4xl font-bold mb-1 tracking-tight">{intakeData?.companyName || sprint?.companyName || 'Company Name'}</h1>
               <p className="text-lg text-blue-100 font-medium">
                 {sprint?.tier?.charAt(0).toUpperCase() + sprint?.tier?.slice(1)} Sprint • 
                 ${sprint?.tier === 'discovery' ? '5,000' : sprint?.tier === 'feasibility' ? '15,000' : '35,000'}
@@ -225,7 +227,7 @@ export default function DecisionEnginePage() {
                       stroke="currentColor"
                       strokeWidth="3"
                       fill="transparent"
-                      strokeDasharray={`${((modules?.filter((m: any) => m.isCompleted).length || 0) / (modules?.length || 1)) * 100}, 100`}
+                      strokeDasharray={`${Array.isArray(modules) ? ((modules.filter((m: any) => m.isCompleted).length) / (modules.length || 1)) * 100 : 0}, 100`}
                       d="M18 2.0845
                         a 15.9155 15.9155 0 0 1 0 31.831
                         a 15.9155 15.9155 0 0 1 0 -31.831"
@@ -233,13 +235,13 @@ export default function DecisionEnginePage() {
                   </svg>
                   <div className="absolute inset-0 flex items-center justify-center">
                     <span className="text-2xl font-bold text-white">
-                      {Math.round(((modules?.filter((m: any) => m.isCompleted).length || 0) / (modules?.length || 1)) * 100)}%
+                      {Array.isArray(modules) ? Math.round(((modules.filter((m: any) => m.isCompleted).length) / (modules.length || 1)) * 100) : 0}%
                     </span>
                   </div>
                 </div>
                 <div className="text-sm text-blue-100 font-medium mt-2">Sprint Complete</div>
                 <div className="text-xs text-blue-200 mt-1">
-                  {modules?.filter((m: any) => m.isCompleted).length || 0} of {modules?.length || 0} modules
+                  {Array.isArray(modules) ? modules.filter((m: any) => m.isCompleted).length : 0} of {Array.isArray(modules) ? modules.length : 0} modules
                 </div>
               </div>
             </div>
@@ -255,7 +257,7 @@ export default function DecisionEnginePage() {
               <div className="p-6 border-b border-gray-200">
                 <h2 className="text-lg font-semibold text-gray-900 mb-2">Validation Features</h2>
                 <p className="text-sm text-gray-600">
-                  {modules?.length || 0} total modules
+                  {Array.isArray(modules) ? modules.length : 0} total modules
                 </p>
               </div>
               
