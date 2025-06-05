@@ -229,7 +229,7 @@ export default function DecisionEngine({ sprintId, tier, modules, intakeData }: 
           Go/Pivot/Kill Decision Engine
         </CardTitle>
         <CardDescription>
-          AI-powered strategic recommendation based on {tier} sprint analysis
+          Strategic recommendation based on {tier} sprint analysis
         </CardDescription>
       </CardHeader>
       <CardContent>
