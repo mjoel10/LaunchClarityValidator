@@ -1,15 +1,74 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { ChevronDown, ChevronRight } from 'lucide-react';
 import { useParams, Link } from 'wouter';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { ArrowLeft, Target, BarChart3, ChevronRight, ChevronDown, Lock } from 'lucide-react';
+import { Separator } from '@/components/ui/separator';
+
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
+import { 
+  Building2, 
+  Brain, 
+  Target, 
+  Sword, 
+  BarChart3, 
+  Shield, 
+  FileText, 
+  Users, 
+  TrendingUp, 
+  Handshake, 
+  MapPin, 
+  Calendar,
+  Lock,
+  Play,
+  CheckCircle2,
+  Clock,
+  ArrowLeft,
+  Zap,
+  Eye,
+  Waves
+} from 'lucide-react';
+import { queryClient } from '@/lib/queryClient';
 import DecisionEngine from '@/components/sprint/decision-engine';
+import MarketSimulation from '@/components/sprint/market-simulation';
+import BusinessModelSimulator from '@/components/sprint/business-model-simulator';
+import ChannelRecommender from '@/components/sprint/channel-recommender';
+import StrategicAnalysisTools from '@/components/sprint/strategic-analysis-tools';
+import AsyncInterviews from '@/components/sprint/async-interviews';
+import DemandTestTracker from '@/components/sprint/demand-test-tracker';
+import FullInterviewSuite from '@/components/sprint/full-interview-suite';
+import MultiChannelTesting from '@/components/sprint/multi-channel-testing';
+import EnhancedMarketIntel from '@/components/sprint/enhanced-market-intel';
+import BlueOceanStrategy from '@/components/sprint/blue-ocean-strategy';
+import ImplementationRoadmap from '@/components/sprint/implementation-roadmap';
+import ActionPlans from '@/components/sprint/action-plans';
+import { cn } from '@/lib/utils';
+
+const FEATURE_COMPONENTS = {
+  market_simulation: MarketSimulation,
+  business_model_simulator: BusinessModelSimulator,
+  channel_recommender: ChannelRecommender,
+  strategic_analysis: StrategicAnalysisTools,
+  async_interviews: AsyncInterviews,
+  demand_test: DemandTestTracker,
+  full_interviews: FullInterviewSuite,
+  multi_channel_tests: MultiChannelTesting,
+  enhanced_market_intel: EnhancedMarketIntel,
+  blue_ocean_strategy: BlueOceanStrategy,
+  implementation_roadmap: ImplementationRoadmap,
+  action_plans: ActionPlans,
+  assumptions: StrategicAnalysisTools,
+  competitive_intel: StrategicAnalysisTools,
+  market_sizing: StrategicAnalysisTools,
+  risk_assessment: StrategicAnalysisTools,
+  swot_analysis: StrategicAnalysisTools,
+  battlecards: StrategicAnalysisTools,
+};
 
 export default function DecisionEnginePage() {
-  const params = useParams();
-  const sprintId = Number(params.id);
+  const { id: sprintId } = useParams();
   const [selectedModule, setSelectedModule] = useState<string | null>(null);
   const [expandedSections, setExpandedSections] = useState({
     discovery: true,
@@ -17,19 +76,12 @@ export default function DecisionEnginePage() {
     validation: false
   });
 
-  const toggleSection = (section: 'discovery' | 'feasibility' | 'validation') => {
-    setExpandedSections(prev => ({
-      ...prev,
-      [section]: !prev[section]
-    }));
-  };
-
   const { data: sprint, isLoading: sprintLoading } = useQuery({
     queryKey: [`/api/sprints/${sprintId}`],
     enabled: !!sprintId,
   });
 
-  const { data: modules = [], isLoading: modulesLoading } = useQuery({
+  const { data: modules, isLoading: modulesLoading } = useQuery({
     queryKey: [`/api/sprints/${sprintId}/modules`],
     enabled: !!sprintId,
   });
@@ -39,6 +91,19 @@ export default function DecisionEnginePage() {
     enabled: !!sprintId,
   });
 
+  const regenerateModulesMutation = useMutation({
+    mutationFn: () => fetch(`/api/sprints/${sprintId}/regenerate-modules`, { method: 'POST' }).then(res => res.json()),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: [`/api/sprints/${sprintId}/modules`] });
+    }
+  });
+
+  useEffect(() => {
+    if (modules && modules.length === 0 && !modulesLoading) {
+      regenerateModulesMutation.mutate();
+    }
+  }, [modules, modulesLoading]);
+
   if (sprintLoading || modulesLoading || intakeLoading) {
     return (
       <div className="h-screen flex items-center justify-center">
@@ -47,41 +112,72 @@ export default function DecisionEnginePage() {
     );
   }
 
-
-
-  const getDecisionPreview = () => {
-    const moduleArray = Array.isArray(modules) ? modules : [];
-    const completionRate = ((moduleArray.filter((m: any) => m.isCompleted).length) / (moduleArray.length || 1)) * 100;
-    
-    if (completionRate >= 70) {
-      return { text: 'Ready for Analysis', confidence: Math.round(completionRate), color: 'text-emerald-300' };
-    } else if (completionRate >= 50) {
-      return { text: 'Partial Analysis', confidence: Math.round(completionRate), color: 'text-amber-300' };
-    }
-    
-    return { text: 'Early Analysis', confidence: Math.round(completionRate + 20), color: 'text-blue-300' };
+  const getModuleIcon = (moduleType: string) => {
+    const iconMap = {
+      intake: Building2,
+      market_simulation: Brain,
+      assumptions: Target,
+      competitive_intel: Sword,
+      market_sizing: BarChart3,
+      risk_assessment: Shield,
+      swot_analysis: FileText,
+      business_model_simulator: Building2,
+      channel_recommender: TrendingUp,
+      async_interviews: Users,
+      demand_test: BarChart3,
+      full_interviews: Users,
+      multi_channel_tests: Zap,
+      enhanced_market_intel: Eye,
+      blue_ocean_strategy: Waves,
+      implementation_roadmap: MapPin,
+      action_plans: Calendar,
+      battlecards: Sword,
+    };
+    return iconMap[moduleType] || FileText;
   };
 
-  const decisionPreview = getDecisionPreview();
-  
-  // Type guards for proper data access
-  const sprintData = sprint as any;
-  const moduleArray = Array.isArray(modules) ? modules : [];
-  const intakeDataItem = intakeData as any;
+  const getModuleName = (moduleType: string) => {
+    const nameMap = {
+      intake: 'Initial Intake',
+      market_simulation: 'AI Market Simulation',
+      assumptions: 'Assumption Tracker',
+      competitive_intel: 'Competitive Intelligence',
+      market_sizing: 'Market Sizing Analysis',
+      risk_assessment: 'Risk Assessment',
+      swot_analysis: 'SWOT Analysis',
+      business_model_simulator: 'Business Model Simulator',
+      channel_recommender: 'Channel Recommender',
+      async_interviews: 'Async Interviews',
+      demand_test: 'Demand Test Tracker',
+      full_interviews: 'Full Interview Suite',
+      multi_channel_tests: 'Multi-Channel Testing',
+      enhanced_market_intel: 'Enhanced Market Intel',
+      blue_ocean_strategy: 'Blue Ocean Strategy',
+      implementation_roadmap: 'Implementation Roadmap',
+      action_plans: 'Action Plans',
+      battlecards: 'Battle Cards',
+    };
+    return nameMap[moduleType] || moduleType;
+  };
 
-  // Module organization functions (copied from sprint-view-fixed.tsx)
+  const toggleSection = (section: 'discovery' | 'feasibility' | 'validation') => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
+
   const getModulesByTier = () => {
-    const moduleArray = Array.isArray(modules) ? modules : [];
-    if (moduleArray.length === 0) return { discovery: [], feasibility: [], validation: [] };
+    if (!modules || modules.length === 0) return { discovery: [], feasibility: [], validation: [] };
     
     const discoveryModules = ['intake', 'market_simulation', 'assumptions', 'competitive_intel', 'market_sizing', 'risk_assessment', 'swot_analysis'];
     const feasibilityModules = ['business_model_simulator', 'channel_recommender', 'async_interviews', 'demand_test'];
-    const validationModules = ['full_interviews', 'multi_channel_tests', 'enhanced_market_intel', 'implementation_roadmap', 'battlecards'];
+    const validationModules = ['full_interviews', 'multi_channel_tests', 'enhanced_market_intel', 'blue_ocean_strategy', 'implementation_roadmap'];
 
     return {
-      discovery: moduleArray.filter((m: any) => discoveryModules.includes(m.moduleType)),
-      feasibility: moduleArray.filter((m: any) => feasibilityModules.includes(m.moduleType)),
-      validation: moduleArray.filter((m: any) => validationModules.includes(m.moduleType))
+      discovery: modules.filter((m: any) => discoveryModules.includes(m.moduleType)),
+      feasibility: modules.filter((m: any) => feasibilityModules.includes(m.moduleType)),
+      validation: modules.filter((m: any) => validationModules.includes(m.moduleType))
     };
   };
 
@@ -111,34 +207,47 @@ export default function DecisionEnginePage() {
         {isExpanded && (
           <div className="ml-6 space-y-2 mt-2">
             {modules.map((module: any) => {
+              const Icon = getModuleIcon(module.moduleType);
               const isAvailable = !module.isLocked;
-              const isCompleted = module.isCompleted;
               
               return (
-                <Link key={module.id} href={`/sprints/${sprintId}`}>
-                  <div
-                    className={`flex items-center justify-between p-3 rounded-lg border transition-all cursor-pointer ${
-                      isAvailable 
-                        ? 'border-gray-200 hover:border-blue-300 hover:bg-blue-50' 
-                        : 'border-gray-100 bg-gray-50'
-                    }`}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className={`w-2 h-2 rounded-full ${
-                        isCompleted ? 'bg-green-500' : isAvailable ? 'bg-blue-500' : 'bg-gray-300'
-                      }`} />
-                      <span className={`text-sm font-medium ${
-                        isAvailable ? 'text-gray-900' : 'text-gray-400'
-                      }`}>
-                        {module.moduleType.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())}
-                      </span>
+                <button
+                  key={module.id}
+                  onClick={() => isAvailable && setSelectedModule(module.moduleType)}
+                  title={!isAvailable ? `Available in ${sectionKey.charAt(0).toUpperCase() + sectionKey.slice(1)} Sprint` : ''}
+                  className={cn(
+                    "w-full flex items-center justify-between p-3 rounded-lg border text-left transition-colors",
+                    isAvailable 
+                      ? "bg-white hover:bg-blue-50 border-gray-200 cursor-pointer" 
+                      : "bg-gray-50 border-gray-100 cursor-not-allowed"
+                  )}
+                >
+                  <div className="flex items-center gap-3">
+                    <div className={cn(
+                      "p-2 rounded-lg",
+                      module.isCompleted 
+                        ? "bg-green-100 text-green-600"
+                        : isAvailable
+                        ? "bg-blue-100 text-blue-600"
+                        : "bg-gray-100 text-gray-400"
+                    )}>
+                      {module.isCompleted ? <CheckCircle2 className="w-4 h-4" /> : <Icon className="w-4 h-4" />}
                     </div>
-                    <div className="flex items-center gap-2">
-                      {isCompleted && <Badge variant="outline" className="text-xs">Complete</Badge>}
-                      {!isAvailable && <Lock className="w-3.5 h-3.5 text-gray-400" />}
+                    <div>
+                      <div className={cn(
+                        "font-medium text-sm",
+                        !isAvailable && "text-gray-500"
+                      )}>
+                        {getModuleName(module.moduleType)}
+                      </div>
+                      {module.isCompleted && (
+                        <div className="text-xs text-green-600">Completed</div>
+                      )}
+
                     </div>
                   </div>
-                </Link>
+                  {!isAvailable && <Lock className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />}
+                </button>
               );
             })}
           </div>
@@ -147,23 +256,44 @@ export default function DecisionEnginePage() {
     );
   };
 
+  const getTierModuleCounts = () => {
+    if (sprint?.tier === 'discovery') return 7;
+    if (sprint?.tier === 'feasibility') return 11;
+    if (sprint?.tier === 'validation') return 16;
+    return 7;
+  };
+
   const modulesByTier = getModulesByTier();
   const isDiscoveryUnlocked = true;
-  const isFeasibilityUnlocked = sprintData?.tier === 'feasibility' || sprintData?.tier === 'validation';
-  const isValidationUnlocked = sprintData?.tier === 'validation';
+  const isFeasibilityUnlocked = sprint?.tier === 'feasibility' || sprint?.tier === 'validation';
+  const isValidationUnlocked = sprint?.tier === 'validation';
+
+  const getDecisionPreview = () => {
+    const completionRate = ((modules?.filter((m: any) => m.isCompleted).length || 0) / getTierModuleCounts()) * 100;
+    
+    if (completionRate >= 80) {
+      return { text: 'High Confidence', confidence: Math.round(completionRate) };
+    } else if (completionRate >= 50) {
+      return { text: 'Moderate Data', confidence: Math.round(completionRate) };
+    } else {
+      return { text: 'Insufficient Data', confidence: Math.round(completionRate) };
+    }
+  };
+
+  const decisionPreview = getDecisionPreview();
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Sprint Banner - Identical to main sprint view */}
+      {/* Header */}
       <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg">
         <div className="max-w-none mx-6 px-4 py-8">
           <div className="flex items-center justify-between">
             {/* Left Section - Company & Sprint Info */}
             <div className="flex-1">
-              <h1 className="text-4xl font-bold mb-1 tracking-tight">{sprintData?.companyName || 'Company Name'}</h1>
+              <h1 className="text-4xl font-bold mb-1 tracking-tight">{intakeData?.companyName || 'Company Name'}</h1>
               <p className="text-lg text-blue-100 font-medium">
-                {sprintData?.tier?.charAt(0).toUpperCase() + sprintData?.tier?.slice(1)} Sprint • 
-                ${sprintData?.tier === 'discovery' ? '5,000' : sprintData?.tier === 'feasibility' ? '15,000' : '35,000'}
+                {sprint?.tier?.charAt(0).toUpperCase() + sprint?.tier?.slice(1)} Sprint • 
+                ${sprint?.tier === 'discovery' ? '5,000' : sprint?.tier === 'feasibility' ? '15,000' : '35,000'}
               </p>
             </div>
             
@@ -173,10 +303,10 @@ export default function DecisionEnginePage() {
                 <div className="flex items-center gap-5">
                   <div className={`p-3 rounded-xl shadow-lg ${
                     decisionPreview.confidence >= 70 
-                      ? 'bg-emerald-500/40 shadow-emerald-500/30' 
+                      ? 'bg-emerald-500/30 shadow-emerald-500/20' 
                       : decisionPreview.confidence >= 50 
-                      ? 'bg-amber-500/40 shadow-amber-500/30'
-                      : 'bg-slate-500/40 shadow-slate-500/30'
+                      ? 'bg-amber-500/30 shadow-amber-500/20'
+                      : 'bg-slate-500/30 shadow-slate-500/20'
                   }`}>
                     <Target className="w-7 h-7 text-white" />
                   </div>
@@ -193,7 +323,7 @@ export default function DecisionEnginePage() {
                         {decisionPreview.text}
                       </span>
                       <div className="flex items-center gap-1">
-                        <div className={`w-3 h-3 rounded-full animate-pulse ${
+                        <div className={`w-2 h-2 rounded-full ${
                           decisionPreview.confidence >= 70 
                             ? 'bg-emerald-400' 
                             : decisionPreview.confidence >= 50 
@@ -234,7 +364,7 @@ export default function DecisionEnginePage() {
                       stroke="currentColor"
                       strokeWidth="3"
                       fill="transparent"
-                      strokeDasharray={`${Array.isArray(modules) ? ((modules.filter((m: any) => m.isCompleted).length) / (modules.length || 1)) * 100 : 0}, 100`}
+                      strokeDasharray={`${((modules?.filter((m: any) => m.isCompleted).length || 0) / getTierModuleCounts()) * 100}, 100`}
                       d="M18 2.0845
                         a 15.9155 15.9155 0 0 1 0 31.831
                         a 15.9155 15.9155 0 0 1 0 -31.831"
@@ -242,13 +372,13 @@ export default function DecisionEnginePage() {
                   </svg>
                   <div className="absolute inset-0 flex items-center justify-center">
                     <span className="text-2xl font-bold text-white">
-                      {Array.isArray(modules) ? Math.round(((modules.filter((m: any) => m.isCompleted).length) / (modules.length || 1)) * 100) : 0}%
+                      {Math.round(((modules?.filter((m: any) => m.isCompleted).length || 0) / getTierModuleCounts()) * 100)}%
                     </span>
                   </div>
                 </div>
                 <div className="text-sm text-blue-100 font-medium mt-2">Sprint Complete</div>
                 <div className="text-xs text-blue-200 mt-1">
-                  {Array.isArray(modules) ? modules.filter((m: any) => m.isCompleted).length : 0} of {Array.isArray(modules) ? modules.length : 0} modules
+                  {modules?.filter((m: any) => m.isCompleted).length || 0} of {getTierModuleCounts()} modules
                 </div>
               </div>
             </div>
@@ -267,48 +397,50 @@ export default function DecisionEnginePage() {
           </Link>
         </div>
 
-        <div className="grid grid-cols-12 gap-8">
-          {/* Sidebar - Identical to main sprint view */}
-          <div className="col-span-3">
-            <div className="bg-white rounded-lg border border-gray-200 sticky top-6">
-              <div className="p-6 border-b border-gray-200">
-                <h2 className="text-lg font-semibold text-gray-900 mb-2">Validation Features</h2>
-                <p className="text-sm text-gray-600">
-                  {moduleArray.length} total modules • {moduleArray.filter((m: any) => m.isCompleted).length} completed
-                </p>
-              </div>
-              
-              <div className="p-6 space-y-1">
-                {renderModuleGroup("Discovery Sprint", modulesByTier.discovery, "discovery", isDiscoveryUnlocked)}
-                {renderModuleGroup("Feasibility Sprint", modulesByTier.feasibility, "feasibility", isFeasibilityUnlocked)}
-                {renderModuleGroup("Validation Sprint", modulesByTier.validation, "validation", isValidationUnlocked)}
-              </div>
-            </div>
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+          {/* Sidebar - All Features by Tier */}
+          <div className="lg:col-span-3">
+            <Card className="rounded-xl shadow-sm sticky top-4">
+              <CardHeader>
+                <CardTitle className="text-lg">Validation Features</CardTitle>
+                <CardDescription>
+                  16 total modules • {modules?.filter((m: any) => m.isCompleted).length || 0} completed
+                </CardDescription>
+              </CardHeader>
+              <CardContent className="space-y-2">
+                {renderModuleGroup(
+                  "Discovery Sprint",
+                  modulesByTier.discovery,
+                  "discovery",
+                  isDiscoveryUnlocked
+                )}
+                
+                {renderModuleGroup(
+                  "Feasibility Sprint",
+                  modulesByTier.feasibility,
+                  "feasibility",
+                  isFeasibilityUnlocked
+                )}
+                
+                {renderModuleGroup(
+                  "Validation Sprint",
+                  modulesByTier.validation,
+                  "validation",
+                  isValidationUnlocked
+                )}
+              </CardContent>
+            </Card>
           </div>
 
-          {/* Main Content */}
-          <div className="col-span-9">
-            <div className="space-y-8">
-              {/* Strategic Decision Analysis Header */}
-              <div className="text-center mb-8">
-                <h2 className="text-4xl font-bold mb-4 text-gray-900">Strategic Decision Analysis</h2>
-                <p className="text-xl text-gray-600 mb-2">
-                  Go/Pivot/Kill recommendation engine
-                </p>
-                <p className="text-gray-500">
-                  Based on {moduleArray.filter((m: any) => m.isCompleted).length || 0} of {moduleArray.length || 0} completed validation modules
-                </p>
-              </div>
-
-              {/* Decision Engine Component */}
+          {/* Main Content - Decision Engine Analysis */}
+          <div className="lg:col-span-9">
+            <div className="space-y-6">
               <DecisionEngine 
                 sprintId={sprintId}
-                tier={sprintData?.tier || ''}
-                modules={moduleArray}
-                intakeData={intakeDataItem}
+                tier={sprint?.tier || ''}
+                modules={modules || []}
+                intakeData={intakeData}
               />
-
-
             </div>
           </div>
         </div>
