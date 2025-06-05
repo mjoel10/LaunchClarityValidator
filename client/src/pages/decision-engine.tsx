@@ -47,8 +47,7 @@ export default function DecisionEnginePage() {
     );
   }
 
-  // Debug logging
-  console.log('Decision Engine Data:', { sprint, modules, intakeData });
+
 
   const getDecisionPreview = () => {
     const moduleArray = Array.isArray(modules) ? modules : [];
@@ -287,6 +286,11 @@ export default function DecisionEnginePage() {
               </div>
 
               {/* Decision Engine Component */}
+              <div className="bg-red-100 p-4 mb-4 rounded border">
+                <p>DEBUG: About to render DecisionEngine component</p>
+                <p>Sprint tier: {sprint?.tier}</p>
+                <p>Modules count: {modules?.length}</p>
+              </div>
               <DecisionEngine 
                 sprintId={sprintId}
                 tier={sprint?.tier || ''}
