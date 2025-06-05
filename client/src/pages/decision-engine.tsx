@@ -334,49 +334,51 @@ export default function DecisionEnginePage() {
             
             {/* Center Section - Decision Engine (Active State) */}
             <div className="flex-1 flex justify-center">
-              <div className={`relative bg-white/15 backdrop-blur-sm rounded-2xl px-8 py-6 border border-white/30 shadow-xl`}>
-                <div className="flex items-center gap-5">
-                  <div className={`p-3 rounded-xl shadow-lg ${
-                    decisionPreview.confidence >= 70 
-                      ? 'bg-emerald-500/30 shadow-emerald-500/20' 
-                      : decisionPreview.confidence >= 50 
-                      ? 'bg-amber-500/30 shadow-amber-500/20'
-                      : 'bg-slate-500/30 shadow-slate-500/20'
-                  }`}>
-                    <Target className="w-7 h-7 text-white" />
-                  </div>
-                  <div className="text-left">
-                    <div className="text-xl font-bold text-white mb-1">Decision Engine</div>
-                    <div className="flex items-center gap-3">
-                      <span className={`text-sm font-semibold ${
-                        decisionPreview.confidence >= 70 
-                          ? 'text-emerald-200' 
-                          : decisionPreview.confidence >= 50 
-                          ? 'text-amber-200'
-                          : 'text-slate-200'
-                      }`}>
-                        {decisionPreview.text}
-                      </span>
-                      <div className="flex items-center gap-1">
-                        <div className={`w-2 h-2 rounded-full ${
+              <Link href={`/sprints/${sprintId}/decision-engine`}>
+                <div className={`relative bg-white/15 backdrop-blur-sm rounded-2xl px-8 py-6 border border-white/30 shadow-xl hover:bg-white/20 transition-all cursor-pointer`}>
+                  <div className="flex items-center gap-5">
+                    <div className={`p-3 rounded-xl shadow-lg ${
+                      decisionPreview.confidence >= 70 
+                        ? 'bg-emerald-500/30 shadow-emerald-500/20' 
+                        : decisionPreview.confidence >= 50 
+                        ? 'bg-amber-500/30 shadow-amber-500/20'
+                        : 'bg-slate-500/30 shadow-slate-500/20'
+                    }`}>
+                      <Target className="w-7 h-7 text-white" />
+                    </div>
+                    <div className="text-left">
+                      <div className="text-xl font-bold text-white mb-1">Decision Engine</div>
+                      <div className="flex items-center gap-3">
+                        <span className={`text-sm font-semibold ${
                           decisionPreview.confidence >= 70 
-                            ? 'bg-emerald-400' 
+                            ? 'text-emerald-200' 
                             : decisionPreview.confidence >= 50 
-                            ? 'bg-amber-400'
-                            : 'bg-slate-400'
-                        }`}></div>
-                        <span className="text-xs text-white/80 font-medium">{decisionPreview.confidence}%</span>
+                            ? 'text-amber-200'
+                            : 'text-slate-200'
+                        }`}>
+                          {decisionPreview.text}
+                        </span>
+                        <div className="flex items-center gap-1">
+                          <div className={`w-2 h-2 rounded-full ${
+                            decisionPreview.confidence >= 70 
+                              ? 'bg-emerald-400' 
+                              : decisionPreview.confidence >= 50 
+                              ? 'bg-amber-400'
+                              : 'bg-slate-400'
+                          }`}></div>
+                          <span className="text-xs text-white/80 font-medium">{decisionPreview.confidence}%</span>
+                        </div>
                       </div>
                     </div>
+                    <div className="ml-3">
+                      <div className="w-2 h-2 bg-white/70 rounded-full"></div>
+                    </div>
                   </div>
-                  <div className="ml-3">
-                    <div className="w-2 h-2 bg-white/70 rounded-full"></div>
-                  </div>
+                  
+                  {/* Active state glow */}
+                  <div className="absolute inset-0 rounded-2xl bg-white/5 animate-pulse"></div>
                 </div>
-                
-                {/* Active state glow */}
-                <div className="absolute inset-0 rounded-2xl bg-white/5 animate-pulse"></div>
-              </div>
+              </Link>
             </div>
             
             {/* Right Section - Sprint Progress */}
