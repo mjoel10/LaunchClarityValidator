@@ -63,6 +63,11 @@ export default function DecisionEnginePage() {
   };
 
   const decisionPreview = getDecisionPreview();
+  
+  // Type guards for proper data access
+  const sprintData = sprint as any;
+  const moduleArray = Array.isArray(modules) ? modules : [];
+  const intakeDataItem = intakeData as any;
 
   // Module organization functions (copied from sprint-view-fixed.tsx)
   const getModulesByTier = () => {
@@ -155,10 +160,10 @@ export default function DecisionEnginePage() {
           <div className="flex items-center justify-between">
             {/* Left Section - Company & Sprint Info */}
             <div className="flex-1">
-              <h1 className="text-4xl font-bold mb-1 tracking-tight">{intakeData?.companyName || sprint?.companyName || 'Company Name'}</h1>
+              <h1 className="text-4xl font-bold mb-1 tracking-tight">{sprintData?.companyName || 'Company Name'}</h1>
               <p className="text-lg text-blue-100 font-medium">
-                {sprint?.tier?.charAt(0).toUpperCase() + sprint?.tier?.slice(1)} Sprint • 
-                ${sprint?.tier === 'discovery' ? '5,000' : sprint?.tier === 'feasibility' ? '15,000' : '35,000'}
+                {sprintData?.tier?.charAt(0).toUpperCase() + sprintData?.tier?.slice(1)} Sprint • 
+                ${sprintData?.tier === 'discovery' ? '5,000' : sprintData?.tier === 'feasibility' ? '15,000' : '35,000'}
               </p>
             </div>
             
@@ -286,11 +291,6 @@ export default function DecisionEnginePage() {
               </div>
 
               {/* Decision Engine Component */}
-              <div className="bg-red-100 p-4 mb-4 rounded border">
-                <p>DEBUG: About to render DecisionEngine component</p>
-                <p>Sprint tier: {sprint?.tier}</p>
-                <p>Modules count: {modules?.length}</p>
-              </div>
               <DecisionEngine 
                 sprintId={sprintId}
                 tier={sprint?.tier || ''}
