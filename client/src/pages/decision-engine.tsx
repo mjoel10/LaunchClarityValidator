@@ -29,50 +29,31 @@ export default function DecisionEnginePage() {
     enabled: !!sprintId,
   });
 
-  const { data: modules, isLoading: modulesLoading } = useQuery({
+  const { data: modules = [], isLoading: modulesLoading } = useQuery({
     queryKey: ['/api/sprints', sprintId, 'modules'],
     enabled: !!sprintId,
   });
 
-  const { data: intakeData } = useQuery({
+  const { data: intakeData, isLoading: intakeLoading } = useQuery({
     queryKey: ['/api/sprints', sprintId, 'intake'],
     enabled: !!sprintId,
   });
 
-  if (sprintLoading || modulesLoading) {
+  if (sprintLoading || modulesLoading || intakeLoading) {
     return (
-      <div className="min-h-screen bg-gray-50">
-        <div className="flex items-center justify-center h-64">
-          <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" />
-        </div>
+      <div className="h-screen flex items-center justify-center">
+        <div className="animate-spin w-8 h-8 border-4 border-primary border-t-transparent rounded-full" aria-label="Loading"/>
       </div>
     );
   }
 
-  if (!sprint) {
-    return (
-      <div className="min-h-screen bg-gray-50">
-        <div className="flex items-center justify-center h-64">
-          <div className="text-red-600">Sprint not found</div>
-        </div>
-      </div>
-    );
-  }
-
-  // Get decision preview for header
   const getDecisionPreview = () => {
-    const completedModules = modules?.filter((m: any) => m.isCompleted) || [];
-    const totalModules = modules?.length || 1;
-    const completionRate = (completedModules.length / totalModules) * 100;
-    
-    if (completionRate < 30) {
-      return { text: 'Insufficient Data', confidence: Math.round(completionRate), color: 'text-gray-300' };
-    }
+    const completionRate = ((modules?.filter((m: any) => m.isCompleted).length || 0) / (modules?.length || 1)) * 100;
     
     if (completionRate >= 70) {
-      return { text: 'Ready for Decision', confidence: 85, color: 'text-green-300' };
+      return { text: 'Ready for Analysis', confidence: Math.round(completionRate), color: 'text-emerald-300' };
     } else if (completionRate >= 50) {
-      return { text: 'Gathering Data', confidence: 65, color: 'text-yellow-300' };
+      return { text: 'Partial Analysis', confidence: Math.round(completionRate), color: 'text-amber-300' };
     }
     
     return { text: 'Early Analysis', confidence: Math.round(completionRate + 20), color: 'text-blue-300' };
@@ -164,30 +145,7 @@ export default function DecisionEnginePage() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white border-b border-gray-200">
-        <div className="max-w-none mx-6 px-4 py-4">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-4">
-              <Link href={`/sprints/${sprintId}`}>
-                <Button variant="ghost" size="sm">
-                  <ArrowLeft className="w-4 h-4 mr-2" />
-                  Back to Sprint
-                </Button>
-              </Link>
-              <div className="flex items-center gap-2">
-                <Target className="w-5 h-5 text-blue-600" />
-                <span className="font-medium">Go/Pivot/Kill Decision Engine</span>
-              </div>
-            </div>
-            <div className="text-sm text-gray-600">
-              {intakeData?.companyName || 'Company Name'} • {sprint?.tier?.charAt(0).toUpperCase() + sprint?.tier?.slice(1)} Sprint
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* Sprint Banner */}
+      {/* Sprint Banner - Identical to main sprint view */}
       <div className="bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg">
         <div className="max-w-none mx-6 px-4 py-8">
           <div className="flex items-center justify-between">
@@ -263,16 +221,9 @@ export default function DecisionEnginePage() {
                         a 15.9155 15.9155 0 0 1 0 -31.831"
                     />
                     <path
-                      className={`${
-                        ((modules?.filter((m: any) => m.isCompleted).length || 0) / (modules?.length || 1)) * 100 >= 70 
-                          ? 'text-emerald-400' 
-                          : ((modules?.filter((m: any) => m.isCompleted).length || 0) / (modules?.length || 1)) * 100 >= 50 
-                          ? 'text-amber-400'
-                          : 'text-blue-400'
-                      }`}
+                      className="text-white"
                       stroke="currentColor"
                       strokeWidth="3"
-                      strokeLinecap="round"
                       fill="transparent"
                       strokeDasharray={`${((modules?.filter((m: any) => m.isCompleted).length || 0) / (modules?.length || 1)) * 100}, 100`}
                       d="M18 2.0845
@@ -298,13 +249,13 @@ export default function DecisionEnginePage() {
 
       <div className="max-w-none mx-6 pl-2 pr-4 py-8">
         <div className="grid grid-cols-12 gap-8">
-          {/* Sidebar */}
+          {/* Sidebar - Identical to main sprint view */}
           <div className="col-span-3">
             <div className="bg-white rounded-lg border border-gray-200 sticky top-6">
               <div className="p-6 border-b border-gray-200">
                 <h2 className="text-lg font-semibold text-gray-900 mb-2">Validation Features</h2>
                 <p className="text-sm text-gray-600">
-                  {modulesByTier.discovery.length + modulesByTier.feasibility.length + modulesByTier.validation.length} total modules
+                  {modules?.length || 0} total modules
                 </p>
               </div>
               
@@ -333,45 +284,20 @@ export default function DecisionEnginePage() {
               {/* Decision Engine Component */}
               <DecisionEngine 
                 sprintId={sprintId}
-                tier={sprint.tier}
+                tier={sprint?.tier || ''}
                 modules={modules || []}
                 intakeData={intakeData}
               />
-              
-              {/* Decision Framework Context */}
-              <Card className="rounded-xl shadow-sm">
-                <CardHeader>
-                  <CardTitle className="flex items-center gap-2">
-                    <Target className="w-5 h-5" />
-                    Decision Framework Context
-                  </CardTitle>
-                  <CardDescription>
-                    Understanding the strategic decision process for {sprint.tier} tier validation
-                  </CardDescription>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid md:grid-cols-3 gap-6">
-                    <div className="text-center p-4 bg-green-50 rounded-lg">
-                      <div className="text-2xl font-bold text-green-600 mb-2">GO</div>
-                      <div className="text-sm text-gray-600">
-                        Strong validation signals across multiple dimensions. Ready to proceed to next phase or market.
-                      </div>
-                    </div>
-                    <div className="text-center p-4 bg-yellow-50 rounded-lg">
-                      <div className="text-2xl font-bold text-yellow-600 mb-2">PIVOT</div>
-                      <div className="text-sm text-gray-600">
-                        Mixed signals suggest strategic adjustments needed before proceeding further.
-                      </div>
-                    </div>
-                    <div className="text-center p-4 bg-red-50 rounded-lg">
-                      <div className="text-2xl font-bold text-red-600 mb-2">KILL</div>
-                      <div className="text-sm text-gray-600">
-                        Insufficient validation or negative signals indicate project termination.
-                      </div>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
+
+              {/* Back to Sprint Button */}
+              <div className="flex justify-center pt-8">
+                <Link href={`/sprints/${sprintId}`}>
+                  <Button variant="outline" className="flex items-center gap-2">
+                    <ArrowLeft className="w-4 h-4" />
+                    Back to Sprint View
+                  </Button>
+                </Link>
+              </div>
             </div>
           </div>
         </div>
