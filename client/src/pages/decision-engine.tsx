@@ -3,14 +3,26 @@ import { useParams, Link } from 'wouter';
 import { useQuery } from '@tanstack/react-query';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, Target, BarChart3, ChevronRight } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { ArrowLeft, Target, BarChart3, ChevronRight, ChevronDown, Lock } from 'lucide-react';
 import DecisionEngine from '@/components/sprint/decision-engine';
-import Sidebar from '@/components/navigation/sidebar';
 
 export default function DecisionEnginePage() {
   const params = useParams();
   const sprintId = Number(params.id);
   const [selectedModule, setSelectedModule] = useState<string | null>(null);
+  const [expandedSections, setExpandedSections] = useState({
+    discovery: true,
+    feasibility: false,
+    validation: false
+  });
+
+  const toggleSection = (section: 'discovery' | 'feasibility' | 'validation') => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
+  };
 
   const { data: sprint, isLoading: sprintLoading } = useQuery({
     queryKey: ['/api/sprints', sprintId],
@@ -68,6 +80,88 @@ export default function DecisionEnginePage() {
 
   const decisionPreview = getDecisionPreview();
 
+  // Module organization functions (copied from sprint-view-fixed.tsx)
+  const getModulesByTier = () => {
+    if (!modules) return { discovery: [], feasibility: [], validation: [] };
+    
+    const discoveryModules = ['intake', 'market_simulation', 'assumptions', 'competitive_intel', 'market_sizing', 'risk_assessment', 'swot_analysis'];
+    const feasibilityModules = ['business_model_simulator', 'channel_recommender', 'async_interviews', 'demand_test'];
+    const validationModules = ['full_interviews', 'multi_channel_tests', 'enhanced_market_intel', 'implementation_roadmap', 'battlecards'];
+
+    return {
+      discovery: modules.filter((m: any) => discoveryModules.includes(m.moduleType)),
+      feasibility: modules.filter((m: any) => feasibilityModules.includes(m.moduleType)),
+      validation: modules.filter((m: any) => validationModules.includes(m.moduleType))
+    };
+  };
+
+  const renderModuleGroup = (
+    title: string, 
+    modules: any[], 
+    sectionKey: 'discovery' | 'feasibility' | 'validation',
+    isUnlocked: boolean
+  ) => {
+    const isExpanded = expandedSections[sectionKey];
+    const ChevronIcon = isExpanded ? ChevronDown : ChevronRight;
+    
+    return (
+      <div className="mb-4">
+        <button
+          onClick={() => toggleSection(sectionKey)}
+          className="w-full flex items-center justify-between p-3 rounded-lg hover:bg-gray-50 transition-colors"
+        >
+          <div className="flex items-center gap-2">
+            <ChevronIcon className="w-4 h-4 text-gray-500" />
+            <h3 className="text-sm font-semibold text-gray-900">
+              {title} ({modules.length})
+            </h3>
+          </div>
+        </button>
+        
+        {isExpanded && (
+          <div className="ml-6 space-y-2 mt-2">
+            {modules.map((module: any) => {
+              const isAvailable = !module.isLocked;
+              const isCompleted = module.isCompleted;
+              
+              return (
+                <Link key={module.id} href={`/sprints/${sprintId}`}>
+                  <div
+                    className={`flex items-center justify-between p-3 rounded-lg border transition-all cursor-pointer ${
+                      isAvailable 
+                        ? 'border-gray-200 hover:border-blue-300 hover:bg-blue-50' 
+                        : 'border-gray-100 bg-gray-50'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className={`w-2 h-2 rounded-full ${
+                        isCompleted ? 'bg-green-500' : isAvailable ? 'bg-blue-500' : 'bg-gray-300'
+                      }`} />
+                      <span className={`text-sm font-medium ${
+                        isAvailable ? 'text-gray-900' : 'text-gray-400'
+                      }`}>
+                        {module.moduleType.replace(/_/g, ' ').replace(/\b\w/g, (l: string) => l.toUpperCase())}
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      {isCompleted && <Badge variant="outline" className="text-xs">Complete</Badge>}
+                      {!isAvailable && <Lock className="w-3.5 h-3.5 text-gray-400" />}
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        )}
+      </div>
+    );
+  };
+
+  const modulesByTier = getModulesByTier();
+  const isDiscoveryUnlocked = true;
+  const isFeasibilityUnlocked = sprint?.tier === 'feasibility' || sprint?.tier === 'validation';
+  const isValidationUnlocked = sprint?.tier === 'validation';
+
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
@@ -87,7 +181,7 @@ export default function DecisionEnginePage() {
               </div>
             </div>
             <div className="text-sm text-gray-600">
-              {intakeData?.companyName || 'Company Name'} • {sprint.tier?.charAt(0).toUpperCase() + sprint.tier?.slice(1)} Sprint
+              {intakeData?.companyName || 'Company Name'} • {sprint?.tier?.charAt(0).toUpperCase() + sprint?.tier?.slice(1)} Sprint
             </div>
           </div>
         </div>
@@ -206,7 +300,20 @@ export default function DecisionEnginePage() {
         <div className="grid grid-cols-12 gap-8">
           {/* Sidebar */}
           <div className="col-span-3">
-            <Sidebar sprint={sprint} modules={modules || []} />
+            <div className="bg-white rounded-lg border border-gray-200 sticky top-6">
+              <div className="p-6 border-b border-gray-200">
+                <h2 className="text-lg font-semibold text-gray-900 mb-2">Validation Features</h2>
+                <p className="text-sm text-gray-600">
+                  {modulesByTier.discovery.length + modulesByTier.feasibility.length + modulesByTier.validation.length} total modules
+                </p>
+              </div>
+              
+              <div className="p-6 space-y-1">
+                {renderModuleGroup("Discovery Sprint", modulesByTier.discovery, "discovery", isDiscoveryUnlocked)}
+                {renderModuleGroup("Feasibility Sprint", modulesByTier.feasibility, "feasibility", isFeasibilityUnlocked)}
+                {renderModuleGroup("Validation Sprint", modulesByTier.validation, "validation", isValidationUnlocked)}
+              </div>
+            </div>
           </div>
 
           {/* Main Content */}
@@ -216,7 +323,7 @@ export default function DecisionEnginePage() {
               <div className="text-center mb-8">
                 <h2 className="text-4xl font-bold mb-4 text-gray-900">Strategic Decision Analysis</h2>
                 <p className="text-xl text-gray-600 mb-2">
-                  AI-powered Go/Pivot/Kill recommendation engine
+                  Go/Pivot/Kill recommendation engine
                 </p>
                 <p className="text-gray-500">
                   Based on {modules?.filter((m: any) => m.isCompleted).length || 0} of {modules?.length || 0} completed validation modules
