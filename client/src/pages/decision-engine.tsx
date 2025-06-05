@@ -47,6 +47,9 @@ export default function DecisionEnginePage() {
     );
   }
 
+  // Debug logging
+  console.log('Decision Engine Data:', { sprint, modules, intakeData });
+
   const getDecisionPreview = () => {
     const moduleArray = Array.isArray(modules) ? modules : [];
     const completionRate = ((moduleArray.filter((m: any) => m.isCompleted).length) / (moduleArray.length || 1)) * 100;
