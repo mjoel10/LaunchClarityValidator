@@ -84,6 +84,30 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Save sprint progress
+  app.post("/api/sprints/:id/save", async (req, res) => {
+    try {
+      const sprintId = Number(req.params.id);
+      const sprint = await storage.getSprintById(sprintId);
+      
+      if (!sprint) {
+        return res.status(404).json({ message: "Sprint not found" });
+      }
+
+      // Update the sprint's updatedAt timestamp to indicate save
+      const updatedSprint = await storage.updateSprint(sprintId, {
+        updatedAt: new Date(),
+      });
+
+      res.json({ 
+        message: "Sprint saved successfully",
+        savedAt: updatedSprint.updatedAt 
+      });
+    } catch (error: any) {
+      res.status(500).json({ message: "Error saving sprint: " + error.message });
+    }
+  });
+
   app.post("/api/sprints", async (req, res) => {
     try {
       // Create a user for the client first

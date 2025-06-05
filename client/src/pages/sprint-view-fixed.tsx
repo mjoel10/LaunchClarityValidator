@@ -28,7 +28,8 @@ import {
   ArrowLeft,
   Zap,
   Eye,
-  Waves
+  Waves,
+  Save
 } from 'lucide-react';
 import { queryClient } from '@/lib/queryClient';
 import DecisionEngine from '@/components/sprint/decision-engine';
@@ -71,6 +72,8 @@ export default function SprintView() {
     validation: false
   });
   const [isDecisionEngineOpen, setIsDecisionEngineOpen] = useState(false);
+  const [lastSaved, setLastSaved] = useState<Date | null>(null);
+  const [autoSaveEnabled, setAutoSaveEnabled] = useState(true);
 
   const toggleSection = (section: 'discovery' | 'feasibility' | 'validation') => {
     setExpandedSections(prev => ({
@@ -106,11 +109,48 @@ export default function SprintView() {
     }
   });
 
+  // Save sprint progress
+  const saveMutation = useMutation({
+    mutationFn: async () => {
+      const response = await fetch(`/api/sprints/${sprintId}/save`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' }
+      });
+      if (!response.ok) throw new Error('Failed to save sprint');
+      return response.json();
+    },
+    onSuccess: (data) => {
+      setLastSaved(new Date(data.savedAt));
+    }
+  });
+
   useEffect(() => {
     if (sprint && sprint.status === 'active' && !modulesLoading) {
       regenerateModulesMutation.mutate();
     }
   }, [sprint?.status]);
+
+  // Auto-save every 30 seconds
+  useEffect(() => {
+    if (!autoSaveEnabled) return;
+    
+    const interval = setInterval(() => {
+      if (sprint) {
+        saveMutation.mutate();
+      }
+    }, 30000); // 30 seconds
+
+    return () => clearInterval(interval);
+  }, [sprint, autoSaveEnabled]);
+
+  const handleManualSave = () => {
+    saveMutation.mutate();
+  };
+
+  const formatSaveTime = (date: Date | null) => {
+    if (!date) return '';
+    return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+  };
 
   const getModuleIcon = (moduleType: string) => {
     const iconMap: Record<string, any> = {
@@ -351,6 +391,24 @@ export default function SprintView() {
               <div className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent text-xl font-bold">
                 LaunchClarity
               </div>
+            </div>
+            
+            <div className="flex items-center gap-4">
+              {lastSaved && (
+                <div className="text-sm text-gray-500">
+                  Last saved: {formatSaveTime(lastSaved)}
+                </div>
+              )}
+              <Button 
+                onClick={handleManualSave}
+                disabled={saveMutation.isPending}
+                size="sm"
+                variant="outline"
+                className="flex items-center gap-2"
+              >
+                <Save className="w-4 h-4" />
+                {saveMutation.isPending ? 'Saving...' : 'Save Progress'}
+              </Button>
             </div>
           </div>
         </div>
