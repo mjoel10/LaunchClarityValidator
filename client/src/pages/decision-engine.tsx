@@ -25,17 +25,17 @@ export default function DecisionEnginePage() {
   };
 
   const { data: sprint, isLoading: sprintLoading } = useQuery({
-    queryKey: ['/api/sprints', sprintId],
+    queryKey: [`/api/sprints/${sprintId}`],
     enabled: !!sprintId,
   });
 
   const { data: modules = [], isLoading: modulesLoading } = useQuery({
-    queryKey: ['/api/sprints', sprintId, 'modules'],
+    queryKey: [`/api/sprints/${sprintId}/modules`],
     enabled: !!sprintId,
   });
 
   const { data: intakeData, isLoading: intakeLoading } = useQuery({
-    queryKey: ['/api/sprints', sprintId, 'intake'],
+    queryKey: [`/api/sprints/${sprintId}/intake`],
     enabled: !!sprintId,
   });
 
