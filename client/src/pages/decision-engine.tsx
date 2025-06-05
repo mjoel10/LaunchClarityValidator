@@ -210,45 +210,60 @@ export default function DecisionEnginePage() {
               const Icon = getModuleIcon(module.moduleType);
               const isAvailable = !module.isLocked;
               
-              return (
-                <button
-                  key={module.id}
-                  onClick={() => isAvailable && setSelectedModule(module.moduleType)}
-                  title={!isAvailable ? `Available in ${sectionKey.charAt(0).toUpperCase() + sectionKey.slice(1)} Sprint` : ''}
-                  className={cn(
-                    "w-full flex items-center justify-between p-3 rounded-lg border text-left transition-colors",
-                    isAvailable 
-                      ? "bg-white hover:bg-blue-50 border-gray-200 cursor-pointer" 
-                      : "bg-gray-50 border-gray-100 cursor-not-allowed"
-                  )}
-                >
-                  <div className="flex items-center gap-3">
-                    <div className={cn(
-                      "p-2 rounded-lg",
-                      module.isCompleted 
-                        ? "bg-green-100 text-green-600"
-                        : isAvailable
-                        ? "bg-blue-100 text-blue-600"
-                        : "bg-gray-100 text-gray-400"
-                    )}>
-                      {module.isCompleted ? <CheckCircle2 className="w-4 h-4" /> : <Icon className="w-4 h-4" />}
-                    </div>
-                    <div>
+              if (isAvailable) {
+                return (
+                  <Link
+                    key={module.id}
+                    href={`/sprints/${sprintId}?module=${module.moduleType}`}
+                    className={cn(
+                      "w-full flex items-center justify-between p-3 rounded-lg border text-left transition-colors block",
+                      "bg-white hover:bg-blue-50 border-gray-200 cursor-pointer"
+                    )}
+                  >
+                    <div className="flex items-center gap-3">
                       <div className={cn(
-                        "font-medium text-sm",
-                        !isAvailable && "text-gray-500"
+                        "p-2 rounded-lg",
+                        module.isCompleted 
+                          ? "bg-green-100 text-green-600"
+                          : "bg-blue-100 text-blue-600"
                       )}>
-                        {getModuleName(module.moduleType)}
+                        {module.isCompleted ? <CheckCircle2 className="w-4 h-4" /> : <Icon className="w-4 h-4" />}
                       </div>
-                      {module.isCompleted && (
-                        <div className="text-xs text-green-600">Completed</div>
-                      )}
-
+                      <div>
+                        <div className="font-medium text-sm">
+                          {getModuleName(module.moduleType)}
+                        </div>
+                        {module.isCompleted && (
+                          <div className="text-xs text-green-600">Completed</div>
+                        )}
+                      </div>
                     </div>
+                  </Link>
+                );
+              } else {
+                return (
+                  <div
+                    key={module.id}
+                    className={cn(
+                      "w-full flex items-center justify-between p-3 rounded-lg border text-left transition-colors",
+                      "bg-gray-50 border-gray-100 cursor-not-allowed"
+                    )}
+                    title={`Available in ${sectionKey.charAt(0).toUpperCase() + sectionKey.slice(1)} Sprint`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <div className="p-2 rounded-lg bg-gray-100 text-gray-400">
+                        <Icon className="w-4 h-4" />
+                      </div>
+                      <div>
+                        <div className="font-medium text-sm text-gray-500">
+                          {getModuleName(module.moduleType)}
+                        </div>
+                      </div>
+                    </div>
+                    <Lock className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />
                   </div>
-                  {!isAvailable && <Lock className="w-3.5 h-3.5 text-gray-400 flex-shrink-0" />}
-                </button>
-              );
+                );
+              }
             })}
           </div>
         )}
