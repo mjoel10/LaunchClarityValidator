@@ -33,6 +33,7 @@ import {
 } from 'lucide-react';
 import { queryClient } from '@/lib/queryClient';
 import DecisionEngine from '@/components/sprint/decision-engine';
+import InitialIntake from '@/components/sprint/initial-intake';
 import MarketSimulation from '@/components/sprint/market-simulation';
 import BusinessModelSimulator from '@/components/sprint/business-model-simulator';
 import ChannelRecommender from '@/components/sprint/channel-recommender';
@@ -48,6 +49,7 @@ import ActionPlans from '@/components/sprint/action-plans';
 import { cn } from '@/lib/utils';
 
 const FEATURE_COMPONENTS = {
+  intake: InitialIntake,
   market_simulation: MarketSimulation,
   business_model_simulator: BusinessModelSimulator,
   channel_recommender: ChannelRecommender,
