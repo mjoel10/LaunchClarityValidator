@@ -257,6 +257,16 @@ export default function DecisionEnginePage() {
       </div>
 
       <div className="max-w-none mx-6 pl-2 pr-4 py-8">
+        {/* Back Navigation */}
+        <div className="mb-6">
+          <Link href={`/sprints/${sprintId}`}>
+            <Button variant="ghost" className="text-gray-600 hover:text-gray-900 p-0 h-auto font-normal">
+              <ArrowLeft className="w-4 h-4 mr-2" />
+              Back to Sprint View
+            </Button>
+          </Link>
+        </div>
+
         <div className="grid grid-cols-12 gap-8">
           {/* Sidebar - Identical to main sprint view */}
           <div className="col-span-3">
@@ -264,7 +274,7 @@ export default function DecisionEnginePage() {
               <div className="p-6 border-b border-gray-200">
                 <h2 className="text-lg font-semibold text-gray-900 mb-2">Validation Features</h2>
                 <p className="text-sm text-gray-600">
-                  {Array.isArray(modules) ? modules.length : 0} total modules
+                  {moduleArray.length} total modules • {moduleArray.filter((m: any) => m.isCompleted).length} completed
                 </p>
               </div>
               
@@ -298,15 +308,7 @@ export default function DecisionEnginePage() {
                 intakeData={intakeDataItem}
               />
 
-              {/* Back to Sprint Button */}
-              <div className="flex justify-center pt-8">
-                <Link href={`/sprints/${sprintId}`}>
-                  <Button variant="outline" className="flex items-center gap-2">
-                    <ArrowLeft className="w-4 h-4" />
-                    Back to Sprint View
-                  </Button>
-                </Link>
-              </div>
+
             </div>
           </div>
         </div>
