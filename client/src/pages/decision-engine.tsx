@@ -149,8 +149,8 @@ export default function DecisionEnginePage() {
 
   const modulesByTier = getModulesByTier();
   const isDiscoveryUnlocked = true;
-  const isFeasibilityUnlocked = sprint?.tier === 'feasibility' || sprint?.tier === 'validation';
-  const isValidationUnlocked = sprint?.tier === 'validation';
+  const isFeasibilityUnlocked = sprintData?.tier === 'feasibility' || sprintData?.tier === 'validation';
+  const isValidationUnlocked = sprintData?.tier === 'validation';
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -286,16 +286,16 @@ export default function DecisionEnginePage() {
                   Go/Pivot/Kill recommendation engine
                 </p>
                 <p className="text-gray-500">
-                  Based on {modules?.filter((m: any) => m.isCompleted).length || 0} of {modules?.length || 0} completed validation modules
+                  Based on {moduleArray.filter((m: any) => m.isCompleted).length || 0} of {moduleArray.length || 0} completed validation modules
                 </p>
               </div>
 
               {/* Decision Engine Component */}
               <DecisionEngine 
                 sprintId={sprintId}
-                tier={sprint?.tier || ''}
-                modules={modules || []}
-                intakeData={intakeData}
+                tier={sprintData?.tier || ''}
+                modules={moduleArray}
+                intakeData={intakeDataItem}
               />
 
               {/* Back to Sprint Button */}
