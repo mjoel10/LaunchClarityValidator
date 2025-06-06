@@ -190,7 +190,7 @@ export default function SprintView() {
     const nameMap: Record<string, string> = {
       intake: 'Initial Intake',
       market_simulation: 'AI Market Simulation',
-      assumptions: 'LaunchClarity Assumption Analysis',
+      assumptions: 'Assumption Tracker',
       competitive_intel: 'Competitive Intelligence',
       market_sizing: 'Market Sizing Analysis',
       risk_assessment: 'Risk Assessment',
@@ -224,7 +224,7 @@ export default function SprintView() {
   const getModulesByTier = () => {
     if (!modules) return { discovery: [], feasibility: [], validation: [] };
     
-    const discoveryModules = ['intake', 'market_simulation', 'assumptions', 'competitive_intel', 'market_sizing', 'risk_assessment', 'swot_analysis'];
+    const discoveryModules = ['intake', 'assumptions', 'market_sizing', 'competitive_intel', 'risk_assessment', 'market_simulation', 'swot_analysis'];
     const feasibilityModules = ['business_model_simulator', 'channel_recommender', 'async_interviews', 'demand_test'];
     const validationModules = ['full_interviews', 'multi_channel_tests', 'enhanced_market_intel', 'implementation_roadmap', 'battlecards'];
 
