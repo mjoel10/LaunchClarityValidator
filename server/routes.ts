@@ -257,7 +257,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         sprintId,
       });
       
-      const intake = await storage.createIntakeData(intakeDataPayload);
+      const intake = await storage.upsertIntakeData(intakeDataPayload);
       
       // Generate initial AI analysis based on intake data
       const sprint = await storage.getSprintById(sprintId);

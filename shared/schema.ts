@@ -60,7 +60,8 @@ export const intakeData = pgTable("intake_data", {
   targetCustomerDescription: text("target_customer_description"),
   coreProblem: text("core_problem"),
   valueProposition: text("value_proposition"),
-  estimatedPricePoint: decimal("estimated_price_point"),
+  estimatedPricePoint: text("estimated_price_point"),
+  pricingModel: text("pricing_model").default("Monthly"),
   currency: text("currency").default("USD"),
   
   // Competitive Landscape

@@ -23,6 +23,8 @@ export interface IStorage {
 
   // Intake data methods
   createIntakeData(insertIntakeData: InsertIntakeData): Promise<IntakeData>;
+  updateIntakeData(sprintId: number, updates: Partial<IntakeData>): Promise<IntakeData>;
+  upsertIntakeData(insertIntakeData: InsertIntakeData): Promise<IntakeData>;
   getIntakeDataBySprintId(sprintId: number): Promise<IntakeData | undefined>;
 
   // Sprint module methods
@@ -145,6 +147,28 @@ export class DatabaseStorage implements IStorage {
       .values(insertIntakeData as any)
       .returning();
     return data;
+  }
+
+  async updateIntakeData(sprintId: number, updates: Partial<IntakeData>): Promise<IntakeData> {
+    const [data] = await db
+      .update(intakeData)
+      .set(updates)
+      .where(eq(intakeData.sprintId, sprintId))
+      .returning();
+    return data;
+  }
+
+  async upsertIntakeData(insertIntakeData: InsertIntakeData): Promise<IntakeData> {
+    // Check if intake data already exists for this sprint
+    const existing = await this.getIntakeDataBySprintId(insertIntakeData.sprintId);
+    
+    if (existing) {
+      // Update existing record
+      return await this.updateIntakeData(insertIntakeData.sprintId, insertIntakeData);
+    } else {
+      // Create new record
+      return await this.createIntakeData(insertIntakeData);
+    }
   }
 
   async getIntakeDataBySprintId(sprintId: number): Promise<IntakeData | undefined> {

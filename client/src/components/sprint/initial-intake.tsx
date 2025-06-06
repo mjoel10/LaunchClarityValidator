@@ -110,15 +110,16 @@ export default function InitialIntake({ sprintId }: InitialIntakeProps) {
 
   // Pre-populate form with existing data
   useEffect(() => {
-    if (existingData) {
+    if (existingData && Object.keys(existingData).length > 0) {
       setFormData(prev => ({
         ...prev,
         ...existingData,
-        companyName: sprint?.companyName || existingData.companyName || '',
-        geographicMarkets: existingData.geographicMarkets || [],
-        validationGoals: existingData.validationGoals || [],
+        companyName: sprint?.companyName || existingData.companyName || prev.companyName,
+        geographicMarkets: Array.isArray(existingData.geographicMarkets) ? existingData.geographicMarkets : prev.geographicMarkets,
+        validationGoals: Array.isArray(existingData.validationGoals) ? existingData.validationGoals : prev.validationGoals,
+        pricingModel: existingData.pricingModel || prev.pricingModel,
       }));
-    } else if (sprint?.companyName) {
+    } else if (sprint?.companyName && !formData.companyName) {
       setFormData(prev => ({
         ...prev,
         companyName: sprint.companyName
