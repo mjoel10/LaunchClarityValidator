@@ -3,6 +3,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/com
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { Textarea } from '@/components/ui/textarea';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useToast } from '@/hooks/use-toast';
@@ -52,6 +53,7 @@ export default function AIAssumptionTracker({ sprintId, intakeData }: AIAssumpti
     validation: true
   });
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
   // Get current sprint data
   const { data: sprint } = useQuery({
@@ -105,16 +107,16 @@ export default function AIAssumptionTracker({ sprintId, intakeData }: AIAssumpti
     }
   });
 
-  const safeGetStatus = (assumption: Assumption): string => {
-    return assumption.status || 'untested';
-  };
-
   const updateAssumptionStatus = (id: string, status: string) => {
     const updatedAssumptions = assumptions.map(assumption => 
       assumption.id === id ? { ...assumption, status } : assumption
     );
     setAssumptions(updatedAssumptions);
     saveAssumptions(updatedAssumptions);
+  };
+
+  const getAssumptionStatus = (assumption: Assumption) => {
+    return assumption.status || 'untested';
   };
 
   const saveAssumptions = async (assumptionsToSave: Assumption[]) => {
@@ -164,14 +166,14 @@ export default function AIAssumptionTracker({ sprintId, intakeData }: AIAssumpti
 
   // Calculate progress
   const getValidatedCount = (tierAssumptions: Assumption[]) => 
-    tierAssumptions.filter(a => safeGetStatus(a) === 'validated').length;
+    tierAssumptions.filter(a => a.status === 'validated').length;
 
   const getTierProgress = (tierAssumptions: Assumption[]) => {
     if (tierAssumptions.length === 0) return 0;
     return Math.round((getValidatedCount(tierAssumptions) / tierAssumptions.length) * 100);
   };
 
-  const totalValidated = assumptions.filter(a => safeGetStatus(a) === 'validated').length;
+  const totalValidated = assumptions.filter(a => a.status === 'validated').length;
   const overallProgress = assumptions.length > 0 ? Math.round((totalValidated / assumptions.length) * 100) : 0;
 
   if (generateAssumptionsMutation.isPending) {
@@ -188,56 +190,6 @@ export default function AIAssumptionTracker({ sprintId, intakeData }: AIAssumpti
       </div>
     );
   }
-
-  const renderAssumption = (assumption: Assumption) => (
-    <div key={assumption.id} className="border rounded-lg p-4 space-y-3">
-      <div className="flex items-start justify-between">
-        <div className="flex-1">
-          <div className="flex items-center gap-3 mb-2">
-            <Badge variant="outline" className="text-xs">{assumption.category}</Badge>
-            <Badge className={getRiskColor(assumption.risk_level)}>
-              {assumption.risk_level} Risk
-            </Badge>
-            <Badge className={getStatusColor(safeGetStatus(assumption))}>
-              {safeGetStatus(assumption).replace('_', ' ')}
-            </Badge>
-          </div>
-          
-          <h4 className="font-medium text-gray-900 mb-2">{assumption.assumption_text}</h4>
-          
-          <div className="text-sm text-gray-600 mb-2">
-            <strong>Method:</strong> {
-              assumption.sprint_tier === 'discovery' ? assumption.validation_approach_discovery :
-              assumption.sprint_tier === 'feasibility' ? assumption.validation_approach_feasibility :
-              assumption.validation_approach_validation
-            }
-          </div>
-          
-          <div className="text-sm text-gray-600 mb-2">
-            <strong>Success Criteria:</strong> {assumption.success_criteria}
-          </div>
-          
-          <div className="text-sm text-blue-600">
-            <strong>Timeframe:</strong> {assumption.timeframe || 
-              (assumption.sprint_tier === 'discovery' ? '1 week' :
-               assumption.sprint_tier === 'feasibility' ? '2 weeks' : '4 weeks')}
-          </div>
-        </div>
-        
-        <Select value={safeGetStatus(assumption)} onValueChange={(value) => updateAssumptionStatus(assumption.id, value)}>
-          <SelectTrigger className="w-32">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="untested">Untested</SelectItem>
-            <SelectItem value="testing">Testing</SelectItem>
-            <SelectItem value="validated">Validated</SelectItem>
-            <SelectItem value="disproven">Disproven</SelectItem>
-          </SelectContent>
-        </Select>
-      </div>
-    </div>
-  );
 
   return (
     <div className="space-y-6">
@@ -356,7 +308,49 @@ export default function AIAssumptionTracker({ sprintId, intakeData }: AIAssumpti
               {expandedSections.discovery && (
                 <CardContent>
                   <div className="space-y-4">
-                    {discoveryAssumptions.map(renderAssumption)}
+                    {discoveryAssumptions.map((assumption) => (
+                      <div key={assumption.id} className="border rounded-lg p-4 space-y-3">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-2">
+                              <Badge variant="outline" className="text-xs">{assumption.category}</Badge>
+                              <Badge className={getRiskColor(assumption.risk_level)}>
+                                {assumption.risk_level} Risk
+                              </Badge>
+                              <Badge className={getStatusColor(assumption.status)}>
+                                {assumption.status.replace('_', ' ')}
+                              </Badge>
+                            </div>
+                            
+                            <h4 className="font-medium text-gray-900 mb-2">{assumption.assumption_text}</h4>
+                            
+                            <div className="text-sm text-gray-600 mb-2">
+                              <strong>Research Method:</strong> {assumption.validation_approach_discovery}
+                            </div>
+                            
+                            <div className="text-sm text-gray-600 mb-2">
+                              <strong>Success Criteria:</strong> {assumption.success_criteria}
+                            </div>
+                            
+                            <div className="text-sm text-blue-600">
+                              <strong>Timeframe:</strong> {assumption.timeframe || '1 week'}
+                            </div>
+                          </div>
+                          
+                          <Select value={assumption.status} onValueChange={(value) => updateAssumptionStatus(assumption.id, value)}>
+                            <SelectTrigger className="w-32">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="untested">Untested</SelectItem>
+                              <SelectItem value="testing">Testing</SelectItem>
+                              <SelectItem value="validated">Validated</SelectItem>
+                              <SelectItem value="disproven">Disproven</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                    ))}
                     {discoveryAssumptions.length === 0 && (
                       <p className="text-gray-500 text-center py-4">No discovery assumptions generated yet. Click "Run Analysis" to generate tier-specific assumptions.</p>
                     )}
@@ -387,7 +381,49 @@ export default function AIAssumptionTracker({ sprintId, intakeData }: AIAssumpti
               {expandedSections.feasibility && (
                 <CardContent>
                   <div className="space-y-4">
-                    {feasibilityAssumptions.map(renderAssumption)}
+                    {feasibilityAssumptions.map((assumption) => (
+                      <div key={assumption.id} className="border rounded-lg p-4 space-y-3">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-2">
+                              <Badge variant="outline" className="text-xs">{assumption.category}</Badge>
+                              <Badge className={getRiskColor(assumption.risk_level)}>
+                                {assumption.risk_level} Risk
+                              </Badge>
+                              <Badge className={getStatusColor(assumption.status)}>
+                                {assumption.status.replace('_', ' ')}
+                              </Badge>
+                            </div>
+                            
+                            <h4 className="font-medium text-gray-900 mb-2">{assumption.assumption_text}</h4>
+                            
+                            <div className="text-sm text-gray-600 mb-2">
+                              <strong>Interview Question:</strong> {assumption.validation_approach_feasibility}
+                            </div>
+                            
+                            <div className="text-sm text-gray-600 mb-2">
+                              <strong>Success Criteria:</strong> {assumption.success_criteria}
+                            </div>
+                            
+                            <div className="text-sm text-green-600">
+                              <strong>Timeframe:</strong> {assumption.timeframe || '2 weeks'}
+                            </div>
+                          </div>
+                          
+                          <Select value={assumption.status} onValueChange={(value) => updateAssumptionStatus(assumption.id, value)}>
+                            <SelectTrigger className="w-32">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="untested">Untested</SelectItem>
+                              <SelectItem value="testing">Testing</SelectItem>
+                              <SelectItem value="validated">Validated</SelectItem>
+                              <SelectItem value="disproven">Disproven</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                    ))}
                     {feasibilityAssumptions.length === 0 && (
                       <p className="text-gray-500 text-center py-4">No feasibility assumptions generated yet. Click "Run Analysis" to generate tier-specific assumptions.</p>
                     )}
@@ -418,7 +454,49 @@ export default function AIAssumptionTracker({ sprintId, intakeData }: AIAssumpti
               {expandedSections.validation && (
                 <CardContent>
                   <div className="space-y-4">
-                    {validationAssumptions.map(renderAssumption)}
+                    {validationAssumptions.map((assumption) => (
+                      <div key={assumption.id} className="border rounded-lg p-4 space-y-3">
+                        <div className="flex items-start justify-between">
+                          <div className="flex-1">
+                            <div className="flex items-center gap-3 mb-2">
+                              <Badge variant="outline" className="text-xs">{assumption.category}</Badge>
+                              <Badge className={getRiskColor(assumption.risk_level)}>
+                                {assumption.risk_level} Risk
+                              </Badge>
+                              <Badge className={getStatusColor(assumption.status)}>
+                                {assumption.status.replace('_', ' ')}
+                              </Badge>
+                            </div>
+                            
+                            <h4 className="font-medium text-gray-900 mb-2">{assumption.assumption_text}</h4>
+                            
+                            <div className="text-sm text-gray-600 mb-2">
+                              <strong>Test Method:</strong> {assumption.validation_approach_validation}
+                            </div>
+                            
+                            <div className="text-sm text-gray-600 mb-2">
+                              <strong>Success Criteria:</strong> {assumption.success_criteria}
+                            </div>
+                            
+                            <div className="text-sm text-purple-600">
+                              <strong>Timeframe:</strong> {assumption.timeframe || '4 weeks'}
+                            </div>
+                          </div>
+                          
+                          <Select value={assumption.status} onValueChange={(value) => updateAssumptionStatus(assumption.id, value)}>
+                            <SelectTrigger className="w-32">
+                              <SelectValue />
+                            </SelectTrigger>
+                            <SelectContent>
+                              <SelectItem value="untested">Untested</SelectItem>
+                              <SelectItem value="testing">Testing</SelectItem>
+                              <SelectItem value="validated">Validated</SelectItem>
+                              <SelectItem value="disproven">Disproven</SelectItem>
+                            </SelectContent>
+                          </Select>
+                        </div>
+                      </div>
+                    ))}
                     {validationAssumptions.length === 0 && (
                       <p className="text-gray-500 text-center py-4">No validation assumptions generated yet. Click "Run Analysis" to generate tier-specific assumptions.</p>
                     )}

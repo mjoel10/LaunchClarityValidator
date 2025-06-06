@@ -11,14 +11,14 @@ interface SidebarProps {
 const moduleConfig = {
   discovery: [
     // Setup Section
-    { key: 'intake', title: 'Intake Form', icon: '📋', section: 'Setup', tier: 'discovery' },
+    { key: 'intake', title: 'Initial Intake', icon: '📋', section: 'Setup', tier: 'discovery' },
+    { key: 'assumptions', title: 'Assumption Tracker', icon: '🎯', section: 'Setup', tier: 'discovery' },
     
     // Discovery Section (Core AI Analysis)
-    { key: 'market_simulation', title: 'Market Simulation', icon: '👥', section: 'Discovery', tier: 'discovery' },
-    { key: 'assumptions', title: 'Assumptions Analysis', icon: '🎯', section: 'Discovery', tier: 'discovery' },
-    { key: 'competitive_intel', title: 'Competitive Intel', icon: '♟', section: 'Discovery', tier: 'discovery' },
-    { key: 'market_sizing', title: 'Market Sizing', icon: '📊', section: 'Discovery', tier: 'discovery' },
+    { key: 'market_sizing', title: 'Market Sizing Analysis', icon: '📊', section: 'Discovery', tier: 'discovery' },
+    { key: 'competitive_intel', title: 'Competitive Intelligence', icon: '♟', section: 'Discovery', tier: 'discovery' },
     { key: 'risk_assessment', title: 'Risk Assessment', icon: '🛡', section: 'Discovery', tier: 'discovery' },
+    { key: 'market_simulation', title: 'AI Market Simulation', icon: '👥', section: 'Discovery', tier: 'discovery' },
     { key: 'swot_analysis', title: 'SWOT Analysis', icon: '⚖', section: 'Discovery', tier: 'discovery' },
     
     // Locked Features (Visible but disabled)
@@ -39,11 +39,11 @@ const moduleConfig = {
   ],
   feasibility: [
     // Setup Section
-    { key: 'intake', title: 'Intake Form', icon: '📋', section: 'Setup', tier: 'discovery' },
+    { key: 'intake', title: 'Initial Intake', icon: '📋', section: 'Setup', tier: 'discovery' },
+    { key: 'assumptions', title: 'Assumption Tracker', icon: '🎯', section: 'Setup', tier: 'discovery' },
     
     // Discovery Section (All unlocked)
-    { key: 'market_simulation', title: 'Market Simulation', icon: '👥', section: 'Discovery', tier: 'discovery' },
-    { key: 'assumptions', title: 'Assumptions Analysis', icon: '🎯', section: 'Discovery', tier: 'discovery' },
+    { key: 'market_simulation', title: 'AI Market Simulation', icon: '👥', section: 'Discovery', tier: 'discovery' },
     { key: 'competitive_intel', title: 'Competitive Intel', icon: '♟', section: 'Discovery', tier: 'discovery' },
     { key: 'market_sizing', title: 'Market Sizing', icon: '📊', section: 'Discovery', tier: 'discovery' },
     { key: 'risk_assessment', title: 'Risk Assessment', icon: '🛡', section: 'Discovery', tier: 'discovery' },
@@ -71,11 +71,11 @@ const moduleConfig = {
   ],
   validation: [
     // Setup Section
-    { key: 'intake', title: 'Intake Form', icon: '📋', section: 'Setup', tier: 'discovery' },
+    { key: 'intake', title: 'Initial Intake', icon: '📋', section: 'Setup', tier: 'discovery' },
+    { key: 'assumptions', title: 'Assumption Tracker', icon: '🎯', section: 'Setup', tier: 'discovery' },
     
     // Discovery Section (All unlocked)
-    { key: 'market_simulation', title: 'Market Simulation', icon: '👥', section: 'Discovery', tier: 'discovery' },
-    { key: 'assumptions', title: 'Assumptions Analysis', icon: '🎯', section: 'Discovery', tier: 'discovery' },
+    { key: 'market_simulation', title: 'AI Market Simulation', icon: '👥', section: 'Discovery', tier: 'discovery' },
     { key: 'competitive_intel', title: 'Competitive Intel', icon: '♟', section: 'Discovery', tier: 'discovery' },
     { key: 'market_sizing', title: 'Market Sizing', icon: '📊', section: 'Discovery', tier: 'discovery' },
     { key: 'risk_assessment', title: 'Risk Assessment', icon: '🛡', section: 'Discovery', tier: 'discovery' },
