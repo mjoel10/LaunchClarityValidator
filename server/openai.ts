@@ -432,23 +432,34 @@ SPECIFIC RISKS/UNCERTAINTIES:
 Generate partnership-specific assumptions organized by validation tier:
 
 DISCOVERY ASSUMPTIONS (5-6 assumptions): Desk research validation in 1 week
-- Partner's public API documentation, support forums, case studies with similar partners
-- Competitive partnership analysis, pricing model research, technical feasibility assessment
-- Examples for ${partnerName}: "${partnerName} has documented APIs for ${intakeData.technicalRequirements || 'core integration needs'}", "${partnerName}'s partner program offers ${intakeData.expectedSupport || 'technical support'} to integration partners"
+- Research ${partnerName}'s public API documentation, developer portal, support forums, case studies
+- Analyze how competitors integrate with ${partnerName}, pricing models, technical requirements
+- Examples for ${intakeData.companyName || 'this company'} + ${partnerName}:
+  * "${partnerName}'s API documentation shows support for ${intakeData.technicalRequirements || 'required data structures and workflows'}"
+  * "Competitors charge $${intakeData.estimatedPricePoint || '15-30'}/month for similar ${partnerName} integrations"
+  * "${intakeData.supportTicketAnalysis || '35%+'} of ${intakeData.companyName || 'company'} support tickets mention needing ${partnerName} integration"
 
 FEASIBILITY ASSUMPTIONS (4-5 assumptions): Partner and customer interviews in 2 weeks
-- Direct partner conversations, joint customer interviews, internal stakeholder alignment
-- Partner interest level, resource commitment, mutual customer demand validation
-- Examples: "${partnerName} allocates dedicated engineering resources to strategic partnerships", "Joint customers see 30%+ value increase from integrated solution"
+- Interview ${intakeData.companyName || 'company'} users about ${partnerName} usage and integration needs
+- Conduct ${partnerName} partnership team conversations about collaboration interest
+- Examples:
+  * "${intakeData.companyName || 'Company'} users currently spend ${intakeData.timeSpentManually || '5-8 hours'} monthly on manual data transfer between ${intakeData.companyName || 'company'} and ${partnerName}"
+  * "Users willing to pay $${intakeData.premiumPricing || '15-20'}/month premium for seamless ${partnerName} integration"
+  * "${partnerName} partnership team sees ${intakeData.revenueOpportunity || '20%+'} revenue opportunity from ${intakeData.companyName || 'company'}'s ${intakeData.userBase || '100K'} user base"
 
 VALIDATION ASSUMPTIONS (4-5 assumptions): Pilot program or market test in 4 weeks
-- Beta integration, pilot customer program, joint go-to-market test, leading indicators
-- Measurable partnership success metrics within timeframe
-- Examples: "Pilot integration achieves 90%+ technical success rate", "Joint customers show 25%+ higher retention in first 30 days"
+- Beta test integration with select users, measure success metrics, gather satisfaction data
+- Test go-to-market messaging and user adoption rates
+- Examples:
+  * "Beta users achieve ${intakeData.successRate || '90%+'} successful data sync between ${intakeData.companyName || 'company'} and ${partnerName}"
+  * "${intakeData.clickThroughRate || '20%+'} click-through rate on ${partnerName} integration announcement emails to ${intakeData.companyName || 'company'} users"
+  * "${intakeData.userSatisfaction || '80%+'} of beta users report satisfaction with ${partnerName} integration after ${intakeData.satisfactionTimeframe || '2 weeks'}"
 
-Make each assumption specific to ${partnerName} and ${partnershipType}, using actual partner/company names and specific metrics.
-
-CRITICAL: Use the actual partner name "${partnerName}" instead of generic terms like "partner" or "the partner" in assumption text.
+CRITICAL REQUIREMENTS:
+- Always use actual company names: "${intakeData.companyName || 'this company'}" and "${partnerName}"
+- Reference specific metrics, user counts, pricing from intake data
+- Make assumptions sound like they were written specifically for this ${partnershipType} partnership
+- No generic language like "the partner" or "the company" - use actual names throughout
 ` : `
 Generate business validation assumptions for ${intakeData.companyName || 'this business'}:
 

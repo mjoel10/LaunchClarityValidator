@@ -190,7 +190,7 @@ export default function AIAssumptionTracker({ sprintId, intakeData }: AIAssumpti
   }
 
   const renderAssumption = (assumption: Assumption) => (
-    <div className="border rounded-lg p-4 space-y-3">
+    <div key={assumption.id} className="border rounded-lg p-4 space-y-3">
       <div className="flex items-start justify-between">
         <div className="flex-1">
           <div className="flex items-center gap-3 mb-2">
@@ -356,11 +356,7 @@ export default function AIAssumptionTracker({ sprintId, intakeData }: AIAssumpti
               {expandedSections.discovery && (
                 <CardContent>
                   <div className="space-y-4">
-                    {discoveryAssumptions.map((assumption) => (
-                      <div key={assumption.id}>
-                        {renderAssumption(assumption)}
-                      </div>
-                    ))}
+                    {discoveryAssumptions.map((assumption) => renderAssumption(assumption))}
                     {discoveryAssumptions.length === 0 && (
                       <p className="text-gray-500 text-center py-4">No discovery assumptions generated yet. Click "Run Analysis" to generate tier-specific assumptions.</p>
                     )}
@@ -391,11 +387,7 @@ export default function AIAssumptionTracker({ sprintId, intakeData }: AIAssumpti
               {expandedSections.feasibility && (
                 <CardContent>
                   <div className="space-y-4">
-                    {feasibilityAssumptions.map((assumption) => (
-                      <div key={assumption.id}>
-                        {renderAssumption(assumption)}
-                      </div>
-                    ))}
+                    {feasibilityAssumptions.map((assumption) => renderAssumption(assumption))}
                     {feasibilityAssumptions.length === 0 && (
                       <p className="text-gray-500 text-center py-4">No feasibility assumptions generated yet. Click "Run Analysis" to generate tier-specific assumptions.</p>
                     )}
@@ -426,11 +418,7 @@ export default function AIAssumptionTracker({ sprintId, intakeData }: AIAssumpti
               {expandedSections.validation && (
                 <CardContent>
                   <div className="space-y-4">
-                    {validationAssumptions.map((assumption) => (
-                      <div key={assumption.id}>
-                        {renderAssumption(assumption)}
-                      </div>
-                    ))}
+                    {validationAssumptions.map((assumption) => renderAssumption(assumption))}
                     {validationAssumptions.length === 0 && (
                       <p className="text-gray-500 text-center py-4">No validation assumptions generated yet. Click "Run Analysis" to generate tier-specific assumptions.</p>
                     )}
