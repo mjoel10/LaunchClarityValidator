@@ -863,12 +863,13 @@ Calculate incremental market opportunity through ${partnershipType} with ${partn
 Assess combined go-to-market potential, cross-selling opportunities, and accelerated market penetration through partnership channels.
 ` : ''}
 
-<h2>Strategic Recommendations</h2>
-<h3>Market Entry Strategy</h3>
-<p>Recommend optimal market entry approach based on market sizing analysis, including segment prioritization, geographic expansion, and resource allocation.</p>
+## Strategic Recommendations
 
-<h3>Growth Acceleration Opportunities</h3>
-<p>Identify specific tactics to accelerate market capture, including product development, pricing optimization, and partnership strategies.</p>
+### Market Entry Strategy
+Recommend optimal market entry approach based on market sizing analysis, including segment prioritization, geographic expansion, and resource allocation.
+
+### Growth Acceleration Opportunities
+Identify specific tactics to accelerate market capture, including product development, pricing optimization, and partnership strategies.
 
 TONE: Professional consulting language with specific numbers and calculations throughout.
 TARGET: 2,000-2,500 words with dense insights and data points.
