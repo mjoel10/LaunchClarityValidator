@@ -79,7 +79,9 @@ export default function InitialIntake({ sprintId }: InitialIntakeProps) {
     uniqueAdvantage: '',
 
     // Validation Intent
-    assumptionsToValidate: '',
+    assumption1: '',
+    assumption2: '',
+    assumption3: '',
     validationGoals: [] as string[],
     criticalQuestion: '',
     hasBeenTested: 'No',
@@ -571,16 +573,44 @@ export default function InitialIntake({ sprintId }: InitialIntakeProps) {
             </CardTitle>
           </CardHeader>
           <CardContent className="space-y-6">
-            <div>
-              <Label htmlFor="assumptionsToValidate">Top 3 Assumptions to Validate *</Label>
-              <Textarea 
-                id="assumptionsToValidate"
-                value={formData.assumptionsToValidate}
-                onChange={(e) => handleInputChange('assumptionsToValidate', e.target.value)}
-                placeholder="List your most critical assumptions that need validation..."
-                className="min-h-[100px]"
-                required
-              />
+            <div className="space-y-4">
+              <Label className="text-base font-medium">Top 3 Assumptions to Validate *</Label>
+              
+              <div>
+                <Label htmlFor="assumption1">1. First Assumption</Label>
+                <Textarea 
+                  id="assumption1"
+                  value={formData.assumption1}
+                  onChange={(e) => handleInputChange('assumption1', e.target.value)}
+                  placeholder="What is your most critical assumption that needs validation?"
+                  className="min-h-[80px]"
+                  required
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="assumption2">2. Second Assumption</Label>
+                <Textarea 
+                  id="assumption2"
+                  value={formData.assumption2}
+                  onChange={(e) => handleInputChange('assumption2', e.target.value)}
+                  placeholder="What is your second most important assumption?"
+                  className="min-h-[80px]"
+                  required
+                />
+              </div>
+
+              <div>
+                <Label htmlFor="assumption3">3. Third Assumption</Label>
+                <Textarea 
+                  id="assumption3"
+                  value={formData.assumption3}
+                  onChange={(e) => handleInputChange('assumption3', e.target.value)}
+                  placeholder="What is your third key assumption to validate?"
+                  className="min-h-[80px]"
+                  required
+                />
+              </div>
             </div>
 
             <div>
