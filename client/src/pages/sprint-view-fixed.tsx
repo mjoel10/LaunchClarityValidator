@@ -53,7 +53,7 @@ import { cn } from '@/lib/utils';
 
 const FEATURE_COMPONENTS = {
   intake: InitialIntake,
-  market_simulation: MarketSimulation,
+  market_simulation: MarketSizingReport,
   assumptions: AssumptionTrackerReport,
   business_model_simulator: BusinessModelSimulator,
   channel_recommender: ChannelRecommender,
