@@ -536,11 +536,12 @@ export default function InitialIntake({ sprintId }: InitialIntakeProps) {
 
                   <div>
                     <Label htmlFor={`competitor${num}Differentiator`}>Key Differentiator</Label>
-                    <Input 
+                    <Textarea 
                       id={`competitor${num}Differentiator`}
                       value={formData[`competitor${num}Differentiator` as keyof typeof formData] as string}
                       onChange={(e) => handleInputChange(`competitor${num}Differentiator`, e.target.value)}
-                      placeholder="How do you differ?" 
+                      placeholder="How do you differ from this competitor? What's your advantage?"
+                      className="min-h-[80px]"
                     />
                   </div>
                 </div>
