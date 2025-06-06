@@ -298,7 +298,9 @@ export default function InitialIntake({ sprintId }: InitialIntakeProps) {
                     <SelectItem value="Pre-launch">Pre-launch</SelectItem>
                     <SelectItem value="MVP">MVP</SelectItem>
                     <SelectItem value="Revenue < $100K">Revenue &lt; $100K</SelectItem>
-                    <SelectItem value="Revenue > $100K">Revenue &gt; $100K</SelectItem>
+                    <SelectItem value="Revenue $100K - $1M">Revenue $100K - $1M</SelectItem>
+                    <SelectItem value="Revenue $1M - $10M">Revenue $1M - $10M</SelectItem>
+                    <SelectItem value="Revenue $10M - $50M+">Revenue $10M - $50M+</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
