@@ -94,7 +94,11 @@ export default function InitialIntake({ sprintId }: InitialIntakeProps) {
     relationshipStatus: '',
     integrationType: '',
     partnershipGoal: '',
-    partnershipRisks: '',
+    partnershipRisk1: '',
+    partnershipRisk2: '',
+    partnershipRisk3: '',
+    partnershipRisk4: '',
+    partnershipRisk5: '',
   });
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -778,15 +782,63 @@ export default function InitialIntake({ sprintId }: InitialIntakeProps) {
                 </div>
               </div>
 
-              <div>
-                <Label htmlFor="partnershipRisks">Key Risks or Uncertainties</Label>
-                <Textarea 
-                  id="partnershipRisks"
-                  value={formData.partnershipRisks}
-                  onChange={(e) => handleInputChange('partnershipRisks', e.target.value)}
-                  placeholder="What are the main risks or uncertainties with this partnership?"
-                  className="min-h-[100px]"
-                />
+              <div className="space-y-4">
+                <Label className="text-base font-medium">Top 5 Risks or Uncertainties</Label>
+                
+                <div>
+                  <Label htmlFor="partnershipRisk1">1. Primary Risk</Label>
+                  <Textarea 
+                    id="partnershipRisk1"
+                    value={formData.partnershipRisk1}
+                    onChange={(e) => handleInputChange('partnershipRisk1', e.target.value)}
+                    placeholder="What is the biggest risk or uncertainty with this partnership?"
+                    className="min-h-[80px]"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="partnershipRisk2">2. Second Risk</Label>
+                  <Textarea 
+                    id="partnershipRisk2"
+                    value={formData.partnershipRisk2}
+                    onChange={(e) => handleInputChange('partnershipRisk2', e.target.value)}
+                    placeholder="What is the second most concerning risk?"
+                    className="min-h-[80px]"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="partnershipRisk3">3. Third Risk</Label>
+                  <Textarea 
+                    id="partnershipRisk3"
+                    value={formData.partnershipRisk3}
+                    onChange={(e) => handleInputChange('partnershipRisk3', e.target.value)}
+                    placeholder="What is your third key risk or uncertainty?"
+                    className="min-h-[80px]"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="partnershipRisk4">4. Fourth Risk</Label>
+                  <Textarea 
+                    id="partnershipRisk4"
+                    value={formData.partnershipRisk4}
+                    onChange={(e) => handleInputChange('partnershipRisk4', e.target.value)}
+                    placeholder="What is another important risk to consider?"
+                    className="min-h-[80px]"
+                  />
+                </div>
+
+                <div>
+                  <Label htmlFor="partnershipRisk5">5. Fifth Risk</Label>
+                  <Textarea 
+                    id="partnershipRisk5"
+                    value={formData.partnershipRisk5}
+                    onChange={(e) => handleInputChange('partnershipRisk5', e.target.value)}
+                    placeholder="What is the fifth risk or uncertainty?"
+                    className="min-h-[80px]"
+                  />
+                </div>
               </div>
             </CardContent>
           </Card>
