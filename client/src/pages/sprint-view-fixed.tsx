@@ -161,10 +161,9 @@ export default function SprintView() {
   const getModuleIcon = (moduleType: string) => {
     const iconMap: Record<string, any> = {
       intake: Building2,
-      market_simulation: Brain,
+      market_simulation: BarChart3,
       assumptions: Target,
       competitive_intel: Sword,
-      market_sizing: BarChart3,
       risk_assessment: Shield,
       swot_analysis: Shield,
       business_model_simulator: TrendingUp,
@@ -190,10 +189,9 @@ export default function SprintView() {
   const getModuleName = (moduleType: string) => {
     const nameMap: Record<string, string> = {
       intake: 'Initial Intake',
-      market_simulation: 'AI Market Simulation',
+      market_simulation: 'Market Sizing Analysis',
       assumptions: 'Assumption Tracker',
       competitive_intel: 'Competitive Intelligence',
-      market_sizing: 'Market Sizing Analysis',
       risk_assessment: 'Risk Assessment',
       swot_analysis: 'SWOT Analysis',
       
