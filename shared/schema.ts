@@ -43,6 +43,11 @@ export const intakeData = pgTable("intake_data", {
   id: serial("id").primaryKey(),
   sprintId: integer("sprint_id").references(() => sprints.id).notNull(),
   
+  // Contact Information
+  companyName: text("company_name"),
+  contactEmail: text("contact_email"),
+  contactPhone: text("contact_phone"),
+  
   // Business Overview
   businessModel: text("business_model"), // B2B, B2C, B2B2C, B2G, Marketplace
   productType: text("product_type"), // SaaS, Service, Physical, Marketplace, App
