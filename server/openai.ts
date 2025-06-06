@@ -533,8 +533,14 @@ export async function generateAssumptionReport(intakeData: any) {
   try {
     const companyName = intakeData.companyName;
     const partnerName = intakeData.potentialPartnerName || intakeData.evaluatedPartner;
-    const partnershipType = intakeData.partnershipType;
-    const industry = intakeData.industry;
+    const partnershipType = intakeData.partnershipType || 'Strategic Partnership';
+    const industry = intakeData.industry || 'Technology';
+    const targetCustomer = intakeData.targetCustomer || intakeData.targetCustomerDescription || 'target customers';
+    const pricePoint = intakeData.estimatedPricePoint || 'competitive pricing';
+    const pricingModel = intakeData.pricingModel || 'monthly subscription';
+    const userBase = intakeData.userBase || intakeData.currentUsers || '50K+';
+    const currentStage = intakeData.currentStage || 'Growth';
+    const primaryGoal = intakeData.primaryPartnershipGoal || intakeData.primaryValidationGoals?.[0] || 'market expansion';
     
     if (!companyName || !partnerName) {
       throw new Error('Company name and partner name are required for generating report');
@@ -544,13 +550,13 @@ export async function generateAssumptionReport(intakeData: any) {
 Generate a comprehensive assumption validation report of approximately 1,500-2,000 words for a $5,000+ consulting sprint analyzing ${companyName}'s ${partnershipType} partnership with ${partnerName}.
 
 PARTNERSHIP CONTEXT:
-- Company: ${companyName}
+- Company: ${companyName} (${userBase} users, ${currentStage} stage)
 - Partner: ${partnerName}
 - Partnership Type: ${partnershipType}
 - Industry: ${industry}
-- Primary Goal: ${intakeData.primaryPartnershipGoal}
-- Current Stage: ${intakeData.currentStage}
-- Target Market: ${intakeData.targetCustomer}
+- Target Market: ${targetCustomer}
+- Pricing: ${pricePoint} per ${pricingModel}
+- Primary Goal: ${primaryGoal}
 
 CRITICAL REQUIREMENTS:
 - Generate 12-15 detailed assumptions (4-5 per sprint tier)
@@ -591,30 +597,47 @@ FORMAT WITH PROPER HTML FOR GOOGLE DOCS TRANSFER:
 <h2>Discovery Sprint Assumptions (Weeks 1-2)</h2>
 <p>Validate through desk research, competitive analysis, and public information gathering.</p>
 
-Generate 4-5 detailed assumptions, each as a full paragraph with:
-- Specific hypothesis about ${partnerName}'s capabilities or market dynamics
-- Why this assumption is critical to partnership success
-- Detailed validation approach using specific research methods
+Generate 4-5 detailed assumptions, each as a full paragraph. Examples of specific hypotheses:
+"${partnerName}'s API infrastructure can handle ${companyName}'s current ${userBase} user base with sub-200ms response times..."
+"${targetCustomer} are willing to pay ${pricePoint} for an integrated ${companyName}+${partnerName} solution..."
+"${partnerName}'s customer success team has capacity to support ${companyName}'s ${pricingModel} onboarding process..."
+
+Each assumption must include:
+- Specific hypothesis using actual company names and metrics
+- Why this assumption is critical to partnership success  
+- Detailed validation approach with concrete research methods
 - Success criteria with measurable thresholds
 - Risk assessment and business impact
 
 <h2>Feasibility Sprint Assumptions (Weeks 3-4)</h2>
 <p>Validate through direct partner engagement and customer discovery interviews.</p>
 
-Generate 4-5 detailed assumptions about:
-- ${partnerName}'s partnership interest and resource commitment
-- ${companyName} customer demand and willingness to adopt
-- Technical feasibility and integration requirements
-- Business model alignment and revenue potential
+Generate 4-5 detailed assumptions with specific examples:
+"${partnerName}'s executive team will commit 2-3 FTE developers for ${companyName} integration within Q2..."
+"${companyName}'s ${targetCustomer} show 40%+ interest in integrated solution during customer interviews..."
+"${partnerName}'s webhook architecture supports real-time data sync for ${companyName}'s ${pricingModel} billing..."
+"Joint ${companyName}+${partnerName} solution generates 25%+ revenue uplift vs standalone products..."
+
+Focus on:
+- Partnership interest and resource commitment specifics
+- Customer demand validation with measurable thresholds
+- Technical feasibility with concrete integration requirements
+- Business model alignment and revenue projections
 
 <h2>Validation Sprint Assumptions (Weeks 5-8)</h2>
 <p>Validate through pilot programs, beta testing, and market experiments.</p>
 
-Generate 4-5 detailed assumptions about:
-- Customer adoption rates and usage patterns
-- Technical performance and reliability metrics
-- Business impact and ROI potential
-- Scalability and long-term viability
+Generate 4-5 detailed assumptions with specific examples:
+"Beta pilot with 100 ${targetCustomer} achieves 60%+ weekly active usage of ${companyName}+${partnerName} integration..."
+"${partnerName}'s infrastructure maintains 99.9% uptime during ${companyName}'s peak ${userBase} concurrent user load..."
+"Integrated solution drives 15%+ customer lifetime value increase vs ${companyName} standalone pricing..."
+"Partnership model scales to support 10x current ${companyName} user growth within 12 months..."
+
+Focus on:
+- Customer adoption metrics with specific usage thresholds
+- Technical performance benchmarks under real load
+- Quantified business impact and ROI calculations
+- Scalability validation for future growth projections
 
 <h2>Risk Assessment & Mitigation</h2>
 Provide detailed analysis of highest-risk assumptions and mitigation strategies.
