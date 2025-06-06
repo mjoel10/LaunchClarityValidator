@@ -41,10 +41,13 @@ interface Assumption {
   category: string;
   risk_level: string;
   confidence_level: string;
+  sprint_tier: 'discovery' | 'feasibility' | 'validation';
+  validation_method: string;
   validation_approach_discovery: string;
   validation_approach_feasibility: string;
   validation_approach_validation: string;
   success_criteria: string;
+  timeframe: string;
   status: string;
   evidence: string;
   custom: boolean;
@@ -171,7 +174,7 @@ export default function AIAssumptionTracker({ sprintId, intakeData }: AIAssumpti
     }
   };
 
-  const addCustomAssumption = () => {
+  const addCustomAssumption = (sprintTier: 'discovery' | 'feasibility' | 'validation') => {
     if (!newAssumption.trim()) return;
     
     const customAssumption: Assumption = {
@@ -180,10 +183,13 @@ export default function AIAssumptionTracker({ sprintId, intakeData }: AIAssumpti
       category: 'Custom',
       risk_level: 'Medium',
       confidence_level: 'Low',
+      sprint_tier: sprintTier,
+      validation_method: `${sprintTier} validation method`,
       validation_approach_discovery: 'Manual research and analysis',
       validation_approach_feasibility: 'Customer interviews and surveys',
       validation_approach_validation: 'Market testing and experiments',
       success_criteria: 'To be defined based on validation approach',
+      timeframe: sprintTier === 'discovery' ? '1 week' : sprintTier === 'feasibility' ? '2 weeks' : '4 weeks',
       status: 'untested',
       evidence: '',
       custom: true
@@ -268,9 +274,9 @@ export default function AIAssumptionTracker({ sprintId, intakeData }: AIAssumpti
         <div>
           <h2 className="text-2xl font-bold flex items-center gap-3">
             <Target className="w-6 h-6 text-blue-600" />
-            LaunchClarity Assumption Analysis
+            Assumption Tracker
           </h2>
-          <p className="text-gray-600 mt-1">Advanced validation roadmap for your critical business assumptions</p>
+          <p className="text-gray-600 mt-1">Systematic validation roadmap organized by sprint tier and timeframe</p>
         </div>
         {assumptions.length === 0 && (
           <Button onClick={() => generateAssumptionsMutation.mutate()} disabled={generateAssumptionsMutation.isPending}>
@@ -288,47 +294,62 @@ export default function AIAssumptionTracker({ sprintId, intakeData }: AIAssumpti
 
       {assumptions.length > 0 && (
         <>
-          {/* Summary Cards */}
+          {/* Sprint Tier Progress Cards */}
           <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            <Card className="rounded-xl shadow-sm">
+            <Card className={`rounded-xl shadow-sm ${tier === 'discovery' ? 'ring-2 ring-blue-500 bg-blue-50' : ''}`}>
               <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium text-gray-600">Total Assumptions</CardTitle>
+                <CardTitle className="text-sm font-medium text-blue-600 flex items-center gap-2">
+                  <Search className="w-4 h-4" />
+                  Discovery Sprint
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-blue-600">{assumptions.length}</div>
-                <div className="text-xs text-gray-500">identified for validation</div>
+                <div className="text-2xl font-bold text-blue-600">
+                  {assumptions.filter(a => a.sprint_tier === 'discovery' && a.status === 'validated').length} of {assumptions.filter(a => a.sprint_tier === 'discovery').length}
+                </div>
+                <div className="text-xs text-gray-500">1 week • Desk research</div>
               </CardContent>
             </Card>
 
-            <Card className="rounded-xl shadow-sm">
+            <Card className={`rounded-xl shadow-sm ${tier === 'feasibility' ? 'ring-2 ring-green-500 bg-green-50' : ''}`}>
               <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium text-gray-600">High Risk</CardTitle>
+                <CardTitle className="text-sm font-medium text-green-600 flex items-center gap-2">
+                  <Users className="w-4 h-4" />
+                  Feasibility Sprint
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-2xl font-bold text-red-600">{requirements.highRiskCount}</div>
-                <div className="text-xs text-gray-500">business-critical assumptions</div>
+                <div className="text-2xl font-bold text-green-600">
+                  {assumptions.filter(a => a.sprint_tier === 'feasibility' && a.status === 'validated').length} of {assumptions.filter(a => a.sprint_tier === 'feasibility').length}
+                </div>
+                <div className="text-xs text-gray-500">2 weeks • Customer interviews</div>
               </CardContent>
             </Card>
 
-            <Card className="rounded-xl shadow-sm">
+            <Card className={`rounded-xl shadow-sm ${tier === 'validation' ? 'ring-2 ring-purple-500 bg-purple-50' : ''}`}>
               <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium text-gray-600">Validated</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold text-green-600">{requirements.validatedCount}</div>
-                <div className="text-xs text-gray-500">of {assumptions.length} assumptions</div>
-              </CardContent>
-            </Card>
-
-            <Card className="rounded-xl shadow-sm">
-              <CardHeader className="pb-3">
-                <CardTitle className="text-sm font-medium text-gray-600">Progress</CardTitle>
+                <CardTitle className="text-sm font-medium text-purple-600 flex items-center gap-2">
+                  <Target className="w-4 h-4" />
+                  Validation Sprint
+                </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold text-purple-600">
-                  {Math.round((requirements.validatedCount / assumptions.length) * 100)}%
+                  {assumptions.filter(a => a.sprint_tier === 'validation' && a.status === 'validated').length} of {assumptions.filter(a => a.sprint_tier === 'validation').length}
                 </div>
-                <div className="text-xs text-gray-500">validation complete</div>
+                <div className="text-xs text-gray-500">4 weeks • Market tests</div>
+              </CardContent>
+            </Card>
+
+            <Card className="rounded-xl shadow-sm">
+              <CardHeader className="pb-3">
+                <CardTitle className="text-sm font-medium text-gray-600">Overall Progress</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold text-gray-900">
+                  {requirements.validatedCount} of {assumptions.length}
+                </div>
+                <div className="text-xs text-gray-500">{Math.round((requirements.validatedCount / Math.max(assumptions.length, 1)) * 100)}% complete</div>
               </CardContent>
             </Card>
           </div>

@@ -405,59 +405,55 @@ Respond with JSON in this exact format:
 export async function generateAssumptions(intakeData: any) {
   try {
     const prompt = `
-Analyze this business context and generate 10-15 critical assumptions that could make or break this venture:
+Generate assumptions for ${intakeData.companyName || 'this business'} organized by validation method and tier timeframes:
 
-Business Model: ${intakeData.businessModel}
-Product Type: ${intakeData.productType}
-Current Stage: ${intakeData.currentStage}
-Industry: ${intakeData.industry}
-Target Customer: ${intakeData.targetCustomerDescription}
-Core Problem: ${intakeData.coreProblem}
-Value Proposition: ${intakeData.valueProposition}
-Price Point: ${intakeData.estimatedPricePoint} ${intakeData.currency}
-Geographic Markets: ${intakeData.geographicMarkets}
-Primary Goals: ${intakeData.primaryValidationGoals}
-Pricing Model: ${intakeData.pricingModel}
-Partnership Evaluation: ${intakeData.isPartnershipEvaluation ? 'Yes' : 'No'}
-Previous Testing: ${intakeData.hasPreviousTesting ? 'Yes' : 'No'}
-${intakeData.testingDescription ? `Testing Description: ${intakeData.testingDescription}` : ''}
+Company Context:
+- Product: ${intakeData.productDescription || intakeData.valueProposition}
+- Target Market: ${intakeData.targetCustomerDescription}
+- Business Model: ${intakeData.businessModel}
+- Current Stage: ${intakeData.currentStage}
+- Industry: ${intakeData.industry}
+- Price Point: ${intakeData.estimatedPricePoint} ${intakeData.currency}
+- Primary Goals: ${intakeData.primaryValidationGoals?.join(', ')}
 
-Key Assumptions to Validate:
+Key User Assumptions:
 1. ${intakeData.assumption1}
 2. ${intakeData.assumption2}
 3. ${intakeData.assumption3}
 
-Partnership Risks:
-${intakeData.partnership_risk1 ? `1. ${intakeData.partnership_risk1}` : ''}
-${intakeData.partnership_risk2 ? `2. ${intakeData.partnership_risk2}` : ''}
-${intakeData.partnership_risk3 ? `3. ${intakeData.partnership_risk3}` : ''}
-${intakeData.partnership_risk4 ? `4. ${intakeData.partnership_risk4}` : ''}
-${intakeData.partnership_risk5 ? `5. ${intakeData.partnership_risk5}` : ''}
+Generate assumptions organized by what's testable in each tier:
 
-Competitors:
-${intakeData.competitors?.map((c: any, i: number) => `${i + 1}. ${c.name}: ${c.differentiator}`).join('\n') || 'None specified'}
+DISCOVERY ASSUMPTIONS (5-6 assumptions): Things provable via desk research in 1 week
+- Competitor analysis, API documentation, support ticket analysis, forum research
+- Focus on market landscape, pricing models, feature gaps, technical feasibility
+- Examples: "Competitor X charges 2x our proposed price", "Integration APIs are publicly available"
+
+FEASIBILITY ASSUMPTIONS (4-5 assumptions): Things requiring 5-7 customer interviews in 2 weeks  
+- Actual time spent on current solutions, specific pain points, willingness to pay, preference data
+- Focus on customer behavior, problem severity, solution fit
+- Examples: "60%+ of target users spend 2+ hours daily on this problem", "Users willing to pay $50+/month for solution"
+
+VALIDATION ASSUMPTIONS (4-5 assumptions): Things requiring market tests/beta in 4 weeks
+- Click rates, signup conversion, setup success, early satisfaction metrics
+- Focus on leading indicators testable within timeframe, not long-term metrics
+- Examples: "Landing page converts at 5%+ signup rate", "80%+ of beta users complete onboarding"
+
+Make assumptions specific and timebound with measurable outcomes.
 
 For each assumption, provide:
-- assumption_text (specific, testable hypothesis with metrics)
-- category (Market/Technical/Operational/Financial/Customer)
-- risk_level (High/Medium/Low based on impact if wrong)
-- confidence_level (Low/Medium/High based on current evidence)
-- validation_approach_discovery (desk research method)
-- validation_approach_feasibility (interview/test method)
-- validation_approach_validation (full market test method)
-- success_criteria (specific metric to prove/disprove)
+- assumption_text: Clear, testable statement with specific metrics
+- category: Market, Customer, Technical, Operational, or Financial
+- risk_level: High, Medium, or Low
+- confidence_level: High, Medium, or Low
+- sprint_tier: discovery, feasibility, or validation
+- validation_method: Specific research/test method for that tier
+- validation_approach_discovery: Desk research method
+- validation_approach_feasibility: Interview question or survey approach
+- validation_approach_validation: Market test or beta experiment
+- success_criteria: Specific metrics that would validate this assumption
+- timeframe: Expected time to test (1 week, 2 weeks, 4 weeks)
 
-Generate assumptions covering:
-- Explicit statements (pricing, target market, value prop)
-- Implicit assumptions (B2B = longer sales cycles, SaaS = monthly churn rates)
-- Industry-specific risks (healthcare = HIPAA compliance, marketplace = network effects)
-- Partnership-specific assumptions (integration complexity, adoption rates)
-- Customer behavior assumptions
-- Market dynamics assumptions
-- Technical feasibility assumptions
-- Financial model assumptions
-
-Format as JSON array:
+Return as JSON with an "assumptions" array organized by sprint tier.
 `;
 
     const response = await openai.chat.completions.create({

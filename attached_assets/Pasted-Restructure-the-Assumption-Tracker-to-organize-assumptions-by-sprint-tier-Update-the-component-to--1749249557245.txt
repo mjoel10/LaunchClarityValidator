@@ -1,0 +1,38 @@
+Restructure the Assumption Tracker to organize assumptions by sprint tier. Update the component to:
+
+1. Change the AI prompt to generate assumptions organized by what's testable in each tier:
+  "Generate assumptions for [company context] organized by validation method:
+  - Discovery assumptions (5-6): Things provable via desk research in 1 week (competitor analysis, API documentation, support ticket analysis, forum research)
+  - Feasibility assumptions (4-5): Things requiring 5-7 customer interviews in 2 weeks (actual time spent, specific pain points, willingness to pay, preference data)
+  - Validation assumptions (4-5): Things requiring market tests/beta in 4 weeks (click rates, signup conversion, setup success, early satisfaction)
+  Focus on leading indicators testable within each timeframe, not long-term metrics."
+
+2. Restructure the UI into three sections:
+  - Discovery Sprint section
+  - Feasibility Sprint section
+  - Validation Sprint section
+
+3. For each section, show:
+  - Header with sprint name
+  - List of assumptions for that tier
+  - Progress bar showing validated vs. total for that tier
+  - Validation status for each assumption
+
+4. Update the summary cards to show:
+  - Discovery: X of Y validated
+  - Feasibility: X of Y validated
+  - Validation: X of Y validated
+  - Overall progress: X of Y total assumptions validated
+
+5. Make assumptions more specific and timebound:
+  - Bad: "Users will adopt the integration"
+  - Good: "30%+ of surveyed users express immediate activation interest"
+
+6. Add validation method hints for each assumption:
+  - Discovery: "Research method: Analyze competitor pricing pages"
+  - Feasibility: "Interview question: Walk me through your current bookkeeping process"  
+  - Validation: "Test method: Measure conversion on beta signup landing page"
+
+7. Color code sections based on current sprint tier (highlight active tier)
+
+This structure organizes assumptions by what's realistically testable in each timeframe and helps consultants track progress systematically.
