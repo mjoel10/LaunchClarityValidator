@@ -225,7 +225,7 @@ export default function SprintView() {
   const getModulesByTier = () => {
     if (!modules) return { discovery: [], feasibility: [], validation: [] };
     
-    const discoveryModules = ['intake', 'assumptions', 'market_sizing', 'competitive_intel', 'risk_assessment', 'market_simulation', 'swot_analysis'];
+    const discoveryModules = ['intake', 'market_simulation', 'assumptions', 'competitive_intel', 'risk_assessment', 'swot_analysis'];
     const feasibilityModules = ['business_model_simulator', 'channel_recommender', 'async_interviews', 'demand_test'];
     const validationModules = ['full_interviews', 'multi_channel_tests', 'enhanced_market_intel', 'implementation_roadmap', 'battlecards'];
 
