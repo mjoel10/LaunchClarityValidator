@@ -542,7 +542,7 @@ export default function InitialIntake({ sprintId }: InitialIntakeProps) {
                       id={`competitor${num}Differentiator`}
                       value={formData[`competitor${num}Differentiator` as keyof typeof formData] as string}
                       onChange={(e) => handleInputChange(`competitor${num}Differentiator`, e.target.value)}
-                      placeholder="How do you differ from this competitor? What's your advantage?"
+                      placeholder="How does this competitor differ from you? What do they offer that you don't?"
                       className="min-h-[80px]"
                     />
                   </div>
