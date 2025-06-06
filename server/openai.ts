@@ -268,14 +268,45 @@ Respond with JSON in this exact format:
 
 export async function generateMarketSizing(intakeData: any) {
   try {
-    const prompt = `
+    const isPartnership = intakeData.isPartnershipEvaluation;
+    const companyName = intakeData.companyName;
+    const partnerName = intakeData.potentialPartnerName || intakeData.evaluatedPartner;
+    const pricePoint = intakeData.estimatedPricePoint;
+    const pricingModel = intakeData.pricingModel;
+    const currency = intakeData.currency;
+
+    const prompt = isPartnership ? `
+You are the LaunchClarity Analysis Engine. Generate market sizing analysis for the PARTNERSHIP between ${companyName} and ${partnerName}.
+
+PARTNERSHIP CONTEXT:
+Company: ${companyName}
+Partner: ${partnerName}
+Partnership Type: ${intakeData.partnershipType}
+Industry: ${intakeData.industry}
+Geographic Markets: ${intakeData.geographicMarkets?.join(', ')}
+Target Customer: ${intakeData.targetCustomerDescription}
+Pricing Model: ${pricePoint} per ${pricingModel}
+
+Focus on:
+- The addressable market for the integration/partnership
+- Revenue opportunity from the partnership specifically
+- Customer overlap between ${companyName} and ${partnerName}
+- Integration adoption rates
+- Partnership-specific market dynamics
+
+Use the actual company names "${companyName}" and "${partnerName}" throughout your analysis.` : `
 You are the LaunchClarity Analysis Engine. Generate market sizing analysis for:
 
+Company: ${companyName}
 Industry: ${intakeData.industry}
 Geographic Markets: ${intakeData.geographicMarkets?.join(', ')}
 Business Model: ${intakeData.businessModel}
 Target Customer: ${intakeData.targetCustomerDescription}
-Price Point: ${intakeData.estimatedPricePoint} ${intakeData.currency}
+Price Point: ${pricePoint} ${currency}
+
+Focus on the general business opportunity for ${companyName}.`;
+
+    const fullPrompt = `${prompt}
 
 Provide TAM/SAM/SOM analysis with growth projections.
 
@@ -322,7 +353,7 @@ Respond with JSON in this exact format:
 
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
-      messages: [{ role: "user", content: prompt }],
+      messages: [{ role: "user", content: fullPrompt }],
       response_format: { type: "json_object" },
     });
 
@@ -686,6 +717,7 @@ TARGET: 1,500-2,000 words total. Each assumption should be substantial, not bull
 
 export async function generateMarketSizingReport(intakeData: any) {
   try {
+    const isPartnership = intakeData.isPartnershipEvaluation;
     const companyName = intakeData.companyName;
     const partnerName = intakeData.potentialPartnerName || intakeData.evaluatedPartner;
     const partnershipType = intakeData.partnershipType || 'Strategic Partnership';
@@ -701,8 +733,27 @@ export async function generateMarketSizingReport(intakeData: any) {
       throw new Error('Company name is required for generating market sizing report');
     }
 
-    const prompt = `
-Generate a comprehensive market sizing analysis report of approximately 2,000-2,500 words for a $5,000+ consulting engagement analyzing ${companyName}'s market opportunity in the ${industry} sector.
+    const prompt = isPartnership ? `
+Generate a comprehensive market sizing analysis report of approximately 2,000-2,500 words for the PARTNERSHIP between ${companyName} and ${partnerName}.
+
+PARTNERSHIP CONTEXT:
+- Company: ${companyName} (${userBase} users, ${currentStage} stage)
+- Partner: ${partnerName}
+- Partnership Type: ${partnershipType}
+- Target Market: ${targetCustomer}
+- Pricing Model: ${pricePoint} per ${pricingModel}
+- Industry: ${industry}
+- Primary Goal: ${primaryGoal}
+
+Focus on:
+- The addressable market for the integration/partnership
+- Revenue opportunity from the partnership specifically
+- Customer overlap between ${companyName} and ${partnerName}
+- Integration adoption rates
+- Partnership-specific market dynamics
+
+Use the actual company names "${companyName}" and "${partnerName}" throughout your analysis.` : `
+Generate a comprehensive market sizing analysis report of approximately 2,000-2,500 words analyzing ${companyName}'s market opportunity in the ${industry} sector.
 
 COMPANY CONTEXT:
 - Company: ${companyName} (${userBase} users, ${currentStage} stage)
@@ -710,7 +761,10 @@ COMPANY CONTEXT:
 - Pricing: ${pricePoint} per ${pricingModel}
 - Industry: ${industry}
 - Primary Goal: ${primaryGoal}
-${partnerName ? `- Partnership Context: ${partnershipType} with ${partnerName}` : ''}
+
+Focus on the general business opportunity for ${companyName}.`;
+
+    const fullPrompt = `${prompt}
 
 CRITICAL REQUIREMENTS:
 - Generate 2,000-2,500 words with specific numbers and calculations
@@ -719,10 +773,10 @@ CRITICAL REQUIREMENTS:
 - Use realistic market sizing methodologies and cite reasoning
 - Make it feel custom to ${companyName} in ${industry}, not generic templates
 
-FORMAT WITH PROPER HTML FOR GOOGLE DOCS TRANSFER:
+FORMAT WITH PROPER MARKDOWN FOR GOOGLE DOCS TRANSFER:
 
-<h1>Market Sizing Analysis</h1>
-<h2>${companyName} Market Opportunity Assessment</h2>
+# Market Sizing Analysis
+## ${companyName} Market Opportunity Assessment
 
 <h2>Executive Summary</h2>
 <p>This comprehensive market sizing analysis evaluates the addressable market opportunity for ${companyName} in the ${industry} sector, targeting ${targetCustomer} with ${pricingModel} pricing. The analysis reveals a Total Addressable Market (TAM) of [specific $X billion], a Serviceable Addressable Market (SAM) of [specific $X million], and a realistic Serviceable Obtainable Market (SOM) of [specific $X million] over the next 5 years.</p>
