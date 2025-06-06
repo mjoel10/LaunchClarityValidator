@@ -542,108 +542,112 @@ export async function generateAssumptionReport(intakeData: any) {
     const currentStage = intakeData.currentStage || 'Growth';
     const primaryGoal = intakeData.primaryPartnershipGoal || intakeData.primaryValidationGoals?.[0] || 'market expansion';
     
-    if (!companyName || !partnerName) {
-      throw new Error('Company name and partner name are required for generating report');
+    // Get client's specific assumptions from intake
+    const clientAssumptions = intakeData.topAssumptions || [];
+    const keyRisks = intakeData.keyRisks || intakeData.uncertainties || [];
+    const criticalQuestion = intakeData.criticalQuestion || intakeData.primaryValidationGoals?.[0];
+    
+    if (!companyName) {
+      throw new Error('Company name is required for generating assumption validation plan');
+    }
+
+    if (!clientAssumptions || clientAssumptions.length === 0) {
+      throw new Error('Client assumptions are required. Please complete the intake form with your top 3 assumptions to validate.');
     }
 
     const prompt = `
-Generate a comprehensive assumption validation report of approximately 1,500-2,000 words for a $5,000+ consulting sprint analyzing ${companyName}'s ${partnershipType} partnership with ${partnerName}.
+Generate a comprehensive assumption validation plan of approximately 1,500-2,000 words for a $5,000+ consulting sprint. The client has identified these specific assumptions that need validation:
 
-PARTNERSHIP CONTEXT:
+CLIENT'S ASSUMPTIONS TO VALIDATE:
+${clientAssumptions.map((assumption, index) => `${index + 1}. "${assumption}"`).join('\n')}
+
+${keyRisks.length > 0 ? `KEY RISKS/UNCERTAINTIES: ${keyRisks.join(', ')}` : ''}
+${criticalQuestion ? `CRITICAL QUESTION: "${criticalQuestion}"` : ''}
+
+BUSINESS CONTEXT:
 - Company: ${companyName} (${userBase} users, ${currentStage} stage)
-- Partner: ${partnerName}
-- Partnership Type: ${partnershipType}
+${partnerName ? `- Partner: ${partnerName}` : ''}
+${partnerName ? `- Partnership Type: ${partnershipType}` : ''}
 - Industry: ${industry}
 - Target Market: ${targetCustomer}
 - Pricing: ${pricePoint} per ${pricingModel}
 - Primary Goal: ${primaryGoal}
 
 CRITICAL REQUIREMENTS:
-- Generate 12-15 detailed assumptions (4-5 per sprint tier)
-- Each assumption must be a full paragraph with rich context
-- Use specific company/partner names throughout - NO generic terms
-- Provide McKinsey-level strategic thinking, not generic ChatGPT output
-- Make it feel like custom strategic analysis worth $5,000+
-
-For each assumption include:
-- Specific, testable hypothesis using actual company/partner names
-- Risk level and detailed rationale (2-3 sentences explaining why this matters)
-- Validation method with concrete steps the consultant can execute
-- Success criteria with measurable thresholds
-- Business impact explanation (why this assumption is critical)
+- DO NOT generate new assumptions - work with the client's exact assumptions listed above
+- For EACH client assumption, create a detailed validation plan
+- Break each assumption into 2-3 testable sub-hypotheses
+- Provide specific validation methods by sprint tier (Discovery/Feasibility/Validation)
+- Use actual company names throughout - NO generic terms
+- Make it actionable and specific to their business context
 
 FORMAT WITH PROPER HTML FOR GOOGLE DOCS TRANSFER:
 
-<h1>Assumption Validation Report</h1>
-<h2>${companyName} + ${partnerName} ${partnershipType} Partnership Analysis</h2>
+<h1>Assumption Validation Plan</h1>
+<h2>${companyName} - Detailed Validation Roadmap</h2>
 
 <h2>Executive Summary</h2>
-<p>This comprehensive analysis identifies 15 critical assumptions across three validation tiers for ${companyName}'s proposed ${partnershipType} partnership with ${partnerName}. The partnership represents a strategic opportunity to [specific value proposition based on context]. This report outlines testable hypotheses that will determine partnership viability, resource allocation requirements, and go-to-market strategy for the ${industry} sector.</p>
+<p>This comprehensive validation plan addresses the specific assumptions identified by ${companyName} for their ${industry} initiative. The client has prioritized ${clientAssumptions.length} core assumptions that require systematic validation across our three-tier sprint methodology. This plan transforms high-level concerns into actionable testing protocols with clear success criteria and go/no-go decision points.</p>
 
-<p>Key findings indicate [3-4 specific strategic insights]. The analysis prioritizes assumptions with highest business impact and validates them through a structured 8-week sprint methodology. Success depends on validating 80% of high-risk assumptions and achieving [specific metrics] in pilot testing.</p>
+<p>The validation approach spans 8 weeks across Discovery, Feasibility, and Validation sprints, with each assumption broken into testable sub-hypotheses. Success depends on achieving validation thresholds for ${Math.ceil(clientAssumptions.length * 0.8)} of the ${clientAssumptions.length} assumptions, with early indicators available within 2-3 weeks.</p>
 
-<h2>Strategic Partnership Overview</h2>
-<h3>Partnership Context & Objectives</h3>
-<p>Provide 2-3 paragraphs of strategic context explaining why this partnership matters, the market opportunity, competitive landscape, and how it fits ${companyName}'s broader strategy.</p>
-
-<h3>Critical Success Factors</h3>
+<h3>Client's Core Assumptions</h3>
 <ul>
-<li>Technical integration capabilities between ${companyName} and ${partnerName}</li>
-<li>Market demand validation for integrated solution</li>
-<li>Resource allocation and partnership commitment levels</li>
-<li>Go-to-market strategy and customer adoption metrics</li>
+${clientAssumptions.map(assumption => `<li><strong>"${assumption}"</strong></li>`).join('\n')}
 </ul>
 
-<h2>Discovery Sprint Assumptions (Weeks 1-2)</h2>
-<p>Validate through desk research, competitive analysis, and public information gathering.</p>
+<h2>Detailed Validation Plans</h2>
 
-Generate 4-5 detailed assumptions, each as a full paragraph. Examples of specific hypotheses:
-"${partnerName}'s API infrastructure can handle ${companyName}'s current ${userBase} user base with sub-200ms response times..."
-"${targetCustomer} are willing to pay ${pricePoint} for an integrated ${companyName}+${partnerName} solution..."
-"${partnerName}'s customer success team has capacity to support ${companyName}'s ${pricingModel} onboarding process..."
+For EACH assumption listed above, provide a comprehensive validation plan (1+ page each):
 
-Each assumption must include:
-- Specific hypothesis using actual company names and metrics
-- Why this assumption is critical to partnership success  
-- Detailed validation approach with concrete research methods
-- Success criteria with measurable thresholds
-- Risk assessment and business impact
+<h3>Assumption 1: "[Restate first assumption exactly]"</h3>
+<h4>Testable Sub-Hypotheses</h4>
+<p>Break this assumption into 2-3 specific, measurable sub-hypotheses that can be tested independently.</p>
 
-<h2>Feasibility Sprint Assumptions (Weeks 3-4)</h2>
-<p>Validate through direct partner engagement and customer discovery interviews.</p>
+<h4>Discovery Sprint Validation (Weeks 1-2)</h4>
+<p>Desk research and public information analysis:</p>
+<ul>
+<li>Specific research methods and data sources</li>
+<li>Competitive analysis approaches</li>
+<li>Industry benchmark gathering</li>
+<li>Success criteria with measurable thresholds</li>
+</ul>
 
-Generate 4-5 detailed assumptions with specific examples:
-"${partnerName}'s executive team will commit 2-3 FTE developers for ${companyName} integration within Q2..."
-"${companyName}'s ${targetCustomer} show 40%+ interest in integrated solution during customer interviews..."
-"${partnerName}'s webhook architecture supports real-time data sync for ${companyName}'s ${pricingModel} billing..."
-"Joint ${companyName}+${partnerName} solution generates 25%+ revenue uplift vs standalone products..."
+<h4>Feasibility Sprint Validation (Weeks 3-4)</h4>
+<p>Direct stakeholder engagement and customer discovery:</p>
+<ul>
+<li>Interview protocols and target respondents</li>
+<li>Partner engagement strategies</li>
+<li>Customer survey design and distribution</li>
+<li>Technical feasibility assessments</li>
+</ul>
 
-Focus on:
-- Partnership interest and resource commitment specifics
-- Customer demand validation with measurable thresholds
-- Technical feasibility with concrete integration requirements
-- Business model alignment and revenue projections
+<h4>Validation Sprint Testing (Weeks 5-8)</h4>
+<p>Market experiments and pilot programs:</p>
+<ul>
+<li>Specific test designs and methodologies</li>
+<li>Pilot program structure and metrics</li>
+<li>A/B testing protocols</li>
+<li>Performance benchmarks and success criteria</li>
+</ul>
 
-<h2>Validation Sprint Assumptions (Weeks 5-8)</h2>
-<p>Validate through pilot programs, beta testing, and market experiments.</p>
+<h4>Risk Assessment & Mitigation</h4>
+<p>What happens if this assumption proves false and how to mitigate that risk.</p>
 
-Generate 4-5 detailed assumptions with specific examples:
-"Beta pilot with 100 ${targetCustomer} achieves 60%+ weekly active usage of ${companyName}+${partnerName} integration..."
-"${partnerName}'s infrastructure maintains 99.9% uptime during ${companyName}'s peak ${userBase} concurrent user load..."
-"Integrated solution drives 15%+ customer lifetime value increase vs ${companyName} standalone pricing..."
-"Partnership model scales to support 10x current ${companyName} user growth within 12 months..."
+[Repeat this structure for each client assumption]
 
-Focus on:
-- Customer adoption metrics with specific usage thresholds
-- Technical performance benchmarks under real load
-- Quantified business impact and ROI calculations
-- Scalability validation for future growth projections
+<h2>Integrated Validation Roadmap</h2>
+<h3>Week-by-Week Execution Plan</h3>
+<p>Provide detailed weekly schedule showing:</p>
+<ul>
+<li>Which assumptions are being tested when</li>
+<li>Dependencies between different validation activities</li>
+<li>Resource requirements and team responsibilities</li>
+<li>Decision points and go/no-go criteria</li>
+</ul>
 
-<h2>Risk Assessment & Mitigation</h2>
-Provide detailed analysis of highest-risk assumptions and mitigation strategies.
-
-<h2>Recommended Validation Sequence</h2>
-Provide week-by-week execution plan with specific deliverables and decision points.
+<h3>Success Metrics & Decision Framework</h3>
+<p>Define clear criteria for determining assumption validation success and overall project viability.</p>
 
 TONE: Professional consulting language. Strategic depth. Custom analysis, not templates.
 TARGET: 1,500-2,000 words total. Each assumption should be substantial, not bullet points.
