@@ -680,6 +680,170 @@ TARGET: 1,500-2,000 words total. Each assumption should be substantial, not bull
   }
 }
 
+export async function generateMarketSizingReport(intakeData: any) {
+  try {
+    const companyName = intakeData.companyName;
+    const partnerName = intakeData.potentialPartnerName || intakeData.evaluatedPartner;
+    const partnershipType = intakeData.partnershipType || 'Strategic Partnership';
+    const industry = intakeData.industry || 'Technology';
+    const targetCustomer = intakeData.targetCustomer || intakeData.targetCustomerDescription || 'target customers';
+    const pricePoint = intakeData.estimatedPricePoint || 'competitive pricing';
+    const pricingModel = intakeData.pricingModel || 'monthly subscription';
+    const userBase = intakeData.userBase || intakeData.currentUsers || '50K+';
+    const currentStage = intakeData.currentStage || 'Growth';
+    const primaryGoal = intakeData.primaryPartnershipGoal || intakeData.primaryValidationGoals?.[0] || 'market expansion';
+    
+    if (!companyName) {
+      throw new Error('Company name is required for generating market sizing report');
+    }
+
+    const prompt = `
+Generate a comprehensive market sizing analysis report of approximately 2,000-2,500 words for a $5,000+ consulting engagement analyzing ${companyName}'s market opportunity in the ${industry} sector.
+
+COMPANY CONTEXT:
+- Company: ${companyName} (${userBase} users, ${currentStage} stage)
+- Target Market: ${targetCustomer}
+- Pricing: ${pricePoint} per ${pricingModel}
+- Industry: ${industry}
+- Primary Goal: ${primaryGoal}
+${partnerName ? `- Partnership Context: ${partnershipType} with ${partnerName}` : ''}
+
+CRITICAL REQUIREMENTS:
+- Generate 2,000-2,500 words with specific numbers and calculations
+- Provide McKinsey-level depth with actual market data and reasoning
+- Include detailed TAM/SAM/SOM analysis with specific dollar amounts
+- Use realistic market sizing methodologies and cite reasoning
+- Make it feel custom to ${companyName} in ${industry}, not generic templates
+
+FORMAT WITH PROPER HTML FOR GOOGLE DOCS TRANSFER:
+
+<h1>Market Sizing Analysis</h1>
+<h2>${companyName} Market Opportunity Assessment</h2>
+
+<h2>Executive Summary</h2>
+<p>This comprehensive market sizing analysis evaluates the addressable market opportunity for ${companyName} in the ${industry} sector, targeting ${targetCustomer} with ${pricingModel} pricing. The analysis reveals a Total Addressable Market (TAM) of [specific $X billion], a Serviceable Addressable Market (SAM) of [specific $X million], and a realistic Serviceable Obtainable Market (SOM) of [specific $X million] over the next 5 years.</p>
+
+<p>Key findings indicate [3-4 specific market insights with numbers]. ${companyName}'s current position with ${userBase} users represents [X%] market penetration in their primary segment. The analysis identifies [specific growth opportunities] that could drive [X%] annual growth through [specific strategies].</p>
+
+<h3>Market Opportunity Headlines</h3>
+<ul>
+<li><strong>TAM:</strong> $[X] billion total market for ${industry} solutions</li>
+<li><strong>SAM:</strong> $[X] million serviceable market for ${targetCustomer}</li>
+<li><strong>SOM:</strong> $[X] million obtainable market (Year 1-5 projections)</li>
+<li><strong>Growth Rate:</strong> [X]% CAGR over next 5 years</li>
+<li><strong>Target Penetration:</strong> [X]% market share achievable</li>
+</ul>
+
+<h2>Total Addressable Market (TAM) Analysis</h2>
+<h3>Market Definition & Boundaries</h3>
+<p>Provide 2-3 paragraphs defining the total market for ${industry} solutions, including geographic scope, customer segments, and use cases. Explain methodology for TAM calculation.</p>
+
+<h3>TAM Sizing by Geography</h3>
+<table border="1" style="border-collapse: collapse; width: 100%;">
+<tr><th>Region</th><th>Market Size</th><th>Growth Rate</th><th>Key Drivers</th></tr>
+<tr><td>North America</td><td>$[X] billion</td><td>[X]% CAGR</td><td>[Specific drivers]</td></tr>
+<tr><td>Europe</td><td>$[X] billion</td><td>[X]% CAGR</td><td>[Specific drivers]</td></tr>
+<tr><td>Asia-Pacific</td><td>$[X] billion</td><td>[X]% CAGR</td><td>[Specific drivers]</td></tr>
+<tr><td><strong>Global Total</strong></td><td><strong>$[X] billion</strong></td><td><strong>[X]% CAGR</strong></td><td>Digital transformation</td></tr>
+</table>
+
+<h3>Customer Segment Breakdown</h3>
+<p>Analyze market size by customer segment relevant to ${companyName}'s target of ${targetCustomer}. Include segment definitions, sizing methodology, and growth projections.</p>
+
+<h3>5-Year Growth Projections</h3>
+<p>Detail market growth drivers, technology trends, and regulatory factors influencing ${industry} market expansion. Provide year-over-year projections with supporting rationale.</p>
+
+<h2>Serviceable Addressable Market (SAM)</h2>
+<h3>TAM to SAM Filtering Criteria</h3>
+<p>Explain how the total market filters to serviceable market based on:</p>
+<ul>
+<li><strong>Target Customer Criteria:</strong> ${targetCustomer} segment represents [X]% of total market</li>
+<li><strong>Geographic Focus:</strong> ${companyName}'s current/planned geographic reach</li>
+<li><strong>Price Point Accessibility:</strong> Customers willing/able to pay ${pricePoint}</li>
+<li><strong>Technology Fit:</strong> Customers needing ${companyName}'s specific solution type</li>
+</ul>
+
+<h3>SAM Calculation & Rationale</h3>
+<p>Provide detailed SAM calculation: [Total market] × [Geographic filter %] × [Customer segment %] × [Price accessibility %] = $[X] million SAM. Explain each filter percentage with supporting data and reasoning.</p>
+
+<h2>Serviceable Obtainable Market (SOM)</h2>
+<h3>Realistic Capture Rate Analysis</h3>
+<p>Analyze ${companyName}'s realistic market capture potential based on competitive positioning, go-to-market capabilities, and resource constraints. Consider current ${userBase} user base as baseline.</p>
+
+<h3>SOM Projections</h3>
+<table border="1" style="border-collapse: collapse; width: 100%;">
+<tr><th>Scenario</th><th>Year 1</th><th>Year 3</th><th>Year 5</th><th>Market Share</th></tr>
+<tr><td>Conservative</td><td>$[X]M</td><td>$[X]M</td><td>$[X]M</td><td>[X]%</td></tr>
+<tr><td>Moderate</td><td>$[X]M</td><td>$[X]M</td><td>$[X]M</td><td>[X]%</td></tr>
+<tr><td>Aggressive</td><td>$[X]M</td><td>$[X]M</td><td>$[X]M</td><td>[X]%</td></tr>
+</table>
+
+<h2>Market Dynamics & Competition</h2>
+<h3>Market Segmentation Analysis</h3>
+<table border="1" style="border-collapse: collapse; width: 100%;">
+<tr><th>Segment</th><th>Size ($M)</th><th>Growth Rate</th><th>Competitive Density</th><th>Fit Score</th></tr>
+<tr><td>[Segment 1]</td><td>$[X]M</td><td>[X]%</td><td>High/Medium/Low</td><td>[1-10]</td></tr>
+<tr><td>[Segment 2]</td><td>$[X]M</td><td>[X]%</td><td>High/Medium/Low</td><td>[1-10]</td></tr>
+<tr><td>[Segment 3]</td><td>$[X]M</td><td>[X]%</td><td>High/Medium/Low</td><td>[1-10]</td></tr>
+</table>
+
+<h3>Competitive Density & Market Share</h3>
+<p>Analyze competitive landscape in ${industry} sector, identifying market leaders, their share percentages, and whitespace opportunities for ${companyName}. Include specific competitor names and positioning.</p>
+
+<h3>Highest Opportunity Segments</h3>
+<p>Identify the 2-3 customer segments with highest potential for ${companyName} based on size, growth, competitive density, and strategic fit. Explain prioritization rationale.</p>
+
+${partnerName ? `
+<h2>Partnership Market Opportunity</h2>
+<h3>${partnerName} Customer Base Analysis</h3>
+<p>Analyze ${partnerName}'s customer base overlap with ${companyName}'s target market. Estimate addressable customers within ${partnerName}'s ecosystem.</p>
+
+<h3>Incremental Market Opportunity</h3>
+<p>Calculate incremental market opportunity through ${partnershipType} with ${partnerName}. Example: "Of ${partnerName}'s [X] customers, approximately [X]% ([X] customers) need ${companyName}'s ${industry} solution, representing $[X]M incremental market opportunity."</p>
+
+<h3>Joint Market Capture Potential</h3>
+<p>Assess combined go-to-market potential, cross-selling opportunities, and accelerated market penetration through partnership channels.</p>
+` : ''}
+
+<h2>Strategic Recommendations</h2>
+<h3>Market Entry Strategy</h3>
+<p>Recommend optimal market entry approach based on market sizing analysis, including segment prioritization, geographic expansion, and resource allocation.</p>
+
+<h3>Growth Acceleration Opportunities</h3>
+<p>Identify specific tactics to accelerate market capture, including product development, pricing optimization, and partnership strategies.</p>
+
+TONE: Professional consulting language with specific numbers and calculations throughout.
+TARGET: 2,000-2,500 words with dense insights and data points.
+METHODOLOGY: Use realistic market sizing approaches and cite reasoning for all calculations.
+`;
+
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
+      messages: [
+        {
+          role: "system", 
+          content: "You are a McKinsey-level senior strategy consultant generating premium market sizing reports for $5,000+ engagements. Your analysis must demonstrate deep market research expertise, specific calculations, and custom insights that justify high-value consulting fees. Provide comprehensive TAM/SAM/SOM analysis with realistic numbers, detailed methodology, and actionable insights. Generate 2,000-2,500 words of professional consulting content with specific data points throughout, not generic market commentary."
+        },
+        {
+          role: "user",
+          content: prompt
+        }
+      ],
+      temperature: 0.3,
+      max_tokens: 7000
+    });
+
+    const reportContent = response.choices[0].message.content;
+    
+    return {
+      report: reportContent
+    };
+  } catch (error) {
+    console.error('Error generating market sizing report:', error);
+    throw new Error('Failed to generate market sizing report');
+  }
+}
+
 export async function generateGoDecision(sprintData: any, allModuleData: any) {
   try {
     const prompt = `

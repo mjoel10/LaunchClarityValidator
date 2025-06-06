@@ -7,7 +7,7 @@ import { insertUserSchema, insertSprintSchema, insertIntakeDataSchema, insertCom
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
-import { generateMarketSimulation, generateAssumptionAnalysis, generateCompetitiveIntelligence, generateMarketSizing, generateRiskAssessment, generateGoDecision, generateAssumptions, generateAssumptionReport } from "./openai";
+import { generateMarketSimulation, generateAssumptionAnalysis, generateCompetitiveIntelligence, generateMarketSizing, generateRiskAssessment, generateGoDecision, generateAssumptions, generateAssumptionReport, generateMarketSizingReport } from "./openai";
 
 if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
@@ -433,6 +433,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error: any) {
       console.error('Error generating assumption report:', error);
       res.status(500).json({ message: "Failed to generate assumption report: " + error.message });
+    }
+  });
+
+  // Generate market sizing report
+  app.post("/api/sprints/:id/generate-market-sizing-report", async (req, res) => {
+    try {
+      const sprintId = Number(req.params.id);
+      const intake = await storage.getIntakeDataBySprintId(sprintId);
+      
+      if (!intake) {
+        return res.status(400).json({ message: "No intake data found for this sprint" });
+      }
+      
+      const report = await generateMarketSizingReport(intake);
+      
+      // Save to sprint module data
+      await storage.updateSprintModuleByType(sprintId, 'market_simulation', {
+        aiAnalysis: report,
+        updatedAt: new Date(),
+      });
+      
+      res.json(report);
+    } catch (error: any) {
+      console.error('Error generating market sizing report:', error);
+      res.status(500).json({ message: "Failed to generate market sizing report: " + error.message });
     }
   });
 

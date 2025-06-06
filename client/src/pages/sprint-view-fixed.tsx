@@ -41,6 +41,7 @@ import StrategicAnalysisTools from '@/components/sprint/strategic-analysis-tools
 import AsyncInterviews from '@/components/sprint/async-interviews';
 import AssumptionsTracker from '@/components/sprint/assumptions-tracker';
 import AssumptionTrackerReport from '@/components/sprint/assumption-tracker-report';
+import MarketSizingReport from '@/components/sprint/market-sizing-report';
 import DemandTestTracker from '@/components/sprint/demand-test-tracker';
 import FullInterviewSuite from '@/components/sprint/full-interview-suite';
 import MultiChannelTesting from '@/components/sprint/multi-channel-testing';
