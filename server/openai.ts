@@ -529,6 +529,67 @@ Return as JSON with an "assumptions" array organized by sprint tier.
   }
 }
 
+export async function generateAssumptionReport(intakeData: any) {
+  try {
+    const companyName = intakeData.companyName;
+    const partnerName = intakeData.potentialPartnerName || intakeData.evaluatedPartner;
+    const partnershipType = intakeData.partnershipType;
+    const industry = intakeData.industry;
+    
+    if (!companyName || !partnerName) {
+      throw new Error('Company name and partner name are required for generating report');
+    }
+
+    const prompt = `
+Generate a comprehensive 4-5 page assumption validation report for a partnership between ${companyName} and ${partnerName}.
+
+PARTNERSHIP CONTEXT:
+- Company: ${companyName}
+- Partner: ${partnerName}
+- Partnership Type: ${partnershipType}
+- Industry: ${industry}
+- Primary Goal: ${intakeData.primaryPartnershipGoal}
+
+Format the report with proper HTML structure that will transfer well to Google Docs. Replace ALL bracketed placeholders with specific, realistic assumptions based on the partnership context.
+
+Generate a comprehensive report with sections for Executive Summary, Partnership Overview, Discovery/Feasibility/Validation Sprint Assumptions, Critical Success Metrics, Risk Assessment, and Recommended Validation Sequence.
+
+Use actual company names throughout. Make it read like a professional consulting report that could be delivered to a client.
+
+CRITICAL: Replace all placeholders with specific, realistic content based on ${companyName} + ${partnerName} partnership context.
+`;
+
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
+      messages: [
+        {
+          role: "system", 
+          content: "You are a senior business consultant generating professional assumption validation reports. Create comprehensive, specific analysis using actual company names. Format with clean HTML that transfers well to Google Docs. Be thorough and professional."
+        },
+        {
+          role: "user",
+          content: prompt
+        }
+      ],
+      temperature: 0.7,
+      max_tokens: 4000
+    });
+
+    const reportContent = response.choices[0].message.content;
+    
+    return {
+      report: reportContent,
+      companyName,
+      partnerName,
+      partnershipType
+    };
+
+  } catch (error) {
+    console.error('Error generating assumption report:', error);
+    throw new Error("Failed to generate assumption report");
+  }
+}
+
 export async function generateGoDecision(sprintData: any, allModuleData: any) {
   try {
     const prompt = `

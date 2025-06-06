@@ -411,6 +411,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Generate assumption validation report
+  app.post("/api/sprints/:id/generate-assumption-report", async (req, res) => {
+    try {
+      const sprintId = Number(req.params.id);
+      const intake = await storage.getIntakeDataBySprintId(sprintId);
+      
+      if (!intake) {
+        return res.status(400).json({ message: "No intake data found for this sprint" });
+      }
+      
+      const report = await generateAssumptionReport(intake);
+      
+      // Save to sprint module data
+      await storage.updateSprintModuleByType(sprintId, 'assumptions', {
+        report: report,
+        updatedAt: new Date(),
+      });
+      
+      res.json(report);
+    } catch (error: any) {
+      console.error('Error generating assumption report:', error);
+      res.status(500).json({ message: "Failed to generate assumption report: " + error.message });
+    }
+  });
+
   // AI Analysis routes
   app.post("/api/modules/:id/regenerate-analysis", async (req, res) => {
     try {
