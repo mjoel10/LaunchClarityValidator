@@ -404,62 +404,57 @@ Respond with JSON in this exact format:
 
 export async function generateAssumptions(intakeData: any) {
   try {
-    // Determine if this is a partnership evaluation or general business validation
+    // Extract actual company and partner names from intake data
     const isPartnership = intakeData.isPartnershipEvaluation;
-    const partnerName = intakeData.potentialPartnerName || 'the partner';
-    const partnershipType = intakeData.partnershipType || 'collaboration';
-    const primaryGoal = intakeData.primaryPartnershipGoal || intakeData.primaryValidationGoals?.[0] || 'business growth';
+    const companyName = intakeData.companyName;
+    const partnerName = intakeData.potentialPartnerName || intakeData.evaluatedPartner;
+    const partnershipType = intakeData.partnershipType;
+    const industry = intakeData.industry;
+    const targetCustomer = intakeData.targetCustomer;
+    
+    if (!companyName || !partnerName) {
+      throw new Error('Company name and partner name are required for generating assumptions');
+    }
     
     const prompt = isPartnership ? `
-Generate specific partnership assumptions for ${intakeData.companyName || 'this company'}'s potential collaboration with ${partnerName}:
+Generate specific, testable assumptions for a partnership between ${companyName} and ${partnerName}.
 
 PARTNERSHIP CONTEXT:
-- Partner: ${partnerName}
+- Company: ${companyName}
+- Partner: ${partnerName}  
 - Partnership Type: ${partnershipType}
-- Primary Goal: ${primaryGoal}
-- Company Stage: ${intakeData.currentStage}
-- Industry: ${intakeData.industry}
-- Expected Value: ${intakeData.estimatedPartnershipValue || 'TBD'}
-- Timeline: ${intakeData.partnershipTimeline || 'TBD'}
-- Relationship Stage: ${intakeData.relationshipStage || 'Early discussions'}
+- Industry: ${industry}
+- Target Customers: ${targetCustomer}
+- Current Stage: ${intakeData.currentStage}
+- Primary Goal: ${intakeData.primaryPartnershipGoal}
 
-SPECIFIC RISKS/UNCERTAINTIES:
-- Strategic Alignment: ${intakeData.strategicAlignmentConcerns || 'Partner priorities alignment'}
-- Technical Integration: ${intakeData.technicalIntegrationChallenges || 'API compatibility and data sync'}
-- Market Dynamics: ${intakeData.marketDynamicsConcerns || 'Customer adoption of joint solution'}
-- Financial Structure: ${intakeData.financialStructureConcerns || 'Revenue sharing and pricing model'}
+CRITICAL INSTRUCTIONS:
+- Use ONLY the actual company name "${companyName}" and partner name "${partnerName}" throughout
+- NEVER use generic terms like "the partner", "the company", or "our company"
+- Generate assumptions specific to their actual business context and industry
+- Base assumptions on realistic scenarios for ${companyName} + ${partnerName} partnership
+- Make each assumption specific, measurable, and testable
 
-Generate partnership-specific assumptions organized by validation tier:
+Generate 15 assumptions organized by validation tier:
 
-DISCOVERY ASSUMPTIONS (5-6 assumptions): Desk research validation in 1 week
-- Research ${partnerName}'s public API documentation, developer portal, support forums, case studies
-- Analyze how competitors integrate with ${partnerName}, pricing models, technical requirements
-- Examples for ${intakeData.companyName || 'this company'} + ${partnerName}:
-  * "${partnerName}'s API documentation shows support for ${intakeData.technicalRequirements || 'required data structures and workflows'}"
-  * "Competitors charge $${intakeData.estimatedPricePoint || '15-30'}/month for similar ${partnerName} integrations"
-  * "${intakeData.supportTicketAnalysis || '35%+'} of ${intakeData.companyName || 'company'} support tickets mention needing ${partnerName} integration"
+DISCOVERY ASSUMPTIONS (5-6 assumptions): Desk research validation
+Focus on: ${partnerName}'s public information, API documentation, competitive landscape analysis, support forums, case studies
+Example topics: ${partnerName}'s technical capabilities, existing partnerships, pricing models, developer resources
 
-FEASIBILITY ASSUMPTIONS (4-5 assumptions): Partner and customer interviews in 2 weeks
-- Interview ${intakeData.companyName || 'company'} users about ${partnerName} usage and integration needs
-- Conduct ${partnerName} partnership team conversations about collaboration interest
-- Examples:
-  * "${intakeData.companyName || 'Company'} users currently spend ${intakeData.timeSpentManually || '5-8 hours'} monthly on manual data transfer between ${intakeData.companyName || 'company'} and ${partnerName}"
-  * "Users willing to pay $${intakeData.premiumPricing || '15-20'}/month premium for seamless ${partnerName} integration"
-  * "${partnerName} partnership team sees ${intakeData.revenueOpportunity || '20%+'} revenue opportunity from ${intakeData.companyName || 'company'}'s ${intakeData.userBase || '100K'} user base"
+FEASIBILITY ASSUMPTIONS (4-5 assumptions): Partner and customer interviews  
+Focus on: Direct conversations with ${partnerName} team, ${companyName} customer interviews, internal stakeholder alignment
+Example topics: ${partnerName}'s interest level, ${companyName} customer demand, resource allocation, mutual value proposition
 
-VALIDATION ASSUMPTIONS (4-5 assumptions): Pilot program or market test in 4 weeks
-- Beta test integration with select users, measure success metrics, gather satisfaction data
-- Test go-to-market messaging and user adoption rates
-- Examples:
-  * "Beta users achieve ${intakeData.successRate || '90%+'} successful data sync between ${intakeData.companyName || 'company'} and ${partnerName}"
-  * "${intakeData.clickThroughRate || '20%+'} click-through rate on ${partnerName} integration announcement emails to ${intakeData.companyName || 'company'} users"
-  * "${intakeData.userSatisfaction || '80%+'} of beta users report satisfaction with ${partnerName} integration after ${intakeData.satisfactionTimeframe || '2 weeks'}"
+VALIDATION ASSUMPTIONS (4-5 assumptions): Pilot program or market test
+Focus on: Beta testing, pilot customer programs, measurable success metrics, market response
+Example topics: Integration success rates, customer adoption, user satisfaction, business impact metrics
 
-CRITICAL REQUIREMENTS:
-- Always use actual company names: "${intakeData.companyName || 'this company'}" and "${partnerName}"
-- Reference specific metrics, user counts, pricing from intake data
-- Make assumptions sound like they were written specifically for this ${partnershipType} partnership
-- No generic language like "the partner" or "the company" - use actual names throughout
+FORMAT: Return assumptions as a JSON object with this structure:
+{
+  "discovery": [{"assumption_text": "...", "category": "...", "sprint_tier": "discovery", "risk_level": "...", "confidence_level": "...", "validation_method": "...", "validation_approach_discovery": "...", "validation_approach_feasibility": "...", "validation_approach_validation": "...", "success_criteria": "...", "timeframe": "..."}],
+  "feasibility": [...],
+  "validation": [...]
+}
 ` : `
 Generate business validation assumptions for ${intakeData.companyName || 'this business'}:
 
