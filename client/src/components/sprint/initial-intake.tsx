@@ -116,9 +116,12 @@ export default function InitialIntake({ sprintId }: InitialIntakeProps) {
 
   // Pre-populate form with existing data
   useEffect(() => {
-    if (existingData && Object.keys(existingData).length > 0) {
+    if (existingData && typeof existingData === 'object' && Object.keys(existingData).length > 0) {
+      // Type-safe access to existing data
+      const data = existingData as any;
+      
       // Map competitors data
-      const competitors = existingData.competitors || [];
+      const competitors = data.competitors || [];
       const competitorData = {
         competitor1Name: competitors[0]?.name || '',
         competitor1Differentiator: competitors[0]?.differentiator || '',
@@ -130,21 +133,21 @@ export default function InitialIntake({ sprintId }: InitialIntakeProps) {
 
       setFormData(prev => ({
         ...prev,
-        ...existingData,
+        ...data,
         ...competitorData,
-        companyName: sprint?.companyName || existingData.companyName || prev.companyName,
-        geographicMarkets: Array.isArray(existingData.geographicMarkets) ? existingData.geographicMarkets : prev.geographicMarkets,
-        primaryValidationGoals: Array.isArray(existingData.primaryValidationGoals) ? existingData.primaryValidationGoals : prev.primaryValidationGoals,
-        pricingModel: existingData.pricingModel || prev.pricingModel,
+        companyName: (sprint as any)?.companyName || data.companyName || prev.companyName,
+        geographicMarkets: Array.isArray(data.geographicMarkets) ? data.geographicMarkets : prev.geographicMarkets,
+        primaryValidationGoals: Array.isArray(data.primaryValidationGoals) ? data.primaryValidationGoals : prev.primaryValidationGoals,
+        pricingModel: data.pricingModel || prev.pricingModel,
         // Map legacy assumptions field to new separate fields if they exist
-        assumption1: existingData.assumption1 || (existingData.assumptionsToValidate && existingData.assumptionsToValidate[0]) || '',
-        assumption2: existingData.assumption2 || (existingData.assumptionsToValidate && existingData.assumptionsToValidate[1]) || '',
-        assumption3: existingData.assumption3 || (existingData.assumptionsToValidate && existingData.assumptionsToValidate[2]) || '',
+        assumption1: data.assumption1 || (data.assumptionsToValidate && data.assumptionsToValidate[0]) || '',
+        assumption2: data.assumption2 || (data.assumptionsToValidate && data.assumptionsToValidate[1]) || '',
+        assumption3: data.assumption3 || (data.assumptionsToValidate && data.assumptionsToValidate[2]) || '',
       }));
-    } else if (sprint?.companyName && !formData.companyName) {
+    } else if ((sprint as any)?.companyName && !formData.companyName) {
       setFormData(prev => ({
         ...prev,
-        companyName: sprint.companyName
+        companyName: (sprint as any).companyName
       }));
     }
   }, [existingData, sprint]);

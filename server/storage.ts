@@ -152,7 +152,7 @@ export class DatabaseStorage implements IStorage {
   async updateIntakeData(sprintId: number, updates: Partial<IntakeData>): Promise<IntakeData> {
     const [data] = await db
       .update(intakeData)
-      .set(updates)
+      .set(updates as any)
       .where(eq(intakeData.sprintId, sprintId))
       .returning();
     return data;
@@ -164,7 +164,9 @@ export class DatabaseStorage implements IStorage {
     
     if (existing) {
       // Update existing record
-      return await this.updateIntakeData(insertIntakeData.sprintId, insertIntakeData);
+      const updateData = { ...insertIntakeData };
+      delete (updateData as any).sprintId; // Remove sprintId from update data
+      return await this.updateIntakeData(insertIntakeData.sprintId, updateData);
     } else {
       // Create new record
       return await this.createIntakeData(insertIntakeData);

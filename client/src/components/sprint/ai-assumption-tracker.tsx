@@ -114,13 +114,7 @@ export default function AIAssumptionTracker({ sprintId, intakeData }: AIAssumpti
     }
   }, [assumptionsModule]);
 
-  // Generate assumptions if none exist and intake data is available
-  useEffect(() => {
-    if (intakeData && assumptions.length === 0 && !isGenerating && !assumptionsModule?.aiAnalysis) {
-      setIsGenerating(true);
-      generateAssumptionsMutation.mutate();
-    }
-  }, [intakeData, assumptions.length, assumptionsModule]);
+  // Only auto-generate if user explicitly requests it - removed automatic generation
 
   const getRiskColor = (risk: string) => {
     switch (risk.toLowerCase()) {
