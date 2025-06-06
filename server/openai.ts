@@ -402,6 +402,87 @@ Respond with JSON in this exact format:
   }
 }
 
+export async function generateAssumptions(intakeData: any) {
+  try {
+    const prompt = `
+Analyze this business context and generate 10-15 critical assumptions that could make or break this venture:
+
+Business Model: ${intakeData.businessModel}
+Product Type: ${intakeData.productType}
+Current Stage: ${intakeData.currentStage}
+Industry: ${intakeData.industry}
+Target Customer: ${intakeData.targetCustomerDescription}
+Core Problem: ${intakeData.coreProblem}
+Value Proposition: ${intakeData.valueProposition}
+Price Point: ${intakeData.estimatedPricePoint} ${intakeData.currency}
+Geographic Markets: ${intakeData.geographicMarkets}
+Primary Goals: ${intakeData.primaryValidationGoals}
+Pricing Model: ${intakeData.pricingModel}
+Partnership Evaluation: ${intakeData.isPartnershipEvaluation ? 'Yes' : 'No'}
+Previous Testing: ${intakeData.hasPreviousTesting ? 'Yes' : 'No'}
+${intakeData.testingDescription ? `Testing Description: ${intakeData.testingDescription}` : ''}
+
+Key Assumptions to Validate:
+1. ${intakeData.assumption1}
+2. ${intakeData.assumption2}
+3. ${intakeData.assumption3}
+
+Partnership Risks:
+${intakeData.partnership_risk1 ? `1. ${intakeData.partnership_risk1}` : ''}
+${intakeData.partnership_risk2 ? `2. ${intakeData.partnership_risk2}` : ''}
+${intakeData.partnership_risk3 ? `3. ${intakeData.partnership_risk3}` : ''}
+${intakeData.partnership_risk4 ? `4. ${intakeData.partnership_risk4}` : ''}
+${intakeData.partnership_risk5 ? `5. ${intakeData.partnership_risk5}` : ''}
+
+Competitors:
+${intakeData.competitors?.map((c: any, i: number) => `${i + 1}. ${c.name}: ${c.differentiator}`).join('\n') || 'None specified'}
+
+For each assumption, provide:
+- assumption_text (specific, testable hypothesis with metrics)
+- category (Market/Technical/Operational/Financial/Customer)
+- risk_level (High/Medium/Low based on impact if wrong)
+- confidence_level (Low/Medium/High based on current evidence)
+- validation_approach_discovery (desk research method)
+- validation_approach_feasibility (interview/test method)
+- validation_approach_validation (full market test method)
+- success_criteria (specific metric to prove/disprove)
+
+Generate assumptions covering:
+- Explicit statements (pricing, target market, value prop)
+- Implicit assumptions (B2B = longer sales cycles, SaaS = monthly churn rates)
+- Industry-specific risks (healthcare = HIPAA compliance, marketplace = network effects)
+- Partnership-specific assumptions (integration complexity, adoption rates)
+- Customer behavior assumptions
+- Market dynamics assumptions
+- Technical feasibility assumptions
+- Financial model assumptions
+
+Format as JSON array:
+`;
+
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [
+        {
+          role: "system",
+          content: "You are the LaunchClarity Analysis Engine. Generate comprehensive business assumptions for validation sprints. Focus on realistic, testable hypotheses that could make or break the venture. Respond only with valid JSON."
+        },
+        {
+          role: "user",
+          content: prompt
+        }
+      ],
+      response_format: { type: "json_object" },
+      temperature: 0.7,
+    });
+
+    return JSON.parse(response.choices[0].message.content || '{"assumptions": []}');
+  } catch (error) {
+    console.error('Error generating assumptions:', error);
+    throw new Error('Failed to generate assumptions');
+  }
+}
+
 export async function generateGoDecision(sprintData: any, allModuleData: any) {
   try {
     const prompt = `

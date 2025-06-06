@@ -7,7 +7,7 @@ import { insertUserSchema, insertSprintSchema, insertIntakeDataSchema, insertCom
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
-import { generateMarketSimulation, generateAssumptionAnalysis, generateCompetitiveIntelligence, generateMarketSizing, generateRiskAssessment, generateGoDecision } from "./openai";
+import { generateMarketSimulation, generateAssumptionAnalysis, generateCompetitiveIntelligence, generateMarketSizing, generateRiskAssessment, generateGoDecision, generateAssumptions } from "./openai";
 
 if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
@@ -383,6 +383,31 @@ export async function registerRoutes(app: Express): Promise<Server> {
       res.json(comment);
     } catch (error: any) {
       res.status(400).json({ message: error.message });
+    }
+  });
+
+  // Generate AI assumptions for assumption tracker
+  app.post("/api/sprints/:id/generate-assumptions", async (req, res) => {
+    try {
+      const sprintId = Number(req.params.id);
+      const intake = await storage.getIntakeDataBySprintId(sprintId);
+      
+      if (!intake) {
+        return res.status(400).json({ message: "No intake data found for this sprint" });
+      }
+      
+      const assumptions = await generateAssumptions(intake);
+      
+      // Save to sprint module data
+      await storage.updateSprintModuleByType(sprintId, 'assumptions', {
+        aiAnalysis: assumptions,
+        updatedAt: new Date(),
+      });
+      
+      res.json(assumptions);
+    } catch (error: any) {
+      console.error('Error generating assumptions:', error);
+      res.status(500).json({ message: "Failed to generate assumptions: " + error.message });
     }
   });
 

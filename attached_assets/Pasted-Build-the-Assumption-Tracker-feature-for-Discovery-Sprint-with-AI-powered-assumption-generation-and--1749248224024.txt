@@ -1,0 +1,55 @@
+Build the Assumption Tracker feature for Discovery Sprint with AI-powered assumption generation and validation roadmap. This feature should:
+
+1. Create a new component at client/src/components/sprint/features/assumption-tracker.tsx
+
+2. On component load, automatically generate assumptions using OpenAI GPT-4:
+   - Make an API call that passes ALL intake data
+   - Generate 10-15 initial assumptions based on:
+     * Explicit statements (pricing, target market, etc.)
+     * Implicit assumptions (B2B = longer sales cycles, SaaS = monthly churn)
+     * Industry-specific risks (healthcare = HIPAA, marketplace = network effects)
+     * Partnership-specific assumptions (integration complexity, adoption rates)
+
+3. OpenAI prompt structure:
+   "Analyze this business context: [full intake data]. Generate 10-15 critical assumptions that could make or break this venture. For each assumption:
+   - assumption_text (specific, testable hypothesis with metrics)
+   - category (Market/Technical/Operational/Financial/Customer)
+   - risk_level (High/Medium/Low based on impact if wrong)
+   - confidence_level (Low/Medium/High based on current evidence)
+   - validation_approach_discovery (desk research method)
+   - validation_approach_feasibility (interview/test method)
+   - validation_approach_validation (full market test method)
+   - success_criteria (specific metric to prove/disprove)
+   Format as JSON array."
+
+4. Display assumptions in an interactive dashboard:
+   - Summary cards: Total assumptions, High risk count, By category
+   - Table/cards for each assumption showing:
+     * Assumption text
+     * Risk level (color-coded: red/yellow/green)
+     * Current status: Untested/Testing/Validated/Invalidated/Needs More Data
+     * Validation methods by sprint tier (showing locked tiers they haven't purchased)
+     * Evidence field (for consultant to add findings)
+     * Confidence meter
+
+5. Allow consultant to:
+   - Add custom assumptions
+   - Edit AI-generated assumptions
+   - Update status as they validate
+   - Add evidence/notes
+   - Delete irrelevant assumptions
+
+6. Create an "Upsell View" that shows:
+   - "4 of 10 assumptions validated via desk research ✅"
+   - "6 assumptions require direct validation:"
+     * 3 need customer interviews (Feasibility Sprint)
+     * 2 need market tests (Validation Sprint)
+     * 1 needs technical prototype (Validation Sprint)
+
+7. Save all data to sprint_data with module_name = "assumption_tracker"
+
+8. Style with card-based layout, using status badges and progress indicators
+
+9. IMPORTANT: Present as "LaunchClarity Assumption Analysis" (never mention GPT/OpenAI)
+
+This creates a powerful tool that both delivers immediate value AND naturally guides clients toward higher-tier sprints.
