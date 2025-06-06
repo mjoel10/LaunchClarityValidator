@@ -30,10 +30,10 @@ interface AIAssumptionTrackerProps {
 interface Assumption {
   id: string;
   assumption_text: string;
-  category: 'Customer' | 'Technical' | 'Market' | 'Financial' | 'Operational';
+  category: string;
   sprint_tier: 'discovery' | 'feasibility' | 'validation';
-  risk_level: 'High' | 'Medium' | 'Low';
-  status: 'untested' | 'testing' | 'validated' | 'disproven';
+  risk_level: string;
+  status?: string;
   confidence_level: string;
   validation_method: string;
   validation_approach_discovery: string;
@@ -113,6 +113,10 @@ export default function AIAssumptionTracker({ sprintId, intakeData }: AIAssumpti
     );
     setAssumptions(updatedAssumptions);
     saveAssumptions(updatedAssumptions);
+  };
+
+  const getAssumptionStatus = (assumption: Assumption) => {
+    return assumption.status || 'untested';
   };
 
   const saveAssumptions = async (assumptionsToSave: Assumption[]) => {
