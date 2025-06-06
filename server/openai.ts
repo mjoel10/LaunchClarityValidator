@@ -404,10 +404,55 @@ Respond with JSON in this exact format:
 
 export async function generateAssumptions(intakeData: any) {
   try {
-    const prompt = `
-Generate assumptions for ${intakeData.companyName || 'this business'} organized by validation method and tier timeframes:
+    // Determine if this is a partnership evaluation or general business validation
+    const isPartnership = intakeData.isPartnershipEvaluation;
+    const partnerName = intakeData.potentialPartnerName || 'the partner';
+    const partnershipType = intakeData.partnershipType || 'collaboration';
+    const primaryGoal = intakeData.primaryPartnershipGoal || intakeData.primaryValidationGoals?.[0] || 'business growth';
+    
+    const prompt = isPartnership ? `
+Generate specific partnership assumptions for ${intakeData.companyName || 'this company'}'s potential collaboration with ${partnerName}:
 
-Company Context:
+PARTNERSHIP CONTEXT:
+- Partner: ${partnerName}
+- Partnership Type: ${partnershipType}
+- Primary Goal: ${primaryGoal}
+- Company Stage: ${intakeData.currentStage}
+- Industry: ${intakeData.industry}
+- Expected Value: ${intakeData.estimatedPartnershipValue || 'TBD'}
+- Timeline: ${intakeData.partnershipTimeline || 'TBD'}
+- Relationship Stage: ${intakeData.relationshipStage || 'Early discussions'}
+
+SPECIFIC RISKS/UNCERTAINTIES:
+- Strategic Alignment: ${intakeData.strategicAlignmentConcerns || 'Partner priorities alignment'}
+- Technical Integration: ${intakeData.technicalIntegrationChallenges || 'API compatibility and data sync'}
+- Market Dynamics: ${intakeData.marketDynamicsConcerns || 'Customer adoption of joint solution'}
+- Financial Structure: ${intakeData.financialStructureConcerns || 'Revenue sharing and pricing model'}
+
+Generate partnership-specific assumptions organized by validation tier:
+
+DISCOVERY ASSUMPTIONS (5-6 assumptions): Desk research validation in 1 week
+- Partner's public API documentation, support forums, case studies with similar partners
+- Competitive partnership analysis, pricing model research, technical feasibility assessment
+- Examples for ${partnerName}: "${partnerName} has documented APIs for ${intakeData.technicalRequirements || 'core integration needs'}", "${partnerName}'s partner program offers ${intakeData.expectedSupport || 'technical support'} to integration partners"
+
+FEASIBILITY ASSUMPTIONS (4-5 assumptions): Partner and customer interviews in 2 weeks
+- Direct partner conversations, joint customer interviews, internal stakeholder alignment
+- Partner interest level, resource commitment, mutual customer demand validation
+- Examples: "${partnerName} allocates dedicated engineering resources to strategic partnerships", "Joint customers see 30%+ value increase from integrated solution"
+
+VALIDATION ASSUMPTIONS (4-5 assumptions): Pilot program or market test in 4 weeks
+- Beta integration, pilot customer program, joint go-to-market test, leading indicators
+- Measurable partnership success metrics within timeframe
+- Examples: "Pilot integration achieves 90%+ technical success rate", "Joint customers show 25%+ higher retention in first 30 days"
+
+Make each assumption specific to ${partnerName} and ${partnershipType}, using actual partner/company names and specific metrics.
+
+CRITICAL: Use the actual partner name "${partnerName}" instead of generic terms like "partner" or "the partner" in assumption text.
+` : `
+Generate business validation assumptions for ${intakeData.companyName || 'this business'}:
+
+BUSINESS CONTEXT:
 - Product: ${intakeData.productDescription || intakeData.valueProposition}
 - Target Market: ${intakeData.targetCustomerDescription}
 - Business Model: ${intakeData.businessModel}
@@ -416,32 +461,29 @@ Company Context:
 - Price Point: ${intakeData.estimatedPricePoint} ${intakeData.currency}
 - Primary Goals: ${intakeData.primaryValidationGoals?.join(', ')}
 
-Key User Assumptions:
+KEY USER ASSUMPTIONS:
 1. ${intakeData.assumption1}
 2. ${intakeData.assumption2}
 3. ${intakeData.assumption3}
 
-Generate assumptions organized by what's testable in each tier:
+Generate assumptions organized by validation tier:
 
-DISCOVERY ASSUMPTIONS (5-6 assumptions): Things provable via desk research in 1 week
-- Competitor analysis, API documentation, support ticket analysis, forum research
-- Focus on market landscape, pricing models, feature gaps, technical feasibility
-- Examples: "Competitor X charges 2x our proposed price", "Integration APIs are publicly available"
+DISCOVERY ASSUMPTIONS (5-6 assumptions): Desk research in 1 week
+- Competitor analysis, market research, technical feasibility assessment
+- Examples: "Competitor X charges 2x our proposed price", "Target market size exceeds 100K potential customers"
 
-FEASIBILITY ASSUMPTIONS (4-5 assumptions): Things requiring 5-7 customer interviews in 2 weeks  
-- Actual time spent on current solutions, specific pain points, willingness to pay, preference data
-- Focus on customer behavior, problem severity, solution fit
+FEASIBILITY ASSUMPTIONS (4-5 assumptions): Customer interviews in 2 weeks
+- Customer behavior, problem validation, willingness to pay, solution fit
 - Examples: "60%+ of target users spend 2+ hours daily on this problem", "Users willing to pay $50+/month for solution"
 
-VALIDATION ASSUMPTIONS (4-5 assumptions): Things requiring market tests/beta in 4 weeks
-- Click rates, signup conversion, setup success, early satisfaction metrics
-- Focus on leading indicators testable within timeframe, not long-term metrics
+VALIDATION ASSUMPTIONS (4-5 assumptions): Market tests in 4 weeks
+- Landing page tests, beta programs, conversion metrics, early satisfaction
 - Examples: "Landing page converts at 5%+ signup rate", "80%+ of beta users complete onboarding"
+`;
 
-Make assumptions specific and timebound with measurable outcomes.
-
+    const baseInstructions = `
 For each assumption, provide:
-- assumption_text: Clear, testable statement with specific metrics
+- assumption_text: Clear, testable statement with specific metrics and actual names (no generic terms)
 - category: Market, Customer, Technical, Operational, or Financial
 - risk_level: High, Medium, or Low
 - confidence_level: High, Medium, or Low
@@ -456,16 +498,18 @@ For each assumption, provide:
 Return as JSON with an "assumptions" array organized by sprint tier.
 `;
 
+    const finalPrompt = prompt + baseInstructions;
+
     const response = await openai.chat.completions.create({
       model: "gpt-4o",
       messages: [
         {
           role: "system",
-          content: "You are the LaunchClarity Analysis Engine. Generate comprehensive business assumptions for validation sprints. Focus on realistic, testable hypotheses that could make or break the venture. Respond only with valid JSON."
+          content: "You are the LaunchClarity Analysis Engine. Generate comprehensive business assumptions for validation sprints. Focus on realistic, testable hypotheses that could make or break the venture. For partnerships, use specific company/partner names throughout. Respond only with valid JSON."
         },
         {
           role: "user",
-          content: prompt
+          content: finalPrompt
         }
       ],
       response_format: { type: "json_object" },
