@@ -252,10 +252,28 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.post("/api/sprints/:id/intake", async (req, res) => {
     try {
       const sprintId = Number(req.params.id);
-      const intakeDataPayload = insertIntakeDataSchema.parse({
+      
+      // Transform the request data to match the schema
+      const transformedData = {
         ...req.body,
         sprintId,
-      });
+        // Handle competitors array transformation if individual fields are sent
+        competitors: req.body.competitors || [
+          { name: req.body.competitor1Name || '', differentiator: req.body.competitor1Differentiator || '' },
+          { name: req.body.competitor2Name || '', differentiator: req.body.competitor2Differentiator || '' },
+          { name: req.body.competitor3Name || '', differentiator: req.body.competitor3Differentiator || '' }
+        ].filter(comp => comp.name.trim() !== ''),
+      };
+      
+      // Remove individual competitor fields from the data to avoid schema conflicts
+      delete transformedData.competitor1Name;
+      delete transformedData.competitor1Differentiator;
+      delete transformedData.competitor2Name;
+      delete transformedData.competitor2Differentiator;
+      delete transformedData.competitor3Name;
+      delete transformedData.competitor3Differentiator;
+      
+      const intakeDataPayload = insertIntakeDataSchema.parse(transformedData);
       
       const intake = await storage.upsertIntakeData(intakeDataPayload);
       
