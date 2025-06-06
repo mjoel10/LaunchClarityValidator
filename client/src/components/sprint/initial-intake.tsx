@@ -692,11 +692,11 @@ export default function InitialIntake({ sprintId }: InitialIntakeProps) {
                   className="mt-2"
                 >
                   <div className="flex items-center space-x-2">
-                    <input type="radio" id="tested-yes" name="hasBeenTested" value="Yes" />
+                    <RadioGroupItem value="Yes" id="tested-yes" />
                     <Label htmlFor="tested-yes" className="font-normal">Yes</Label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <input type="radio" id="tested-no" name="hasBeenTested" value="No" />
+                    <RadioGroupItem value="No" id="tested-no" />
                     <Label htmlFor="tested-no" className="font-normal">No</Label>
                   </div>
                 </RadioGroup>
@@ -710,11 +710,11 @@ export default function InitialIntake({ sprintId }: InitialIntakeProps) {
                   className="mt-2"
                 >
                   <div className="flex items-center space-x-2">
-                    <input type="radio" id="audience-yes" name="hasAudience" value="Yes" />
+                    <RadioGroupItem value="Yes" id="audience-yes" />
                     <Label htmlFor="audience-yes" className="font-normal">Yes</Label>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <input type="radio" id="audience-no" name="hasAudience" value="No" />
+                    <RadioGroupItem value="No" id="audience-no" />
                     <Label htmlFor="audience-no" className="font-normal">No</Label>
                   </div>
                 </RadioGroup>
