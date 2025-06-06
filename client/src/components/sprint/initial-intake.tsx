@@ -438,8 +438,8 @@ export default function InitialIntake({ sprintId }: InitialIntakeProps) {
               </div>
 
               <div>
-                <Label htmlFor="deliveryModel">Primary Delivery Model *</Label>
-                <Select value={formData.deliveryModel} onValueChange={(value) => handleInputChange('deliveryModel', value)}>
+                <Label htmlFor="primaryDeliveryModel">Primary Delivery Model *</Label>
+                <Select value={formData.primaryDeliveryModel} onValueChange={(value) => handleInputChange('primaryDeliveryModel', value)}>
                   <SelectTrigger>
                     <SelectValue placeholder="Select delivery model" />
                   </SelectTrigger>
@@ -660,8 +660,8 @@ export default function InitialIntake({ sprintId }: InitialIntakeProps) {
                   <div key={goal} className="flex items-center space-x-2">
                     <Checkbox
                       id={goal}
-                      checked={formData.validationGoals.includes(goal)}
-                      onCheckedChange={(checked) => handleCheckboxChange('validationGoals', goal, checked as boolean)}
+                      checked={formData.primaryValidationGoals.includes(goal)}
+                      onCheckedChange={(checked) => handleCheckboxChange('primaryValidationGoals', goal, checked as boolean)}
                     />
                     <Label htmlFor={goal} className="text-sm font-normal">
                       {goal}
