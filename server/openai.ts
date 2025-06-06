@@ -778,89 +778,89 @@ FORMAT WITH PROPER MARKDOWN FOR GOOGLE DOCS TRANSFER:
 # Market Sizing Analysis
 ## ${companyName} Market Opportunity Assessment
 
-<h2>Executive Summary</h2>
-<p>This comprehensive market sizing analysis evaluates the addressable market opportunity for ${companyName} in the ${industry} sector, targeting ${targetCustomer} with ${pricingModel} pricing. The analysis reveals a Total Addressable Market (TAM) of [specific $X billion], a Serviceable Addressable Market (SAM) of [specific $X million], and a realistic Serviceable Obtainable Market (SOM) of [specific $X million] over the next 5 years.</p>
+## Executive Summary
 
-<p>Key findings indicate [3-4 specific market insights with numbers]. ${companyName}'s current position with ${userBase} users represents [X%] market penetration in their primary segment. The analysis identifies [specific growth opportunities] that could drive [X%] annual growth through [specific strategies].</p>
+This comprehensive market sizing analysis evaluates the addressable market opportunity for ${companyName} in the ${industry} sector, targeting ${targetCustomer} with ${pricingModel} pricing. The analysis reveals a Total Addressable Market (TAM) of [specific $X billion], a Serviceable Addressable Market (SAM) of [specific $X million], and a realistic Serviceable Obtainable Market (SOM) of [specific $X million] over the next 5 years.
 
-<h3>Market Opportunity Headlines</h3>
-<ul>
-<li><strong>TAM:</strong> $[X] billion total market for ${industry} solutions</li>
-<li><strong>SAM:</strong> $[X] million serviceable market for ${targetCustomer}</li>
-<li><strong>SOM:</strong> $[X] million obtainable market (Year 1-5 projections)</li>
-<li><strong>Growth Rate:</strong> [X]% CAGR over next 5 years</li>
-<li><strong>Target Penetration:</strong> [X]% market share achievable</li>
-</ul>
+Key findings indicate [3-4 specific market insights with numbers]. ${companyName}'s current position with ${userBase} users represents [X%] market penetration in their primary segment. The analysis identifies [specific growth opportunities] that could drive [X%] annual growth through [specific strategies].
 
-<h2>Total Addressable Market (TAM) Analysis</h2>
-<h3>Market Definition & Boundaries</h3>
-<p>Provide 2-3 paragraphs defining the total market for ${industry} solutions, including geographic scope, customer segments, and use cases. Explain methodology for TAM calculation.</p>
+### Market Opportunity Headlines
+- **TAM:** $[X] billion total market for ${industry} solutions
+- **SAM:** $[X] million serviceable market for ${targetCustomer}
+- **SOM:** $[X] million obtainable market (Year 1-5 projections)
+- **Growth Rate:** [X]% CAGR over next 5 years
+- **Target Penetration:** [X]% market share achievable
 
-<h3>TAM Sizing by Geography</h3>
-<table border="1" style="border-collapse: collapse; width: 100%;">
-<tr><th>Region</th><th>Market Size</th><th>Growth Rate</th><th>Key Drivers</th></tr>
-<tr><td>North America</td><td>$[X] billion</td><td>[X]% CAGR</td><td>[Specific drivers]</td></tr>
-<tr><td>Europe</td><td>$[X] billion</td><td>[X]% CAGR</td><td>[Specific drivers]</td></tr>
-<tr><td>Asia-Pacific</td><td>$[X] billion</td><td>[X]% CAGR</td><td>[Specific drivers]</td></tr>
-<tr><td><strong>Global Total</strong></td><td><strong>$[X] billion</strong></td><td><strong>[X]% CAGR</strong></td><td>Digital transformation</td></tr>
-</table>
+## Total Addressable Market (TAM) Analysis
 
-<h3>Customer Segment Breakdown</h3>
-<p>Analyze market size by customer segment relevant to ${companyName}'s target of ${targetCustomer}. Include segment definitions, sizing methodology, and growth projections.</p>
+### Market Definition & Boundaries
+Provide 2-3 paragraphs defining the total market for ${industry} solutions, including geographic scope, customer segments, and use cases. Explain methodology for TAM calculation.
 
-<h3>5-Year Growth Projections</h3>
-<p>Detail market growth drivers, technology trends, and regulatory factors influencing ${industry} market expansion. Provide year-over-year projections with supporting rationale.</p>
+### TAM Sizing by Geography
+| Region | Market Size | Growth Rate | Key Drivers |
+|--------|-------------|-------------|-------------|
+| North America | $[X] billion | [X]% CAGR | [Specific drivers] |
+| Europe | $[X] billion | [X]% CAGR | [Specific drivers] |
+| Asia-Pacific | $[X] billion | [X]% CAGR | [Specific drivers] |
+| **Global Total** | **$[X] billion** | **[X]% CAGR** | Digital transformation |
 
-<h2>Serviceable Addressable Market (SAM)</h2>
-<h3>TAM to SAM Filtering Criteria</h3>
-<p>Explain how the total market filters to serviceable market based on:</p>
-<ul>
-<li><strong>Target Customer Criteria:</strong> ${targetCustomer} segment represents [X]% of total market</li>
-<li><strong>Geographic Focus:</strong> ${companyName}'s current/planned geographic reach</li>
-<li><strong>Price Point Accessibility:</strong> Customers willing/able to pay ${pricePoint}</li>
-<li><strong>Technology Fit:</strong> Customers needing ${companyName}'s specific solution type</li>
-</ul>
+### Customer Segment Breakdown
+Analyze market size by customer segment relevant to ${companyName}'s target of ${targetCustomer}. Include segment definitions, sizing methodology, and growth projections.
 
-<h3>SAM Calculation & Rationale</h3>
-<p>Provide detailed SAM calculation: [Total market] × [Geographic filter %] × [Customer segment %] × [Price accessibility %] = $[X] million SAM. Explain each filter percentage with supporting data and reasoning.</p>
+### 5-Year Growth Projections
+Detail market growth drivers, technology trends, and regulatory factors influencing ${industry} market expansion. Provide year-over-year projections with supporting rationale.
 
-<h2>Serviceable Obtainable Market (SOM)</h2>
-<h3>Realistic Capture Rate Analysis</h3>
-<p>Analyze ${companyName}'s realistic market capture potential based on competitive positioning, go-to-market capabilities, and resource constraints. Consider current ${userBase} user base as baseline.</p>
+## Serviceable Addressable Market (SAM)
 
-<h3>SOM Projections</h3>
-<table border="1" style="border-collapse: collapse; width: 100%;">
-<tr><th>Scenario</th><th>Year 1</th><th>Year 3</th><th>Year 5</th><th>Market Share</th></tr>
-<tr><td>Conservative</td><td>$[X]M</td><td>$[X]M</td><td>$[X]M</td><td>[X]%</td></tr>
-<tr><td>Moderate</td><td>$[X]M</td><td>$[X]M</td><td>$[X]M</td><td>[X]%</td></tr>
-<tr><td>Aggressive</td><td>$[X]M</td><td>$[X]M</td><td>$[X]M</td><td>[X]%</td></tr>
-</table>
+### TAM to SAM Filtering Criteria
+Explain how the total market filters to serviceable market based on:
 
-<h2>Market Dynamics & Competition</h2>
-<h3>Market Segmentation Analysis</h3>
-<table border="1" style="border-collapse: collapse; width: 100%;">
-<tr><th>Segment</th><th>Size ($M)</th><th>Growth Rate</th><th>Competitive Density</th><th>Fit Score</th></tr>
-<tr><td>[Segment 1]</td><td>$[X]M</td><td>[X]%</td><td>High/Medium/Low</td><td>[1-10]</td></tr>
-<tr><td>[Segment 2]</td><td>$[X]M</td><td>[X]%</td><td>High/Medium/Low</td><td>[1-10]</td></tr>
-<tr><td>[Segment 3]</td><td>$[X]M</td><td>[X]%</td><td>High/Medium/Low</td><td>[1-10]</td></tr>
-</table>
+- **Target Customer Criteria:** ${targetCustomer} segment represents [X]% of total market
+- **Geographic Focus:** ${companyName}'s current/planned geographic reach
+- **Price Point Accessibility:** Customers willing/able to pay ${pricePoint}
+- **Technology Fit:** Customers needing ${companyName}'s specific solution type
 
-<h3>Competitive Density & Market Share</h3>
-<p>Analyze competitive landscape in ${industry} sector, identifying market leaders, their share percentages, and whitespace opportunities for ${companyName}. Include specific competitor names and positioning.</p>
+### SAM Calculation & Rationale
+Provide detailed SAM calculation: [Total market] × [Geographic filter %] × [Customer segment %] × [Price accessibility %] = $[X] million SAM. Explain each filter percentage with supporting data and reasoning.
 
-<h3>Highest Opportunity Segments</h3>
-<p>Identify the 2-3 customer segments with highest potential for ${companyName} based on size, growth, competitive density, and strategic fit. Explain prioritization rationale.</p>
+## Serviceable Obtainable Market (SOM)
+
+### Realistic Capture Rate Analysis
+Analyze ${companyName}'s realistic market capture potential based on competitive positioning, go-to-market capabilities, and resource constraints. Consider current ${userBase} user base as baseline.
+
+### SOM Projections
+| Scenario | Year 1 | Year 3 | Year 5 | Market Share |
+|----------|--------|--------|--------|--------------|
+| Conservative | $[X]M | $[X]M | $[X]M | [X]% |
+| Moderate | $[X]M | $[X]M | $[X]M | [X]% |
+| Aggressive | $[X]M | $[X]M | $[X]M | [X]% |
+
+## Market Dynamics & Competition
+
+### Market Segmentation Analysis
+| Segment | Size ($M) | Growth Rate | Competitive Density | Fit Score |
+|---------|-----------|-------------|---------------------|-----------|
+| [Segment 1] | $[X]M | [X]% | High/Medium/Low | [1-10] |
+| [Segment 2] | $[X]M | [X]% | High/Medium/Low | [1-10] |
+| [Segment 3] | $[X]M | [X]% | High/Medium/Low | [1-10] |
+
+### Competitive Density & Market Share
+Analyze competitive landscape in ${industry} sector, identifying market leaders, their share percentages, and whitespace opportunities for ${companyName}. Include specific competitor names and positioning.
+
+### Highest Opportunity Segments
+Identify the 2-3 customer segments with highest potential for ${companyName} based on size, growth, competitive density, and strategic fit. Explain prioritization rationale.
 
 ${partnerName ? `
-<h2>Partnership Market Opportunity</h2>
-<h3>${partnerName} Customer Base Analysis</h3>
-<p>Analyze ${partnerName}'s customer base overlap with ${companyName}'s target market. Estimate addressable customers within ${partnerName}'s ecosystem.</p>
+## Partnership Market Opportunity
 
-<h3>Incremental Market Opportunity</h3>
-<p>Calculate incremental market opportunity through ${partnershipType} with ${partnerName}. Example: "Of ${partnerName}'s [X] customers, approximately [X]% ([X] customers) need ${companyName}'s ${industry} solution, representing $[X]M incremental market opportunity."</p>
+### ${partnerName} Customer Base Analysis
+Analyze ${partnerName}'s customer base overlap with ${companyName}'s target market. Estimate addressable customers within ${partnerName}'s ecosystem.
 
-<h3>Joint Market Capture Potential</h3>
-<p>Assess combined go-to-market potential, cross-selling opportunities, and accelerated market penetration through partnership channels.</p>
+### Incremental Market Opportunity
+Calculate incremental market opportunity through ${partnershipType} with ${partnerName}. Example: "Of ${partnerName}'s [X] customers, approximately [X]% ([X] customers) need ${companyName}'s ${industry} solution, representing $[X]M incremental market opportunity."
+
+### Joint Market Capture Potential
+Assess combined go-to-market potential, cross-selling opportunities, and accelerated market penetration through partnership channels.
 ` : ''}
 
 <h2>Strategic Recommendations</h2>
