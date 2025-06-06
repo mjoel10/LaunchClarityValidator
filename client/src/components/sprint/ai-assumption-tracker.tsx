@@ -71,7 +71,19 @@ export default function AIAssumptionTracker({ sprintId, intakeData }: AIAssumpti
   // Load saved assumptions
   useEffect(() => {
     if (assumptionModule?.moduleData?.assumptions) {
-      setAssumptions(assumptionModule.moduleData.assumptions);
+      const savedAssumptions = assumptionModule.moduleData.assumptions;
+      // Handle both old array format and new object format
+      if (Array.isArray(savedAssumptions)) {
+        setAssumptions(savedAssumptions);
+      } else if (savedAssumptions && typeof savedAssumptions === 'object') {
+        // Flatten the tier-specific assumptions into a single array
+        const allAssumptions = [
+          ...(savedAssumptions.discovery || []),
+          ...(savedAssumptions.feasibility || []),
+          ...(savedAssumptions.validation || [])
+        ];
+        setAssumptions(allAssumptions);
+      }
     }
   }, [assumptionModule]);
 
@@ -89,10 +101,25 @@ export default function AIAssumptionTracker({ sprintId, intakeData }: AIAssumpti
     },
     onSuccess: (data) => {
       if (data.assumptions) {
-        setAssumptions(data.assumptions);
+        let allAssumptions: Assumption[] = [];
+        
+        // Handle new object structure with tier-specific arrays
+        if (data.assumptions.discovery || data.assumptions.feasibility || data.assumptions.validation) {
+          allAssumptions = [
+            ...(data.assumptions.discovery || []),
+            ...(data.assumptions.feasibility || []),
+            ...(data.assumptions.validation || [])
+          ];
+        } 
+        // Handle legacy array structure
+        else if (Array.isArray(data.assumptions)) {
+          allAssumptions = data.assumptions;
+        }
+        
+        setAssumptions(allAssumptions);
         toast({
-          title: "Analysis Complete",
-          description: `Generated ${data.assumptions.length} tier-specific assumptions for validation.`
+          title: "LaunchClarity Analysis Complete",
+          description: `Generated ${allAssumptions.length} tier-specific assumptions for validation.`
         });
       }
     },
