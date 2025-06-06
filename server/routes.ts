@@ -7,7 +7,7 @@ import { insertUserSchema, insertSprintSchema, insertIntakeDataSchema, insertCom
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
-import { generateMarketSimulation, generateAssumptionAnalysis, generateCompetitiveIntelligence, generateMarketSizing, generateRiskAssessment, generateGoDecision, generateAssumptions } from "./openai";
+import { generateMarketSimulation, generateAssumptionAnalysis, generateCompetitiveIntelligence, generateMarketSizing, generateRiskAssessment, generateGoDecision, generateAssumptions, generateAssumptionReport } from "./openai";
 
 if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
@@ -425,7 +425,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Save to sprint module data
       await storage.updateSprintModuleByType(sprintId, 'assumptions', {
-        report: report,
+        aiAnalysis: report,
         updatedAt: new Date(),
       });
       

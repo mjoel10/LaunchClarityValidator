@@ -40,7 +40,7 @@ import ChannelRecommender from '@/components/sprint/channel-recommender';
 import StrategicAnalysisTools from '@/components/sprint/strategic-analysis-tools';
 import AsyncInterviews from '@/components/sprint/async-interviews';
 import AssumptionsTracker from '@/components/sprint/assumptions-tracker';
-import AIAssumptionTracker from '@/components/sprint/ai-assumption-tracker';
+import AssumptionTrackerReport from '@/components/sprint/assumption-tracker-report';
 import DemandTestTracker from '@/components/sprint/demand-test-tracker';
 import FullInterviewSuite from '@/components/sprint/full-interview-suite';
 import MultiChannelTesting from '@/components/sprint/multi-channel-testing';
@@ -53,7 +53,7 @@ import { cn } from '@/lib/utils';
 const FEATURE_COMPONENTS = {
   intake: InitialIntake,
   market_simulation: MarketSimulation,
-  assumptions: AIAssumptionTracker,
+  assumptions: AssumptionTrackerReport,
   business_model_simulator: BusinessModelSimulator,
   channel_recommender: ChannelRecommender,
   strategic_analysis: StrategicAnalysisTools,
