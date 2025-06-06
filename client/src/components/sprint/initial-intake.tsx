@@ -673,11 +673,12 @@ export default function InitialIntake({ sprintId }: InitialIntakeProps) {
 
             <div>
               <Label htmlFor="criticalQuestion">#1 Critical Question *</Label>
-              <Input 
+              <Textarea 
                 id="criticalQuestion"
                 value={formData.criticalQuestion}
                 onChange={(e) => handleInputChange('criticalQuestion', e.target.value)}
-                placeholder="What's the most important question to answer?"
+                placeholder="What's the most important question this validation sprint needs to answer? Be specific about what decision this will inform."
+                className="min-h-[80px]"
                 required
               />
             </div>
