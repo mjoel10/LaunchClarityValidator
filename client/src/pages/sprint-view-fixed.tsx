@@ -228,10 +228,17 @@ export default function SprintView() {
     const feasibilityModules = ['business_model_simulator', 'channel_recommender', 'async_interviews', 'demand_test'];
     const validationModules = ['full_interviews', 'multi_channel_tests', 'enhanced_market_intel', 'implementation_roadmap', 'battlecards'];
 
+    // Sort modules by predefined order
+    const sortByOrder = (moduleList: string[], filteredModules: any[]) => {
+      return moduleList
+        .map(moduleType => filteredModules.find((m: any) => m.moduleType === moduleType))
+        .filter(Boolean);
+    };
+
     return {
-      discovery: modules.filter((m: any) => discoveryModules.includes(m.moduleType)),
-      feasibility: modules.filter((m: any) => feasibilityModules.includes(m.moduleType)),
-      validation: modules.filter((m: any) => validationModules.includes(m.moduleType))
+      discovery: sortByOrder(discoveryModules, modules.filter((m: any) => discoveryModules.includes(m.moduleType))),
+      feasibility: sortByOrder(feasibilityModules, modules.filter((m: any) => feasibilityModules.includes(m.moduleType))),
+      validation: sortByOrder(validationModules, modules.filter((m: any) => validationModules.includes(m.moduleType)))
     };
   };
 
