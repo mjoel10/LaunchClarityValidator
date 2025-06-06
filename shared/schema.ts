@@ -69,7 +69,9 @@ export const intakeData = pgTable("intake_data", {
   uniqueAdvantage: text("unique_advantage"),
   
   // Validation Intent
-  assumptionsToValidate: text("assumptions_to_validate").array(),
+  assumption1: text("assumption1"),
+  assumption2: text("assumption2"),
+  assumption3: text("assumption3"),
   primaryValidationGoals: text("primary_validation_goals").array(),
   criticalQuestion: text("critical_question"),
   previouslyTested: boolean("previously_tested"),
@@ -83,7 +85,11 @@ export const intakeData = pgTable("intake_data", {
   relationshipStatus: text("relationship_status"), // None, Early convo, Signed LOI, Beta
   integrationType: text("integration_type"), // API, White-label, Co-built, Bundled Offer
   partnershipGoal: text("partnership_goal"), // New Revenue, Churn Reduction, Market Entry, Strategic Leverage
-  keyRisksOrUncertainties: text("key_risks_or_uncertainties"),
+  partnershipRisk1: text("partnership_risk1"),
+  partnershipRisk2: text("partnership_risk2"),
+  partnershipRisk3: text("partnership_risk3"),
+  partnershipRisk4: text("partnership_risk4"),
+  partnershipRisk5: text("partnership_risk5"),
   
   createdAt: timestamp("created_at").defaultNow().notNull(),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),

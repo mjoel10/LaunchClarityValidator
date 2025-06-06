@@ -117,13 +117,29 @@ export default function InitialIntake({ sprintId }: InitialIntakeProps) {
   // Pre-populate form with existing data
   useEffect(() => {
     if (existingData && Object.keys(existingData).length > 0) {
+      // Map competitors data
+      const competitors = existingData.competitors || [];
+      const competitorData = {
+        competitor1Name: competitors[0]?.name || '',
+        competitor1Differentiator: competitors[0]?.differentiator || '',
+        competitor2Name: competitors[1]?.name || '',
+        competitor2Differentiator: competitors[1]?.differentiator || '',
+        competitor3Name: competitors[2]?.name || '',
+        competitor3Differentiator: competitors[2]?.differentiator || '',
+      };
+
       setFormData(prev => ({
         ...prev,
         ...existingData,
+        ...competitorData,
         companyName: sprint?.companyName || existingData.companyName || prev.companyName,
         geographicMarkets: Array.isArray(existingData.geographicMarkets) ? existingData.geographicMarkets : prev.geographicMarkets,
-        validationGoals: Array.isArray(existingData.validationGoals) ? existingData.validationGoals : prev.validationGoals,
+        validationGoals: Array.isArray(existingData.primaryValidationGoals) ? existingData.primaryValidationGoals : prev.validationGoals,
         pricingModel: existingData.pricingModel || prev.pricingModel,
+        // Map legacy assumptions field to new separate fields if they exist
+        assumption1: existingData.assumption1 || (existingData.assumptionsToValidate && existingData.assumptionsToValidate[0]) || '',
+        assumption2: existingData.assumption2 || (existingData.assumptionsToValidate && existingData.assumptionsToValidate[1]) || '',
+        assumption3: existingData.assumption3 || (existingData.assumptionsToValidate && existingData.assumptionsToValidate[2]) || '',
       }));
     } else if (sprint?.companyName && !formData.companyName) {
       setFormData(prev => ({
@@ -158,7 +174,27 @@ export default function InitialIntake({ sprintId }: InitialIntakeProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
-    saveMutation.mutate(formData);
+    
+    // Transform form data to match backend schema
+    const transformedData = {
+      ...formData,
+      // Transform competitor data into array format
+      competitors: [
+        { name: formData.competitor1Name, differentiator: formData.competitor1Differentiator },
+        { name: formData.competitor2Name, differentiator: formData.competitor2Differentiator },
+        { name: formData.competitor3Name, differentiator: formData.competitor3Differentiator }
+      ].filter(comp => comp.name.trim() !== ''), // Only include competitors with names
+      
+      // Remove individual competitor fields
+      competitor1Name: undefined,
+      competitor1Differentiator: undefined,
+      competitor2Name: undefined,
+      competitor2Differentiator: undefined,
+      competitor3Name: undefined,
+      competitor3Differentiator: undefined,
+    };
+    
+    saveMutation.mutate(transformedData);
     setIsSubmitting(false);
   };
 
