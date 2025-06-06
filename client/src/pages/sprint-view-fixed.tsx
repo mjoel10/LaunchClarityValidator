@@ -53,7 +53,7 @@ import { cn } from '@/lib/utils';
 const FEATURE_COMPONENTS = {
   intake: InitialIntake,
   market_simulation: MarketSimulation,
-  assumptions: AssumptionsTracker,
+  assumptions: AIAssumptionTracker,
   business_model_simulator: BusinessModelSimulator,
   channel_recommender: ChannelRecommender,
   strategic_analysis: StrategicAnalysisTools,
@@ -190,7 +190,7 @@ export default function SprintView() {
     const nameMap: Record<string, string> = {
       intake: 'Initial Intake',
       market_simulation: 'AI Market Simulation',
-      assumptions: 'Assumption Tracker',
+      assumptions: 'LaunchClarity Assumption Analysis',
       competitive_intel: 'Competitive Intelligence',
       market_sizing: 'Market Sizing Analysis',
       risk_assessment: 'Risk Assessment',
