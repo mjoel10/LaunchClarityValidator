@@ -59,7 +59,7 @@ export default function InitialIntake({ sprintId }: InitialIntakeProps) {
     salesComplexity: '',
     salesMotion: '',
     deliveryComplexity: '',
-    deliveryModel: '',
+    primaryDeliveryModel: '',
 
     // Customer & Value Proposition
     targetCustomerDescription: '',
@@ -82,7 +82,7 @@ export default function InitialIntake({ sprintId }: InitialIntakeProps) {
     assumption1: '',
     assumption2: '',
     assumption3: '',
-    validationGoals: [] as string[],
+    primaryValidationGoals: [] as string[],
     criticalQuestion: '',
     hasBeenTested: 'No',
     testingDescription: '',
@@ -134,7 +134,7 @@ export default function InitialIntake({ sprintId }: InitialIntakeProps) {
         ...competitorData,
         companyName: sprint?.companyName || existingData.companyName || prev.companyName,
         geographicMarkets: Array.isArray(existingData.geographicMarkets) ? existingData.geographicMarkets : prev.geographicMarkets,
-        validationGoals: Array.isArray(existingData.primaryValidationGoals) ? existingData.primaryValidationGoals : prev.validationGoals,
+        primaryValidationGoals: Array.isArray(existingData.primaryValidationGoals) ? existingData.primaryValidationGoals : prev.primaryValidationGoals,
         pricingModel: existingData.pricingModel || prev.pricingModel,
         // Map legacy assumptions field to new separate fields if they exist
         assumption1: existingData.assumption1 || (existingData.assumptionsToValidate && existingData.assumptionsToValidate[0]) || '',

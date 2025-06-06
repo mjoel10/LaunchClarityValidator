@@ -40,6 +40,7 @@ import ChannelRecommender from '@/components/sprint/channel-recommender';
 import StrategicAnalysisTools from '@/components/sprint/strategic-analysis-tools';
 import AsyncInterviews from '@/components/sprint/async-interviews';
 import AssumptionsTracker from '@/components/sprint/assumptions-tracker';
+import AIAssumptionTracker from '@/components/sprint/ai-assumption-tracker';
 import DemandTestTracker from '@/components/sprint/demand-test-tracker';
 import FullInterviewSuite from '@/components/sprint/full-interview-suite';
 import MultiChannelTesting from '@/components/sprint/multi-channel-testing';
