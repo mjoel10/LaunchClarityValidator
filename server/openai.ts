@@ -541,7 +541,7 @@ export async function generateAssumptionReport(intakeData: any) {
     }
 
     const prompt = `
-Generate a comprehensive 4-5 page assumption validation report for a partnership between ${companyName} and ${partnerName}.
+Generate a comprehensive assumption validation report of approximately 1,500-2,000 words for a $5,000+ consulting sprint analyzing ${companyName}'s ${partnershipType} partnership with ${partnerName}.
 
 PARTNERSHIP CONTEXT:
 - Company: ${companyName}
@@ -549,14 +549,81 @@ PARTNERSHIP CONTEXT:
 - Partnership Type: ${partnershipType}
 - Industry: ${industry}
 - Primary Goal: ${intakeData.primaryPartnershipGoal}
+- Current Stage: ${intakeData.currentStage}
+- Target Market: ${intakeData.targetCustomer}
 
-Format the report with proper HTML structure that will transfer well to Google Docs. Replace ALL bracketed placeholders with specific, realistic assumptions based on the partnership context.
+CRITICAL REQUIREMENTS:
+- Generate 12-15 detailed assumptions (4-5 per sprint tier)
+- Each assumption must be a full paragraph with rich context
+- Use specific company/partner names throughout - NO generic terms
+- Provide McKinsey-level strategic thinking, not generic ChatGPT output
+- Make it feel like custom strategic analysis worth $5,000+
 
-Generate a comprehensive report with sections for Executive Summary, Partnership Overview, Discovery/Feasibility/Validation Sprint Assumptions, Critical Success Metrics, Risk Assessment, and Recommended Validation Sequence.
+For each assumption include:
+- Specific, testable hypothesis using actual company/partner names
+- Risk level and detailed rationale (2-3 sentences explaining why this matters)
+- Validation method with concrete steps the consultant can execute
+- Success criteria with measurable thresholds
+- Business impact explanation (why this assumption is critical)
 
-Use actual company names throughout. Make it read like a professional consulting report that could be delivered to a client.
+FORMAT WITH PROPER HTML FOR GOOGLE DOCS TRANSFER:
 
-CRITICAL: Replace all placeholders with specific, realistic content based on ${companyName} + ${partnerName} partnership context.
+<h1>Assumption Validation Report</h1>
+<h2>${companyName} + ${partnerName} ${partnershipType} Partnership Analysis</h2>
+
+<h2>Executive Summary</h2>
+<p>This comprehensive analysis identifies 15 critical assumptions across three validation tiers for ${companyName}'s proposed ${partnershipType} partnership with ${partnerName}. The partnership represents a strategic opportunity to [specific value proposition based on context]. This report outlines testable hypotheses that will determine partnership viability, resource allocation requirements, and go-to-market strategy for the ${industry} sector.</p>
+
+<p>Key findings indicate [3-4 specific strategic insights]. The analysis prioritizes assumptions with highest business impact and validates them through a structured 8-week sprint methodology. Success depends on validating 80% of high-risk assumptions and achieving [specific metrics] in pilot testing.</p>
+
+<h2>Strategic Partnership Overview</h2>
+<h3>Partnership Context & Objectives</h3>
+<p>Provide 2-3 paragraphs of strategic context explaining why this partnership matters, the market opportunity, competitive landscape, and how it fits ${companyName}'s broader strategy.</p>
+
+<h3>Critical Success Factors</h3>
+<ul>
+<li>Technical integration capabilities between ${companyName} and ${partnerName}</li>
+<li>Market demand validation for integrated solution</li>
+<li>Resource allocation and partnership commitment levels</li>
+<li>Go-to-market strategy and customer adoption metrics</li>
+</ul>
+
+<h2>Discovery Sprint Assumptions (Weeks 1-2)</h2>
+<p>Validate through desk research, competitive analysis, and public information gathering.</p>
+
+Generate 4-5 detailed assumptions, each as a full paragraph with:
+- Specific hypothesis about ${partnerName}'s capabilities or market dynamics
+- Why this assumption is critical to partnership success
+- Detailed validation approach using specific research methods
+- Success criteria with measurable thresholds
+- Risk assessment and business impact
+
+<h2>Feasibility Sprint Assumptions (Weeks 3-4)</h2>
+<p>Validate through direct partner engagement and customer discovery interviews.</p>
+
+Generate 4-5 detailed assumptions about:
+- ${partnerName}'s partnership interest and resource commitment
+- ${companyName} customer demand and willingness to adopt
+- Technical feasibility and integration requirements
+- Business model alignment and revenue potential
+
+<h2>Validation Sprint Assumptions (Weeks 5-8)</h2>
+<p>Validate through pilot programs, beta testing, and market experiments.</p>
+
+Generate 4-5 detailed assumptions about:
+- Customer adoption rates and usage patterns
+- Technical performance and reliability metrics
+- Business impact and ROI potential
+- Scalability and long-term viability
+
+<h2>Risk Assessment & Mitigation</h2>
+Provide detailed analysis of highest-risk assumptions and mitigation strategies.
+
+<h2>Recommended Validation Sequence</h2>
+Provide week-by-week execution plan with specific deliverables and decision points.
+
+TONE: Professional consulting language. Strategic depth. Custom analysis, not templates.
+TARGET: 1,500-2,000 words total. Each assumption should be substantial, not bullet points.
 `;
 
     const response = await openai.chat.completions.create({
@@ -564,15 +631,15 @@ CRITICAL: Replace all placeholders with specific, realistic content based on ${c
       messages: [
         {
           role: "system", 
-          content: "You are a senior business consultant generating professional assumption validation reports. Create comprehensive, specific analysis using actual company names. Format with clean HTML that transfers well to Google Docs. Be thorough and professional."
+          content: "You are a McKinsey-level senior strategy consultant generating premium assumption validation reports for $5,000+ engagements. Your analysis must demonstrate deep strategic thinking, industry expertise, and custom insights that justify high-value consulting fees. Each assumption should be a substantial paragraph with rich context, not bullet points. Use specific company names throughout and provide actionable validation methods with measurable success criteria. Generate 1,500-2,000 words of professional consulting content that reads like bespoke strategic analysis, not generic templates."
         },
         {
           role: "user",
           content: prompt
         }
       ],
-      temperature: 0.7,
-      max_tokens: 4000
+      temperature: 0.3,
+      max_tokens: 6000
     });
 
     const reportContent = response.choices[0].message.content;
