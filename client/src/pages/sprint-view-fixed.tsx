@@ -575,8 +575,7 @@ export default function SprintView() {
               {selectedModule ? (
                 <Card className="rounded-xl shadow-sm">
                   <CardHeader className="px-8 pt-8">
-                    <div className="flex items-center justify-between">
-                      <CardTitle>{getModuleName(selectedModule)}</CardTitle>
+                    <div className="flex items-center justify-end">
                       <Button 
                         variant="outline" 
                         size="sm"
