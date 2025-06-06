@@ -69,8 +69,8 @@ export default function AIAssumptionTracker({ sprintId, intakeData }: AIAssumpti
     queryKey: [`/api/sprints/${sprintId}`],
   });
 
-  const assumptionsModule = moduleData?.find((m: any) => m.moduleType === 'assumptions');
-  const tier = sprint?.tier || 'discovery';
+  const assumptionsModule = moduleData ? moduleData.find((m: any) => m.moduleType === 'assumptions') : null;
+  const tier = (sprint as any)?.tier || 'discovery';
 
   // Generate assumptions using AI
   const generateAssumptionsMutation = useMutation({
@@ -113,6 +113,22 @@ export default function AIAssumptionTracker({ sprintId, intakeData }: AIAssumpti
       setAssumptions(assumptionsModule.aiAnalysis.assumptions);
     }
   }, [assumptionsModule]);
+
+  // Save assumptions to module data when they change
+  const saveAssumptions = async (updatedAssumptions: Assumption[]) => {
+    try {
+      await fetch(`/api/sprints/${sprintId}/modules`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          moduleType: 'assumptions',
+          aiAnalysis: { assumptions: updatedAssumptions }
+        })
+      });
+    } catch (error) {
+      console.error('Failed to save assumptions:', error);
+    }
+  };
 
   // Only auto-generate if user explicitly requests it - removed automatic generation
 
@@ -182,15 +198,19 @@ export default function AIAssumptionTracker({ sprintId, intakeData }: AIAssumpti
   };
 
   const updateAssumptionStatus = (id: string, status: string) => {
-    setAssumptions(prev => prev.map(assumption => 
+    const updatedAssumptions = assumptions.map(assumption => 
       assumption.id === id ? { ...assumption, status } : assumption
-    ));
+    );
+    setAssumptions(updatedAssumptions);
+    saveAssumptions(updatedAssumptions);
   };
 
   const updateAssumptionEvidence = (id: string, evidence: string) => {
-    setAssumptions(prev => prev.map(assumption => 
+    const updatedAssumptions = assumptions.map(assumption => 
       assumption.id === id ? { ...assumption, evidence } : assumption
-    ));
+    );
+    setAssumptions(updatedAssumptions);
+    saveAssumptions(updatedAssumptions);
   };
 
   const deleteAssumption = (id: string) => {
@@ -392,7 +412,7 @@ export default function AIAssumptionTracker({ sprintId, intakeData }: AIAssumpti
                             {assumption.risk_level} Risk
                           </Badge>
                           <Badge className={getStatusColor(assumption.status)}>
-                            {assumption.status.replace('_', ' ')}
+                            {(assumption.status || 'untested').replace('_', ' ')}
                           </Badge>
                           {assumption.custom && (
                             <Badge variant="secondary">Custom</Badge>
