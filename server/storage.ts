@@ -5,7 +5,7 @@ import {
   type Comment, type InsertComment
 } from "@shared/schema";
 import { db } from "./db";
-import { eq, and } from "drizzle-orm";
+import { eq, and, asc } from "drizzle-orm";
 
 export interface IStorage {
   // User methods
@@ -177,7 +177,10 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getSprintModules(sprintId: number): Promise<SprintModule[]> {
-    return await db.select().from(sprintModules).where(eq(sprintModules.sprintId, sprintId));
+    return await db.select()
+      .from(sprintModules)
+      .where(eq(sprintModules.sprintId, sprintId))
+      .orderBy(asc(sprintModules.id));
   }
 
   async getSprintModuleById(id: number): Promise<SprintModule | undefined> {

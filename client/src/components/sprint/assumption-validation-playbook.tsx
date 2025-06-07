@@ -20,7 +20,9 @@ export default function AssumptionValidationPlaybook({ sprintId, intakeData }: A
 
   const { data: modules, refetch } = useQuery({
     queryKey: [`/api/sprints/${sprintId}/modules`],
-    staleTime: 0
+    staleTime: 0,
+    refetchOnMount: true,
+    refetchOnWindowFocus: true
   });
   
   // Force array check and find assumptions module
