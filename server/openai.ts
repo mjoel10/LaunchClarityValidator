@@ -369,6 +369,10 @@ Implementation Priorities:
 This analysis provides ${companyName} with actionable intelligence to strengthen competitive positioning and capitalize on market opportunities in the ${industry} sector.`;
 
   try {
+    console.log('About to call OpenAI API...');
+    console.log('Company name:', companyName);
+    console.log('Industry:', industry);
+    
     const response = await openai.chat.completions.create({
       model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
       messages: [
@@ -385,6 +389,7 @@ This analysis provides ${companyName} with actionable intelligence to strengthen
       max_tokens: 6000
     });
 
+    console.log('OpenAI API call completed successfully');
     const content = response.choices[0].message.content;
     if (!content) {
       throw new Error('No content received from OpenAI');
@@ -399,7 +404,8 @@ This analysis provides ${companyName} with actionable intelligence to strengthen
 
   } catch (error) {
     console.error('Error generating competitive intelligence:', error);
-    throw new Error("Failed to generate competitive intelligence");
+    console.error('Error details:', error.message);
+    throw new Error("Failed to generate competitive intelligence: " + error.message);
   }
 }
 
