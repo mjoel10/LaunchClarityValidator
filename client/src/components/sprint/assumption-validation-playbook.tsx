@@ -1,9 +1,11 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Loader2, Copy, CheckCircle } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Loader2, Copy, CheckCircle, Target, Shield, AlertTriangle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { apiRequest } from '@/lib/queryClient';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 interface AssumptionValidationPlaybookProps {
   sprintId: number;
@@ -12,49 +14,41 @@ interface AssumptionValidationPlaybookProps {
 
 export default function AssumptionValidationPlaybook({ sprintId, intakeData }: AssumptionValidationPlaybookProps) {
   const [isGenerating, setIsGenerating] = useState(false);
-  const [playbook, setPlaybook] = useState<string>('');
   const [copied, setCopied] = useState(false);
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
-  const generatePlaybook = async () => {
-    if (!intakeData?.companyName) {
-      toast({
-        title: "Missing Information",
-        description: "Please complete the Initial Intake first to generate the assumption validation playbook.",
-        variant: "destructive",
-      });
-      return;
-    }
+  const { data: module } = useQuery({
+    queryKey: ['/api/sprints', sprintId, 'modules'],
+    select: (modules: any[]) => modules?.find((m: any) => m.moduleType === 'assumptions')
+  });
 
-    if (!intakeData?.assumptions || !intakeData?.risks) {
+  const generateMutation = useMutation({
+    mutationFn: async () => {
+      setIsGenerating(true);
+      const response = await apiRequest("POST", `/api/sprints/${sprintId}/generate-assumption-playbook`);
+      return response.json();
+    },
+    onSuccess: (data) => {
+      queryClient.invalidateQueries({ queryKey: ['/api/sprints', sprintId, 'modules'] });
       toast({
-        title: "Missing Assumptions & Risks",
-        description: "Please provide 3 assumptions and 5 risks in the Initial Intake to generate validation strategies.",
-        variant: "destructive",
+        title: "Assumption Playbook Generated",
+        description: "Comprehensive validation strategies ready for each sprint tier."
       });
-      return;
-    }
-
-    setIsGenerating(true);
-    try {
-      const response = await apiRequest('POST', `/api/sprints/${sprintId}/generate-assumption-playbook`);
-      const data = await response.json();
-      setPlaybook(data.playbook);
+      setIsGenerating(false);
+    },
+    onError: (error: any) => {
       toast({
-        title: "Playbook Generated",
-        description: "Assumption validation playbook is ready with testing strategies for each sprint tier.",
+        title: "Generation Failed",
+        description: error.message || "Failed to generate assumption validation playbook.",
+        variant: "destructive"
       });
-    } catch (error) {
-      console.error('Error generating playbook:', error);
-      toast({
-        title: "Generation Failed", 
-        description: "Unable to generate assumption validation playbook. Please try again.",
-        variant: "destructive",
-      });
-    } finally {
       setIsGenerating(false);
     }
-  };
+  });
+
+  const playbook = module?.aiAnalysis?.playbook || '';
+  const isCompleted = module?.isCompleted;
 
   const copyToClipboard = async () => {
     try {
@@ -63,7 +57,7 @@ export default function AssumptionValidationPlaybook({ sprintId, intakeData }: A
       setTimeout(() => setCopied(false), 2000);
       toast({
         title: "Copied to Clipboard",
-        description: "Assumption validation playbook copied. Paste into Google Docs for client delivery.",
+        description: "Assumption validation playbook copied successfully.",
       });
     } catch (error) {
       toast({
@@ -104,7 +98,7 @@ export default function AssumptionValidationPlaybook({ sprintId, intakeData }: A
                 </Button>
               )}
               <Button
-                onClick={generatePlaybook}
+                onClick={() => generateMutation.mutate()}
                 disabled={isGenerating || !hasRequiredData}
                 className="flex items-center gap-2"
               >

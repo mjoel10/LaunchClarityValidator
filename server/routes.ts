@@ -419,6 +419,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Generate competitive intelligence analysis
+  app.post("/api/sprints/:id/modules/competitive_intelligence/generate", async (req, res) => {
+    try {
+      const sprintId = Number(req.params.id);
+      const intake = await storage.getIntakeDataBySprintId(sprintId);
+      
+      if (!intake) {
+        return res.status(400).json({ message: "No intake data found for this sprint" });
+      }
+      
+      const analysis = await generateCompetitiveIntelligence(intake);
+      
+      // Save to sprint module and mark as completed
+      await storage.updateSprintModuleByType(sprintId, 'competitive_intelligence', {
+        aiAnalysis: analysis,
+        isCompleted: true,
+        updatedAt: new Date(),
+      });
+      
+      res.json(analysis);
+    } catch (error: any) {
+      console.error('Error generating competitive intelligence:', error);
+      res.status(500).json({ message: "Failed to generate competitive intelligence: " + error.message });
+    }
+  });
+
   // Generate assumption validation report
   app.post("/api/sprints/:id/generate-assumption-report", async (req, res) => {
     try {

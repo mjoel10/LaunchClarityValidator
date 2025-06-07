@@ -43,6 +43,7 @@ import AssumptionsTracker from '@/components/sprint/assumptions-tracker';
 import AssumptionTrackerReport from '@/components/sprint/assumption-tracker-report';
 import AssumptionValidationPlaybook from '@/components/sprint/assumption-validation-playbook';
 import MarketSizingReport from '@/components/sprint/market-sizing-report';
+import CompetitiveIntelligence from '@/components/sprint/competitive-intelligence';
 import DemandTestTracker from '@/components/sprint/demand-test-tracker';
 import FullInterviewSuite from '@/components/sprint/full-interview-suite';
 import MultiChannelTesting from '@/components/sprint/multi-channel-testing';
@@ -56,6 +57,7 @@ const FEATURE_COMPONENTS = {
   intake: InitialIntake,
   market_simulation: MarketSizingReport,
   assumptions: AssumptionValidationPlaybook,
+  competitive_intelligence: CompetitiveIntelligence,
   business_model_simulator: BusinessModelSimulator,
   channel_recommender: ChannelRecommender,
   strategic_analysis: StrategicAnalysisTools,
