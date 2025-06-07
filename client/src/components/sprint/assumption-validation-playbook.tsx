@@ -19,7 +19,7 @@ export default function AssumptionValidationPlaybook({ sprintId, intakeData }: A
   const queryClient = useQueryClient();
 
   const { data: modules, refetch } = useQuery({
-    queryKey: [`/api/sprints/${sprintId}/modules`],
+    queryKey: [`/api/sprints/${sprintId}/modules`, Date.now()],
     staleTime: 0,
     refetchOnMount: true,
     refetchOnWindowFocus: true
@@ -28,6 +28,20 @@ export default function AssumptionValidationPlaybook({ sprintId, intakeData }: A
   // Force array check and find assumptions module
   const moduleArray = Array.isArray(modules) ? modules : [];
   const module = moduleArray.find((m: any) => m.moduleType === 'assumptions');
+  
+  // Fallback query specifically for assumptions module if not found in main query
+  const { data: assumptionsModule } = useQuery({
+    queryKey: [`/api/sprints/${sprintId}/modules/assumptions`],
+    queryFn: async () => {
+      const response = await fetch(`/api/sprints/${sprintId}/modules`);
+      const allModules = await response.json();
+      return allModules.find((m: any) => m.moduleType === 'assumptions');
+    },
+    enabled: !module && !!sprintId,
+    staleTime: 0
+  });
+  
+  const finalModule = module || assumptionsModule;
 
   const generateMutation = useMutation({
     mutationFn: async () => {
