@@ -1088,6 +1088,273 @@ Critical Success Factors:
   }
 }
 
+export async function generateAssumptionValidationPlaybook(intakeData: any) {
+  try {
+    const { 
+      companyName, 
+      assumptions = [], 
+      risks = [],
+      industry,
+      targetCustomer,
+      currentStage,
+      teamSize,
+      fundingStage
+    } = intakeData;
+
+    if (!assumptions.length || !risks.length) {
+      throw new Error('Assumptions and risks are required to generate validation playbook');
+    }
+
+    const assumptionsList = assumptions.slice(0, 3).map((a: any, i: number) => `${i + 1}. "${a.text || a}"`).join('\n');
+    const risksList = risks.slice(0, 5).map((r: any, i: number) => `${i + 1}. "${r.text || r}"`).join('\n');
+
+    const prompt = `Generate a comprehensive assumption validation playbook for ${companyName}, a ${industry} company targeting ${targetCustomer}.
+
+CLIENT ASSUMPTIONS TO VALIDATE:
+${assumptionsList}
+
+CLIENT RISKS & UNKNOWNS:
+${risksList}
+
+COMPANY CONTEXT:
+- Industry: ${industry}
+- Target Customer: ${targetCustomer}
+- Current Stage: ${currentStage}
+- Team Size: ${teamSize}
+- Funding Stage: ${fundingStage}
+
+FORMAT WITH EXACT PROFESSIONAL CONSULTING STANDARD:
+
+ASSUMPTION & RISK VALIDATION PLAYBOOK
+${companyName} Sprint Planning Guide
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+EXECUTIVE SUMMARY
+
+This comprehensive validation playbook addresses ${companyName}'s 3 core assumptions and 5 key risks through structured testing approaches across three sprint investment levels. The analysis reveals which assumptions can be validated through desk research alone versus requiring primary customer research.
+
+Based on ${companyName}'s current ${currentStage} stage and ${fundingStage} funding status, the recommended approach balances validation rigor with resource constraints. Each assumption and risk includes specific testing methodologies tailored to Discovery ($5,000), Feasibility ($15,000), and Validation ($35,000) sprint tiers.
+
+KEY FINDINGS:
+
+• Most Critical Assumption: [Identify which assumption has highest business impact]
+• Highest Impact Risk: [Identify highest potential damage risk]
+• Recommended Sprint: [Discovery/Feasibility/Validation based on context]
+• What Desk Research Can Answer: [List 3-4 key questions answerable without customers]
+• What Requires Customer Input: [List 3-4 questions requiring primary research]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CORE ASSUMPTIONS VALIDATION
+
+[For each assumption, provide detailed analysis in this format:]
+
+Assumption 1: "[Quote exact assumption text]"
+─────────────────────────────────────────
+
+Why This Matters:
+[Explain specific business impact if assumption proves true/false, include revenue/cost implications]
+
+Discovery Sprint Approach (Desk Research Only):
+
+What we can learn: [Specific insights available from secondary research]
+Data sources: [Industry reports, competitor analysis, online communities, etc.]
+Limitations: [What cannot be answered without direct customer contact]
+
+Feasibility Sprint Approach (+ 5 Interviews + 1 Demand Test):
+
+Interview focus: [Specific questions for the 5 target customers]
+Demand test option: [Specific test like landing page signup, survey, prototype]
+Additional insights: [What this adds beyond Discovery findings]
+
+Validation Sprint Approach (+ 10-15 Interviews + 2-3 Demand Tests):
+
+Expanded interviews: [Broader customer segments and use cases to cover]
+Multiple demand tests: [Test 1: description], [Test 2: description], [Test 3: description]
+Statistical confidence: [What 15 interviews can definitively validate]
+
+Success Criteria:
+
+• Discovery: [Specific metric or finding that indicates proceed/stop]
+• Feasibility: [Minimum viable proof required to justify next level]
+• Validation: [Full confidence threshold for go-to-market decision]
+
+[Repeat this exact format for Assumptions 2 and 3]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+KEY RISKS & UNKNOWNS
+
+[For each risk, provide analysis in this format:]
+
+Risk 1: "[Quote exact risk text]"
+───────────────────────────────────
+
+Impact Level: [High/Medium/Low with rationale]
+
+What Desk Research Can Reveal:
+• [Available market data and industry precedents]
+• [Competitor case studies and outcomes]
+• [Regulatory or technical constraints]
+
+What Requires Primary Research:
+• [Customer-specific insights needed]
+• [Market acceptance factors]
+• [Implementation challenges]
+
+Mitigation Approach by Sprint:
+• Discovery: [Initial risk assessment approach]
+• Feasibility: [Risk validation with 5 interviews]
+• Validation: [Comprehensive risk mitigation plan]
+
+[Repeat for Risks 2-5]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+VALIDATION ROADMAP BY SPRINT TIER
+
+Discovery Sprint ($5,000) - 1 Week Desk Research
+────────────────────────────────────────────
+
+What We Can Validate:
+• Market size and competitive landscape analysis
+• Industry benchmarks and best practices research
+• Regulatory requirements and technical constraints
+• Pricing precedents and business model analysis
+
+Deliverables:
+• Market sizing analysis with TAM/SAM/SOM
+• Competitive intelligence report with positioning
+• Initial assumption assessment with confidence levels
+• Go/no-go recommendation with risk analysis
+
+Limitations:
+• No direct customer feedback or validation
+• No demand testing or market acceptance data
+• Assumptions based entirely on secondary research
+• Cannot validate customer willingness to pay
+
+Feasibility Sprint ($15,000) - Discovery + Light Validation
+───────────────────────────────────────────────────────
+
+Adds to Discovery:
+• 5 customer interviews with target segment
+• 1 demand test (landing page, survey, or prototype)
+• Business model simulation with financial projections
+• Competitive positioning validation
+
+What This Validates:
+• Initial customer interest and pain point confirmation
+• Basic willingness to pay and price sensitivity
+• Key assumption directional validation
+• Product-market fit indicators
+
+Decision Point: Sufficient evidence to invest in comprehensive validation?
+
+Validation Sprint ($35,000) - 30-Day Comprehensive Program
+──────────────────────────────────────────────────────
+
+Full Program Includes:
+• 10-15 customer interviews across multiple segments
+• 2-3 demand tests (landing pages, prototypes, pilot programs)
+• Competitive battlecards and positioning strategy
+• 90-day implementation roadmap
+• Financial model with 3-year projections
+
+What This Validates:
+• All core assumptions with statistical confidence
+• Demand validation across customer segments
+• Competitive positioning and differentiation
+• Implementation feasibility and resource requirements
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+RECOMMENDED TESTING METHODS
+
+Desk Research Methods (Discovery):
+• Industry reports: [Specific sources like Gartner, McKinsey, etc.]
+• Competitor analysis: [Website analysis, pricing research, feature comparison]
+• Online communities: [Reddit, LinkedIn groups, industry forums where customers discuss]
+• Search trend analysis: [Google Trends keywords related to problem/solution]
+
+Interview Approaches (Feasibility/Validation):
+• Problem discovery interviews: Understand current pain points and workflows
+• Solution validation interviews: Test proposed solution resonance
+• Pricing sensitivity discussions: Validate willingness to pay and budget
+• Competitive alternative analysis: Understand current solutions and switching costs
+
+Demand Tests (Feasibility/Validation):
+• Landing page with email signup to test interest
+• Paid advertising campaign to measure click-through and conversion
+• Interactive prototype or demo feedback sessions
+• Pre-order collection or letter of intent (LOI) campaigns
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PRIORITY & SEQUENCING
+
+Test First: [Assumption #] because [specific business rationale]
+Test Second: [Assumption #] because [dependency or risk rationale]  
+Test Third: [Assumption #] because [supporting evidence rationale]
+
+Sprint Recommendation:
+
+[Recommend Discovery, Feasibility, or Validation based on:]
+• Current evidence level and uncertainty
+• Risk tolerance and potential downside
+• Available budget and resource constraints
+• Time sensitivity and market timing
+• Team experience with customer research
+
+[Provide specific rationale for recommended tier with expected outcomes]
+
+Focus on practical, actionable testing approaches that match the investment level. Be explicit about what each sprint tier can and cannot validate, helping ${companyName} make informed decisions about their validation investment.
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
+
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
+      messages: [
+        {
+          role: "system", 
+          content: "You are a senior validation consultant creating detailed testing playbooks for startup assumptions and risks. Your analysis must provide specific, actionable testing strategies for each sprint investment level, with clear ROI justification for each tier. Generate 1,800-2,200 words of practical validation guidance.\n\nCRITICAL FORMATTING RULES:\n- Use ONLY plain text formatting - NO LaTeX, NO HTML, NO markdown\n- NEVER use \\text{} or any LaTeX notation\n- Use simple symbols: × for multiplication, = for equals\n- Use plain parentheses () for groupings\n- All content must be formatted for clean copy/paste into Google Docs"
+        },
+        {
+          role: "user",
+          content: prompt
+        }
+      ],
+      temperature: 0.3,
+      max_tokens: 8000
+    });
+
+    let playbookContent = response.choices[0].message.content;
+    
+    // Clean any LaTeX formatting that might slip through
+    if (playbookContent) {
+      playbookContent = playbookContent
+        .replace(/\\text\{([^}]+)\}/g, '$1')  // Remove \text{} wrappers
+        .replace(/\\times/g, '×')             // Replace LaTeX times with multiplication symbol
+        .replace(/\\cdot/g, '×')              // Replace LaTeX cdot with multiplication symbol
+        .replace(/\\div/g, '÷')               // Replace LaTeX div with division symbol
+        .replace(/\\equals/g, '=')            // Replace LaTeX equals
+        .replace(/\\\(/g, '(')                // Replace LaTeX parentheses
+        .replace(/\\\)/g, ')')                // Replace LaTeX parentheses
+        .replace(/\\,/g, ',')                 // Replace LaTeX comma spacing
+        .replace(/\\\$/g, '$')                // Replace escaped dollar signs
+        .replace(/\\&/g, '&');                // Replace escaped ampersands
+    }
+    
+    return {
+      playbook: playbookContent
+    };
+  } catch (error) {
+    console.error('Error generating assumption validation playbook:', error);
+    throw new Error('Failed to generate assumption validation playbook');
+  }
+}
+
 export async function generateGoDecision(sprintData: any, allModuleData: any) {
   try {
     const prompt = `

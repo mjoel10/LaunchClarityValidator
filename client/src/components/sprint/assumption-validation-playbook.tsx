@@ -1,0 +1,185 @@
+import { useState } from 'react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Loader2, Copy, CheckCircle } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import { apiRequest } from '@/lib/queryClient';
+
+interface AssumptionValidationPlaybookProps {
+  sprintId: number;
+  intakeData?: any;
+}
+
+export default function AssumptionValidationPlaybook({ sprintId, intakeData }: AssumptionValidationPlaybookProps) {
+  const [isGenerating, setIsGenerating] = useState(false);
+  const [playbook, setPlaybook] = useState<string>('');
+  const [copied, setCopied] = useState(false);
+  const { toast } = useToast();
+
+  const generatePlaybook = async () => {
+    if (!intakeData?.companyName) {
+      toast({
+        title: "Missing Information",
+        description: "Please complete the Initial Intake first to generate the assumption validation playbook.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!intakeData?.assumptions || !intakeData?.risks) {
+      toast({
+        title: "Missing Assumptions & Risks",
+        description: "Please provide 3 assumptions and 5 risks in the Initial Intake to generate validation strategies.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsGenerating(true);
+    try {
+      const response = await apiRequest('POST', `/api/sprints/${sprintId}/generate-assumption-playbook`);
+      const data = await response.json();
+      setPlaybook(data.playbook);
+      toast({
+        title: "Playbook Generated",
+        description: "Assumption validation playbook is ready with testing strategies for each sprint tier.",
+      });
+    } catch (error) {
+      console.error('Error generating playbook:', error);
+      toast({
+        title: "Generation Failed", 
+        description: "Unable to generate assumption validation playbook. Please try again.",
+        variant: "destructive",
+      });
+    } finally {
+      setIsGenerating(false);
+    }
+  };
+
+  const copyToClipboard = async () => {
+    try {
+      await navigator.clipboard.writeText(playbook);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+      toast({
+        title: "Copied to Clipboard",
+        description: "Assumption validation playbook copied. Paste into Google Docs for client delivery.",
+      });
+    } catch (error) {
+      toast({
+        title: "Copy Failed",
+        description: "Unable to copy to clipboard. Please select and copy manually.",
+        variant: "destructive",
+      });
+    }
+  };
+
+  const hasRequiredData = intakeData?.assumptions?.length >= 3 && intakeData?.risks?.length >= 5;
+
+  return (
+    <div className="space-y-6">
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center justify-between">
+            Assumption & Risk Validation Playbook
+            <div className="flex gap-2">
+              {playbook && (
+                <Button
+                  onClick={copyToClipboard}
+                  variant="outline"
+                  size="sm"
+                  className="flex items-center gap-2"
+                >
+                  {copied ? (
+                    <>
+                      <CheckCircle className="h-4 w-4" />
+                      Copied
+                    </>
+                  ) : (
+                    <>
+                      <Copy className="h-4 w-4" />
+                      Copy Playbook
+                    </>
+                  )}
+                </Button>
+              )}
+              <Button
+                onClick={generatePlaybook}
+                disabled={isGenerating || !hasRequiredData}
+                className="flex items-center gap-2"
+              >
+                {isGenerating ? (
+                  <>
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                    Generating...
+                  </>
+                ) : (
+                  'Generate Playbook'
+                )}
+              </Button>
+            </div>
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          {!hasRequiredData && !isGenerating && (
+            <div className="text-center py-12 text-muted-foreground">
+              <p className="text-lg mb-2">Ready to Generate Validation Playbook</p>
+              <p className="text-sm mb-4">
+                Requires 3 assumptions and 5 risks from Initial Intake to create comprehensive validation strategies.
+              </p>
+              {intakeData?.assumptions?.length < 3 && (
+                <p className="text-sm text-orange-600">
+                  Missing assumptions: {intakeData?.assumptions?.length || 0}/3 provided
+                </p>
+              )}
+              {intakeData?.risks?.length < 5 && (
+                <p className="text-sm text-orange-600">
+                  Missing risks: {intakeData?.risks?.length || 0}/5 provided
+                </p>
+              )}
+            </div>
+          )}
+
+          {hasRequiredData && !playbook && !isGenerating && (
+            <div className="text-center py-12 text-muted-foreground">
+              <p className="text-lg mb-2">Ready to Generate Validation Playbook</p>
+              <p className="text-sm">
+                Click "Generate Playbook" to create detailed validation strategies for each assumption and risk, 
+                with specific approaches for Discovery ($5K), Feasibility ($15K), and Validation ($35K) sprint tiers.
+              </p>
+            </div>
+          )}
+
+          {isGenerating && (
+            <div className="text-center py-12">
+              <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
+              <p className="text-lg font-medium">Generating Assumption Validation Playbook...</p>
+              <p className="text-sm text-muted-foreground mt-2">
+                Creating validation strategies for {intakeData?.assumptions?.length} assumptions and {intakeData?.risks?.length} risks 
+                across Discovery, Feasibility, and Validation sprint tiers. This may take 30-45 seconds.
+              </p>
+            </div>
+          )}
+
+          {playbook && (
+            <div className="space-y-4">
+              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
+                <h4 className="font-medium text-green-900 mb-2">Validation Playbook Ready</h4>
+                <p className="text-sm text-green-700">
+                  Comprehensive 1,800+ word validation playbook with specific testing strategies for each sprint tier. 
+                  Includes desk research approaches, interview guides, and decision criteria.
+                </p>
+              </div>
+              
+              <div className="bg-white border rounded-lg p-6">
+                <pre className="whitespace-pre-wrap font-mono text-sm leading-relaxed text-gray-900 overflow-x-auto">
+                  {playbook}
+                </pre>
+              </div>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

@@ -1,0 +1,228 @@
+Create an Assumption Tracker module that takes the client's 3 assumptions and 5 risks/unknowns from the intake form and builds practical validation strategies. The module should:
+
+Generate a detailed 1,800-2,200 word report with these exact sections:
+
+Executive Summary (200-300 words)
+Core Assumptions Validation (3 assumptions from intake)
+
+For each: Why it matters, How to test it, Success criteria
+
+
+Key Risks & Unknowns (5 risks from intake)
+
+For each: Impact assessment, Early indicators, Mitigation approach
+
+
+Validation Roadmap by Sprint Tier
+
+Discovery Sprint ($5K): 1 week desk research only
+Feasibility Sprint ($15K): Discovery + 5 interviews + 1 demand test
+Validation Sprint ($35K): Full 30-day program with 10-15 interviews + 2-3 demand tests
+
+
+Recommended Testing Methods
+
+Desk research approaches for Discovery
+Interview guides and demand test options
+Success metrics and decision criteria
+
+
+Priority & Sequencing
+
+Which assumptions to test first and why
+Dependencies between assumptions
+Go/no-go decision points
+
+
+
+
+For each assumption (300-400 words):
+
+Quote the EXACT assumption text from intake
+Explain why this matters to the business model
+Propose validation approach for each sprint tier
+Define clear, measurable success criteria
+Identify what can be learned from desk research alone
+Specify what requires customer interviews or demand tests
+
+
+For each risk/unknown (150-200 words):
+
+Quote the EXACT risk text from intake
+Assess potential impact (High/Medium/Low)
+Identify what desk research can reveal
+Note what requires primary research
+Link to relevant assumptions
+
+
+CRITICAL FORMATTING REQUIREMENTS - Use this EXACT format:
+
+ASSUMPTION & RISK VALIDATION PLAYBOOK
+[Company Name] Sprint Planning Guide
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EXECUTIVE SUMMARY
+[First paragraph summarizing the 3 assumptions and 5 risks]
+[Second paragraph recommending which sprint tier to start with]
+KEY FINDINGS:
+
+Most Critical Assumption: [Which one and why]
+Highest Impact Risk: [Which one and why]
+Recommended Sprint: [Discovery/Feasibility/Validation]
+What Desk Research Can Answer: [List key questions]
+What Requires Customer Input: [List key questions]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CORE ASSUMPTIONS VALIDATION
+
+Assumption 1: "[Exact text from intake]"
+─────────────────────────────────────────
+Why This Matters:
+[Explain business impact if true/false]
+Discovery Sprint Approach (Desk Research Only):
+
+What we can learn: [Specific insights from secondary research]
+Data sources: [Industry reports, competitor analysis, etc.]
+Limitations: [What can't be answered without customers]
+
+Feasibility Sprint Approach (+ 5 Interviews + 1 Demand Test):
+
+Interview focus: [Key questions for the 5 customers]
+Demand test option: [Specific test like landing page, survey]
+Additional insights: [What this adds beyond Discovery]
+
+Validation Sprint Approach (+ 10-15 Interviews + 2-3 Demand Tests):
+
+Expanded interviews: [Broader customer segments to cover]
+Multiple demand tests: [Test 1], [Test 2], [Test 3]
+Statistical confidence: [What 15 interviews can validate]
+
+Success Criteria:
+
+Discovery: [What indicates proceed/stop]
+Feasibility: [Minimum viable proof]
+Validation: [Full confidence threshold]
+
+[Repeat for Assumptions 2 and 3]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+KEY RISKS & UNKNOWNS
+
+Risk 1: "[Exact text from intake]"
+───────────────────────────────────
+Impact Level: [High/Medium/Low]
+What Desk Research Can Reveal:
+
+[Available market data]
+[Competitor precedents]
+
+What Requires Primary Research:
+
+[Customer-specific insights needed]
+
+Mitigation Approach by Sprint:
+
+Discovery: [Initial risk assessment]
+Feasibility: [Risk validation with 5 interviews]
+Validation: [Full risk mitigation plan]
+
+[Repeat for Risks 2-5]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+VALIDATION ROADMAP BY SPRINT TIER
+
+Discovery Sprint ($5K) - 1 Week Desk Research
+────────────────────────────────────────────
+What We Can Validate:
+
+Market size and competitive landscape
+Industry benchmarks and best practices
+Regulatory requirements and constraints
+Pricing precedents and models
+
+Deliverables:
+
+Market sizing analysis
+Competitive intelligence report
+Initial assumption assessment
+Go/no-go recommendation
+
+Limitations:
+
+No direct customer feedback
+No demand validation
+Assumptions based on secondary data
+
+Feasibility Sprint ($15K) - Discovery + Light Validation
+───────────────────────────────────────────────────────
+Adds to Discovery:
+
+5 customer interviews (target: [specific segment])
+1 demand test (recommended: [specific test])
+Business model simulation
+
+What This Validates:
+
+Initial customer interest and pain points
+Basic willingness to pay
+Key assumption directional validation
+
+Decision Point: Enough evidence to invest in full validation?
+Validation Sprint ($35K) - 30-Day Comprehensive Program
+──────────────────────────────────────────────────────
+Full Program Includes:
+
+10-15 customer interviews across segments
+2-3 demand tests (landing pages, prototypes, etc.)
+Competitive battlecards
+90-day implementation roadmap
+Financial model and projections
+
+What This Validates:
+
+All core assumptions with statistical confidence
+Demand across multiple customer segments
+Competitive positioning and differentiation
+Implementation feasibility
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+RECOMMENDED TESTING METHODS
+
+Desk Research Methods (Discovery):
+
+Industry reports: [Specific sources]
+Competitor analysis: [What to analyze]
+Online communities: [Where target customers discuss]
+Search trend analysis: [Keywords to track]
+
+Interview Approaches (Feasibility/Validation):
+
+Problem discovery interviews
+Solution validation interviews
+Pricing sensitivity discussions
+Competitive alternative analysis
+
+Demand Tests (Feasibility/Validation):
+
+Landing page with signup
+Paid ad campaign test
+Prototype feedback session
+Pre-order or LOI collection
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PRIORITY & SEQUENCING
+
+Test First: [Assumption #] because [specific reason]
+Test Second: [Assumption #] because [specific reason]
+Test Third: [Assumption #] because [specific reason]
+Sprint Recommendation:
+[Recommend Discovery, Feasibility, or Validation based on:
+
+Current evidence level
+Risk tolerance
+Available budget
+Time constraints]
+
+Focus on what can realistically be learned at each investment level. Be clear about the limitations of desk research and the value of primary customer research.

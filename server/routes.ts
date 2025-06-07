@@ -7,7 +7,7 @@ import { insertUserSchema, insertSprintSchema, insertIntakeDataSchema, insertCom
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
-import { generateMarketSimulation, generateAssumptionAnalysis, generateCompetitiveIntelligence, generateMarketSizing, generateRiskAssessment, generateGoDecision, generateAssumptions, generateAssumptionReport, generateMarketSizingReport } from "./openai";
+import { generateMarketSimulation, generateAssumptionAnalysis, generateCompetitiveIntelligence, generateMarketSizing, generateRiskAssessment, generateGoDecision, generateAssumptions, generateAssumptionReport, generateAssumptionValidationPlaybook, generateMarketSizingReport } from "./openai";
 
 if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
@@ -433,6 +433,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error: any) {
       console.error('Error generating assumption report:', error);
       res.status(500).json({ message: "Failed to generate assumption report: " + error.message });
+    }
+  });
+
+  // Generate assumption validation playbook
+  app.post("/api/sprints/:id/generate-assumption-playbook", async (req, res) => {
+    try {
+      const sprintId = Number(req.params.id);
+      const intake = await storage.getIntakeDataBySprintId(sprintId);
+      
+      if (!intake) {
+        return res.status(400).json({ message: "No intake data found for this sprint" });
+      }
+      
+      const { playbook } = await generateAssumptionValidationPlaybook(intake);
+      
+      // Save to sprint module data
+      await storage.updateSprintModuleByType(sprintId, 'assumption-tracker', {
+        content: JSON.stringify({ playbook }),
+        status: 'completed',
+        updatedAt: new Date(),
+      });
+      
+      res.json({ playbook });
+    } catch (error: any) {
+      console.error('Error generating assumption validation playbook:', error);
+      res.status(500).json({ message: "Failed to generate assumption validation playbook: " + error.message });
     }
   });
 
