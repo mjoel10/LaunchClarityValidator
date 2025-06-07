@@ -2,7 +2,8 @@ import OpenAI from "openai";
 
 // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
 const openai = new OpenAI({ 
-  apiKey: process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY_ENV_VAR || "default_key"
+  apiKey: process.env.OPENAI_API_KEY || process.env.OPENAI_API_KEY_ENV_VAR || "default_key",
+  timeout: 90000 // 90 seconds timeout for comprehensive reports
 });
 
 export async function generateMarketSimulation(intakeData: any) {
@@ -1147,6 +1148,8 @@ Critical Success Factors:
 
 export async function generateAssumptionValidationPlaybook(intakeData: any) {
   try {
+    console.log('Starting assumption validation playbook generation...');
+    
     const { 
       companyName, 
       industry,
@@ -1166,9 +1169,13 @@ export async function generateAssumptionValidationPlaybook(intakeData: any) {
       partnershipRisk5
     } = intakeData;
 
+    console.log('Extracting assumptions and risks...');
+    
     // Extract assumptions and risks from intake data
     const assumptions = [assumption1, assumption2, assumption3].filter(Boolean);
     const risks = [partnershipRisk1, partnershipRisk2, partnershipRisk3, partnershipRisk4, partnershipRisk5].filter(Boolean);
+
+    console.log(`Found ${assumptions.length} assumptions and ${risks.length} risks`);
 
     if (!assumptions.length || !risks.length) {
       throw new Error('Assumptions and risks are required to generate validation playbook');
@@ -1187,7 +1194,7 @@ ${risksList}
 
 CONTEXT: ${currentStage} stage, ${productType}, solving ${coreProblem}
 
-Generate a 1,200-word playbook with this exact format:
+Generate a comprehensive 1,800-2,200 word playbook with detailed analysis for each assumption and risk (300-400 words per assumption). Use this exact format:
 
 ASSUMPTION & RISK VALIDATION PLAYBOOK
 ${companyName} Sprint Planning Guide
@@ -1377,6 +1384,8 @@ Focus on practical, actionable testing approaches that match the investment leve
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━`;
 
+    console.log('Calling OpenAI API for assumption validation playbook...');
+    
     const response = await openai.chat.completions.create({
       model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
       messages: [
@@ -1390,8 +1399,10 @@ Focus on practical, actionable testing approaches that match the investment leve
         }
       ],
       temperature: 0.3,
-      max_tokens: 4000
+      max_tokens: 8000
     });
+
+    console.log('OpenAI API response received, processing content...');
 
     let playbookContent = response.choices[0].message.content;
     
