@@ -170,9 +170,33 @@ export default function DecisionEnginePage() {
   const getModulesByTier = () => {
     if (!modules || modules.length === 0) return { discovery: [], feasibility: [], validation: [] };
     
-    const discoveryModules = ['intake', 'market_simulation', 'assumptions', 'competitive_intel', 'market_sizing', 'risk_assessment', 'swot_analysis'];
-    const feasibilityModules = ['business_model_simulator', 'channel_recommender', 'async_interviews', 'demand_test'];
-    const validationModules = ['full_interviews', 'multi_channel_tests', 'enhanced_market_intel', 'blue_ocean_strategy', 'implementation_roadmap'];
+    // Discovery Sprint ($5K) - 6 core modules + 1 conditional partnership
+    const discoveryModules = [
+      'initial_intake', 
+      'assumption_tracker', 
+      'market_sizing_analysis', 
+      'competitive_intelligence', 
+      'risk_assessment', 
+      'customer_voice_simulation',
+      'partnership_viability'
+    ];
+    
+    // Feasibility Sprint ($15K) - 4 additional modules
+    const feasibilityModules = [
+      'light_customer_feedback', 
+      'business_model_simulation', 
+      'channel_recommendations', 
+      'swot_analysis'
+    ];
+    
+    // Validation Sprint ($35K) - 5 additional modules
+    const validationModules = [
+      'full_interview_suite', 
+      'multi_channel_testing', 
+      'enhanced_market_intelligence', 
+      'market_deep_dive', 
+      'strategic_roadmap'
+    ];
 
     return {
       discovery: modules.filter((m: any) => discoveryModules.includes(m.moduleType)),
