@@ -1166,11 +1166,7 @@ export async function generateAssumptionValidationPlaybook(intakeData: any) {
     const assumptions = [assumption1, assumption2, assumption3].filter(Boolean);
     const risks = [partnershipRisk1, partnershipRisk2, partnershipRisk3, partnershipRisk4, partnershipRisk5].filter(Boolean);
 
-    console.log('Debug - Assumptions found:', assumptions.length, assumptions);
-    console.log('Debug - Risks found:', risks.length, risks);
-
     if (!assumptions.length || !risks.length) {
-      console.log('Debug - Missing data. Assumptions:', assumptions.length, 'Risks:', risks.length);
       throw new Error('Assumptions and risks are required to generate validation playbook');
     }
 
@@ -1189,8 +1185,6 @@ COMPANY CONTEXT:
 - Industry: ${industry}
 - Target Customer: ${targetCustomer}
 - Current Stage: ${currentStage}
-- Team Size: ${teamSize}
-- Funding Stage: ${fundingStage}
 
 FORMAT WITH EXACT PROFESSIONAL CONSULTING STANDARD:
 
@@ -1203,7 +1197,7 @@ EXECUTIVE SUMMARY
 
 This comprehensive validation playbook addresses ${companyName}'s 3 core assumptions and 5 key risks through structured testing approaches across three sprint investment levels. The analysis reveals which assumptions can be validated through desk research alone versus requiring primary customer research.
 
-Based on ${companyName}'s current ${currentStage} stage and ${fundingStage} funding status, the recommended approach balances validation rigor with resource constraints. Each assumption and risk includes specific testing methodologies tailored to Discovery ($5,000), Feasibility ($15,000), and Validation ($35,000) sprint tiers.
+Based on ${companyName}'s current ${currentStage} stage, the recommended approach balances validation rigor with resource constraints. Each assumption and risk includes specific testing methodologies tailored to Discovery ($5,000), Feasibility ($15,000), and Validation ($35,000) sprint tiers.
 
 KEY FINDINGS:
 
