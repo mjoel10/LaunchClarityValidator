@@ -1,0 +1,125 @@
+Market Sizing Analysis module that generates a comprehensive report matching this professional standard. The module should:
+
+Generate a detailed 2,000-2,500 word report with these exact sections:
+
+Executive Summary (200-300 words)
+Total Addressable Market (TAM) with subsections:
+
+Market Characteristics (user base, revenue stage, key segments, current challenges)
+TAM Calculation with clear formula presentation
+
+
+Serviceable Available Market (SAM)
+
+Target user identification and rationale
+SAM Calculation with assumptions
+
+
+Serviceable Obtainable Market (SOM)
+
+Realistic adoption rate analysis
+SOM Calculation with first-year projections
+
+
+Customer Overlap and Integration Adoption (for partnerships)
+
+Overlap analysis
+Adoption dynamics with specific pain points and time/cost savings
+
+
+Revenue Opportunity
+
+Pricing strategy justification
+Multi-year revenue projections
+
+
+Partnership-Specific Market Dynamics (if applicable)
+
+Competitive landscape analysis
+Strategic advantages
+
+
+Actionable Insights and Recommendations
+
+Marketing and outreach strategies
+User education and support plans
+Continuous improvement roadmap
+
+
+
+
+Use professional formatting:
+
+Bold section headers
+Numbered subsections (1.1, 1.2, etc.)
+Clear mathematical formulas using LaTeX-style notation
+Specific percentages and dollar amounts
+Bullet points for key characteristics
+
+
+Include specific calculations:
+
+TAM = Total Users × Monthly Pricing × 12
+SAM = Target Users × Monthly Pricing × 12
+SOM = SAM × Adoption Rate
+Show all numbers clearly (e.g., '$3,150,000' not just '3.15M')
+
+
+For partnerships, emphasize:
+
+Integration benefits and synergies
+Time savings (e.g., '5-8 hours monthly')
+Error reduction rates
+Specific user segments who benefit most
+
+
+Maintain consultant-quality language throughout, avoiding generic statements and including specific, actionable insights.
+CRITICAL FORMATTING REQUIREMENTS - Use this EXACT format:
+
+MARKET SIZING ANALYSIS
+[Company Name] - [Partnership Name if applicable]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EXECUTIVE SUMMARY
+[First paragraph of executive summary with clear line breaks between paragraphs]
+[Second paragraph continuing the summary]
+KEY FINDINGS:
+
+Total Addressable Market (TAM): $X,XXX,XXX
+Serviceable Available Market (SAM): $X,XXX,XXX
+Serviceable Obtainable Market (SOM): $X,XXX,XXX
+Year 1 Projected Adoption Rate: XX%
+Year 1 Projected Revenue: $X,XXX,XXX
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+TOTAL ADDRESSABLE MARKET (TAM)
+
+The Total Addressable Market represents...
+Market Characteristics:
+
+User Base: XX,XXX users
+Revenue Stage: $XM - $XM
+Key Segments: [List segments]
+Current Pain Points: [List pain points]
+
+TAM Calculation:
+─────────────────
+TAM = Total Potential Users × Monthly Price × 12 months
+TAM = XX,XXX × $XX × 12
+TAM = $X,XXX,XXX
+[Continue with this format throughout]
+NEVER USE:
+
+Markdown headers (#, ##, ###)
+LaTeX notation ([ ])
+HTML tags
+Inline formatting that won't copy/paste well
+
+ALWAYS USE:
+
+ALL CAPS for main headers
+Line separators (━━━ for major sections, ─── for subsections)
+Bullet points (•) not dashes or asterisks
+Clear white space between sections
+Numbers formatted with commas ($1,234,567)
+Simple math notation (× not \times, = not \equals)"

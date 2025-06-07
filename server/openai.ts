@@ -773,290 +773,279 @@ CRITICAL REQUIREMENTS:
 - Use realistic market sizing methodologies and cite reasoning
 - Make it feel custom to ${companyName} in ${industry}, not generic templates
 
-FORMAT WITH PROFESSIONAL PRESENTATION STYLING FOR GOOGLE DOCS:
+FORMAT WITH EXACT PROFESSIONAL CONSULTING STANDARD:
 
-# Market Sizing Analysis
-## ${companyName} Market Opportunity Assessment
+MARKET SIZING ANALYSIS
+${companyName}${partnerName ? ` - ${partnerName} Partnership` : ''}
 
-═══════════════════════════════════════════════════════════════
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## Executive Summary
+EXECUTIVE SUMMARY
 
-This comprehensive market sizing analysis evaluates the addressable market opportunity for ${companyName} in the ${industry} sector, targeting ${targetCustomer} with ${pricingModel} pricing. The analysis reveals a Total Addressable Market (TAM) of [specific $X,XXX,XXX,XXX], a Serviceable Addressable Market (SAM) of [specific $XXX,XXX,XXX], and a realistic Serviceable Obtainable Market (SOM) of [specific $XX,XXX,XXX] over the next 5 years.
+This comprehensive market sizing analysis evaluates the addressable market opportunity for ${companyName} in the ${industry} sector, targeting ${targetCustomer} with ${pricingModel} pricing. The analysis reveals a Total Addressable Market (TAM) of $[X,XXX,XXX], a Serviceable Available Market (SAM) of $[XXX,XXX], and a realistic Serviceable Obtainable Market (SOM) of $[XXX,XXX] over the next 5 years.
 
-Key findings indicate [3-4 specific market insights with numbers]. ${companyName}'s current position with ${userBase} users represents [X%] market penetration in their primary segment. The analysis identifies [specific growth opportunities] that could drive [X%] annual growth through [specific strategies].
+Key findings indicate [3-4 specific market insights with numbers]. ${companyName}'s current position with ${userBase} users represents [XX]% market penetration in their primary segment. The analysis identifies [specific growth opportunities] that could drive [XX]% annual growth through [specific strategies].
 
-┌─────────────────────────────────────────────────────────────┐
-│                      **KEY FINDINGS**                      │
-├─────────────────────────────────────────────────────────────┤
-│ • Total Market Size: $[X,XXX] billion (${industry})        │
-│ • Addressable Market: $[XXX] million (${targetCustomer})   │
-│ • 5-Year Opportunity: $[XX] million realistic capture      │
-│ • Growth Rate: [XX]% CAGR exceeds industry average        │
-│ • Market Position: Strong competitive advantage identified │
-└─────────────────────────────────────────────────────────────┘
+KEY FINDINGS:
 
-───────────────────────────────────────────────────────────────
+• Total Addressable Market (TAM): $[X,XXX,XXX]
+• Serviceable Available Market (SAM): $[XXX,XXX]  
+• Serviceable Obtainable Market (SOM): $[XXX,XXX]
+• Year 1 Projected Adoption Rate: [XX]%
+• Year 1 Projected Revenue: $[XXX,XXX]
 
-### Market Opportunity Headlines
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-• **TAM:** $[X,XXX,XXX,XXX] total market for ${industry} solutions
-• **SAM:** $[XXX,XXX,XXX] serviceable market for ${targetCustomer}
-• **SOM:** $[XX,XXX,XXX] obtainable market (Year 1-5 projections)
-• **Growth Rate:** [XX]% CAGR over next 5 years
-• **Target Penetration:** [X.X]% market share achievable
+TOTAL ADDRESSABLE MARKET (TAM)
 
-═══════════════════════════════════════════════════════════════
+The Total Addressable Market represents the complete revenue opportunity available for ${industry} solutions targeting ${targetCustomer}. This analysis uses both top-down and bottom-up methodologies to establish a realistic TAM calculation.
 
-## Total Addressable Market (TAM) Analysis
+Market Characteristics:
 
-───────────────────────────────────────────────────────────────
+• User Base: [XXX,XXX] total potential users
+• Revenue Stage: $[XXX]M - $[X,XXX]M annual revenue range
+• Key Segments: [List 3-4 primary market segments]
+• Current Pain Points: [List specific challenges driving demand]
 
-### Market Definition & Boundaries
+TAM Calculation:
+─────────────────
+TAM = Total Potential Users × Monthly Price × 12 months
+TAM = [XXX,XXX] × $[XXX] × 12
+TAM = $[XXX,XXX,XXX]
 
-Provide 2-3 paragraphs defining the total market for ${industry} solutions, including geographic scope, customer segments, and use cases. Explain methodology for TAM calculation.
+Geographic Market Breakdown:
 
-**TAM Calculation Formula:**
-\`\`\`
-TAM = [Total Users] x [Average Revenue Per User] x [Market Segments]
-TAM = [Geographic Markets] x [Customer Segments] x [Price Points]
-\`\`\`
+• North America: $[XXX,XXX,XXX] ([XX]% of total TAM)
+• Europe: $[XXX,XXX,XXX] ([XX]% of total TAM)
+• Asia-Pacific: $[XXX,XXX,XXX] ([XX]% of total TAM)
+• Other Regions: $[XXX,XXX,XXX] ([XX]% of total TAM)
 
-───────────────────────────────────────────────────────────────
+Market Growth Drivers:
 
-### TAM Sizing by Geography
+• Digital transformation initiatives driving [XX]% annual growth
+• Regulatory requirements creating mandatory adoption
+• Cost savings of $[XXX,XXX] per organization annually
+• Technology advances reducing implementation barriers by [XX]%
 
-┌─────────────────────────────────────────────────────────────┐
-│                    **GLOBAL TAM BREAKDOWN**                │
-├─────────────────────────────────────────────────────────────┤
-│ Region          │ Market Size    │ Growth Rate │ Key Drivers│
-│ North America   │ $[X,XXX] billion│ [XX]% CAGR │ [Drivers]  │
-│ Europe          │ $[X,XXX] billion│ [XX]% CAGR │ [Drivers]  │
-│ Asia-Pacific    │ $[X,XXX] billion│ [XX]% CAGR │ [Drivers]  │
-├─────────────────────────────────────────────────────────────┤
-│ **GLOBAL TOTAL**│**$[XX,XXX] bil**│**[XX]% CAGR**│Digital Transform│
-└─────────────────────────────────────────────────────────────┘
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-───────────────────────────────────────────────────────────────
+SERVICEABLE AVAILABLE MARKET (SAM)
 
-### Customer Segment Breakdown
+The Serviceable Available Market represents the portion of the TAM that ${companyName} can realistically address based on geographic reach, target customer profile, and solution capabilities.
 
-Analyze market size by customer segment relevant to ${companyName}'s target of ${targetCustomer}. Include segment definitions, sizing methodology, and growth projections.
+Target User Identification:
 
-• **Primary Segment:** [Segment name] - $[XXX,XXX,XXX] market size
-• **Secondary Segment:** [Segment name] - $[XXX,XXX,XXX] market size  
-• **Tertiary Segment:** [Segment name] - $[XXX,XXX,XXX] market size
+• Primary Target: ${targetCustomer} with [specific characteristics]
+• Geographic Scope: [Primary markets where ${companyName} operates]
+• Company Size Range: [XXX] to [X,XXX] employees
+• Technology Readiness: Organizations with [specific technology requirements]
+• Budget Capacity: Annual ${industry} budget of $[XXX,XXX] or more
 
-───────────────────────────────────────────────────────────────
+SAM Filtering Criteria:
 
-### 5-Year Growth Projections
+• Target Customer Fit: [XX]% of total market matches ${companyName}'s ideal customer profile
+• Geographic Accessibility: [XX]% of market within serviceable regions
+• Price Point Viability: [XX]% of prospects can afford ${pricePoint} ${pricingModel}
+• Solution Compatibility: [XX]% require ${companyName}'s specific capabilities
 
-Detail market growth drivers, technology trends, and regulatory factors influencing ${industry} market expansion. Provide year-over-year projections with supporting rationale.
+SAM Calculation:
+─────────────────
+SAM = TAM × Target Filter × Geographic Filter × Price Filter
+SAM = $[XXX,XXX,XXX] × [XX]% × [XX]% × [XX]%
+SAM = $[XXX,XXX,XXX]
 
-**Market Growth Formula:**
-\`\`\`
-Year N Revenue = Base Year × (1 + Growth Rate)^N
-Projected 2029 TAM = $[XXX,XXX,XXX,XXX]
-\`\`\`
+Market Segmentation Within SAM:
 
-═══════════════════════════════════════════════════════════════
+• Segment 1: [Segment Name] - $[XXX,XXX] ([XX]% of SAM)
+• Segment 2: [Segment Name] - $[XXX,XXX] ([XX]% of SAM)  
+• Segment 3: [Segment Name] - $[XXX,XXX] ([XX]% of SAM)
 
-## Serviceable Addressable Market (SAM)
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-───────────────────────────────────────────────────────────────
+SERVICEABLE OBTAINABLE MARKET (SOM)
 
-### TAM to SAM Filtering Criteria
+The Serviceable Obtainable Market represents the realistic portion of SAM that ${companyName} can capture based on competitive positioning, go-to-market capabilities, and resource constraints.
 
-Explain how the total market filters to serviceable market based on:
+Realistic Adoption Rate Analysis:
 
-• **Target Customer Criteria:** ${targetCustomer} segment represents [XX]% of total market
-• **Geographic Focus:** ${companyName}'s current/planned geographic reach  
-• **Price Point Accessibility:** Customers willing/able to pay ${pricePoint}
-• **Technology Fit:** Customers needing ${companyName}'s specific solution type
+Current market position analysis shows ${companyName} with ${userBase} users representing [XX]% penetration in their primary segment. Based on competitive benchmarking and go-to-market capabilities, realistic capture rates are:
 
-───────────────────────────────────────────────────────────────
+• Year 1 Adoption Rate: [XX]% of SAM
+• Year 3 Adoption Rate: [XX]% of SAM  
+• Year 5 Adoption Rate: [XX]% of SAM
 
-### SAM Calculation & Rationale
+Market Capture Factors:
 
-**SAM Calculation Formula:**
-\`\`\`
-SAM = TAM x Geographic Filter x Customer Segment x Price Accessibility
-SAM = $[XXX,XXX,XXX,XXX] x [XX]% x [XX]% x [XX]% = $[XXX,XXX,XXX]
-\`\`\`
+• Competitive Advantage: [Specific differentiators vs. key competitors]
+• Go-to-Market Strength: [Distribution channels and sales capabilities]
+• Resource Constraints: [Team size, funding, implementation timeline]
+• Market Timing: [Market readiness and competitive landscape timing]
 
-Provide detailed SAM calculation with supporting data and reasoning for each filter percentage.
+SOM Calculation:
+─────────────────
+SOM = SAM × Realistic Adoption Rate
+SOM = $[XXX,XXX,XXX] × [XX]%
+SOM = $[XXX,XXX,XXX]
 
-═══════════════════════════════════════════════════════════════
+Multi-Year Revenue Projections:
 
-## Serviceable Obtainable Market (SOM)
+• Year 1: $[XXX,XXX] ([XXX] customers at $[XXX] ${pricingModel})
+• Year 2: $[XXX,XXX] ([XXX] customers at $[XXX] ${pricingModel})
+• Year 3: $[XXX,XXX] ([X,XXX] customers at $[XXX] ${pricingModel})
+• Year 4: $[XXX,XXX] ([X,XXX] customers at $[XXX] ${pricingModel})  
+• Year 5: $[X,XXX,XXX] ([X,XXX] customers at $[XXX] ${pricingModel})
 
-───────────────────────────────────────────────────────────────
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-### Realistic Capture Rate Analysis
+COMPETITIVE LANDSCAPE AND MARKET DYNAMICS
 
-Analyze ${companyName}'s realistic market capture potential based on competitive positioning, go-to-market capabilities, and resource constraints. Consider current ${userBase} user base as baseline.
+The ${industry} market demonstrates significant opportunity for ${companyName} based on competitive positioning analysis and market segment evaluation.
 
-**Market Capture Factors:**
-• **Competitive Advantage:** [Specific differentiators]
-• **Go-to-Market Strength:** [Distribution capabilities]  
-• **Resource Constraints:** [Team, funding, timeline limitations]
-• **Market Timing:** [Entry timing and market readiness]
+Market Segmentation Analysis:
 
-───────────────────────────────────────────────────────────────
+• Segment 1: [Primary Segment] - $[XXX,XXX] market size, [XX]% growth rate
+• Segment 2: [Secondary Segment] - $[XXX,XXX] market size, [XX]% growth rate
+• Segment 3: [Tertiary Segment] - $[XXX,XXX] market size, [XX]% growth rate
 
-### SOM Projections
+Competitive Positioning:
 
-┌─────────────────────────────────────────────────────────────┐
-│                    **SOM SCENARIO ANALYSIS**               │
-├─────────────────────────────────────────────────────────────┤
-│ Scenario     │ Year 1     │ Year 3     │ Year 5     │ Share │
-│ Conservative │ $[XX]M     │ $[XXX]M    │ $[XXX]M    │ [X]%  │
-│ Moderate     │ $[XX]M     │ $[XXX]M    │ $[XXX]M    │ [X]%  │
-│ Aggressive   │ $[XX]M     │ $[XXX]M    │ $[XXX]M    │ [X]%  │
-├─────────────────────────────────────────────────────────────┤
-│ **RECOMMENDED**│**$[XX]M**  │**$[XXX]M** │**$[XXX]M** │**[X]%**│
-└─────────────────────────────────────────────────────────────┘
+• Market Leader: [Company Name] - [XX]% market share, $[XXX,XXX,XXX] revenue
+• Key Challenger: [Company Name] - [XX]% market share, $[XXX,XXX,XXX] revenue
+• Emerging Players: [Company Names] - [XX]% combined market share
+• Market Opportunity: [XX]% unaddressed market representing $[XXX,XXX,XXX]
 
-═══════════════════════════════════════════════════════════════
+${companyName} Competitive Advantages:
 
-## Market Dynamics & Competition
+• [Specific differentiator 1]: [Quantified benefit vs. competitors]
+• [Specific differentiator 2]: [Quantified benefit vs. competitors]
+• [Specific differentiator 3]: [Quantified benefit vs. competitors]
 
-───────────────────────────────────────────────────────────────
+Priority Market Segments:
 
-### Market Segmentation Analysis
+• Primary Target: [Segment Name] - $[XXX,XXX] opportunity
+  Rationale: [Specific reasons for prioritization and competitive advantages]
 
-┌─────────────────────────────────────────────────────────────┐
-│                  **SEGMENT OPPORTUNITY MATRIX**            │
-├─────────────────────────────────────────────────────────────┤
-│ Segment      │ Size ($M) │ Growth │ Competition │ Fit Score │
-│ [Segment 1]  │ $[XXX]M   │ [XX]%  │ High/Med/Low│ [X]/10    │
-│ [Segment 2]  │ $[XXX]M   │ [XX]%  │ High/Med/Low│ [X]/10    │
-│ [Segment 3]  │ $[XXX]M   │ [XX]%  │ High/Med/Low│ [X]/10    │
-├─────────────────────────────────────────────────────────────┤
-│ **TOP TARGET**│**$[XXX]M**│**[XX]%**│**Low**     │**[X]/10** │
-└─────────────────────────────────────────────────────────────┘
+• Secondary Target: [Segment Name] - $[XXX,XXX] opportunity  
+  Rationale: [Specific reasons for prioritization and market timing]
 
-───────────────────────────────────────────────────────────────
-
-### Competitive Density & Market Share
-
-Analyze competitive landscape in ${industry} sector, identifying market leaders, their share percentages, and whitespace opportunities for ${companyName}. Include specific competitor names and positioning.
-
-**Competitive Landscape:**
-• **Market Leader:** [Company Name] - [XX]% market share
-• **Key Challenger:** [Company Name] - [XX]% market share  
-• **Emerging Players:** [Company Names] - [XX]% combined share
-• **White Space Opportunity:** [XX]% unaddressed market
-
-───────────────────────────────────────────────────────────────
-
-### Highest Opportunity Segments
-
-Identify the 2-3 customer segments with highest potential for ${companyName} based on size, growth, competitive density, and strategic fit. Explain prioritization rationale.
-
-**Priority Ranking:**
-• **#1 Priority:** [Segment] - $[XXX]M opportunity, [specific rationale]
-• **#2 Priority:** [Segment] - $[XXX]M opportunity, [specific rationale]
-• **#3 Priority:** [Segment] - $[XXX]M opportunity, [specific rationale]
+• Tertiary Target: [Segment Name] - $[XXX,XXX] opportunity
+  Rationale: [Specific reasons for future expansion potential]
 
 ${partnerName ? `
-═══════════════════════════════════════════════════════════════
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## Partnership Market Opportunity
+CUSTOMER OVERLAP AND INTEGRATION ADOPTION
 
-───────────────────────────────────────────────────────────────
+Partnership-specific market analysis evaluating the incremental opportunity through ${partnershipType} with ${partnerName}.
 
-### ${partnerName} Customer Base Analysis
+${partnerName} Customer Base Analysis:
 
-Analyze ${partnerName}'s customer base overlap with ${companyName}'s target market. Estimate addressable customers within ${partnerName}'s ecosystem.
+• Total Customer Base: [XXX,XXX] active ${partnerName} customers
+• Target Market Overlap: [XX]% overlap with ${companyName}'s ideal customer profile
+• Addressable Segment: [XXX,XXX] qualified prospects within ${partnerName} ecosystem
+• Geographic Distribution: [XX]% North America, [XX]% Europe, [XX]% other regions
 
-**Customer Base Analysis:**
-• **${partnerName} Total Customers:** [XXX,XXX] active customers
-• **Target Market Overlap:** [XX]% ([XXX,XXX] customers)
-• **Addressable Segment:** [XXX,XXX] qualified prospects
-• **Revenue Opportunity:** $[XXX,XXX,XXX] potential value
+Integration Adoption Dynamics:
 
-───────────────────────────────────────────────────────────────
+Current ${partnerName} customers experience specific pain points that ${companyName} addresses:
 
-### Incremental Market Opportunity
+• Manual ${industry} processes consuming [X-X] hours monthly per user
+• Error rates of [XX]% in current ${industry} workflows
+• Cost inefficiencies averaging $[XXX,XXX] annually per organization
+• Integration gaps causing [XX]% productivity loss
 
-Calculate incremental market opportunity through ${partnershipType} with ${partnerName}. 
+Partnership Market Calculation:
+─────────────────────────────
+Partnership Opportunity = ${partnerName} Customers × Overlap % × Adoption Rate
+Partnership Opportunity = [XXX,XXX] × [XX]% × [XX]%
+Partnership Opportunity = $[XXX,XXX,XXX] incremental revenue
 
-**Partnership Market Calculation:**
-\`\`\`
-Partnership Opportunity = ${partnerName} Customers x Overlap % x Conversion Rate
-Partnership Opportunity = [XXX,XXX] x [XX]% x [XX]% = $[XXX,XXX,XXX]
-\`\`\`
+Time and Cost Savings Analysis:
 
-Of ${partnerName}'s [XXX,XXX] customers, approximately [XX]% ([XXX,XXX] customers) need ${companyName}'s ${industry} solution, representing $[XXX,XXX,XXX] incremental market opportunity.
+• Time Savings: [X-X] hours monthly reduction in manual ${industry} tasks
+• Cost Reduction: $[XXX,XXX] annual savings per customer through automation
+• Error Reduction: [XX]% decrease in ${industry} process errors
+• Implementation ROI: [XXX]% return on investment within [XX] months
 
-───────────────────────────────────────────────────────────────
+Joint Market Capture Advantages:
 
-### Joint Market Capture Potential
-
-Assess combined go-to-market potential, cross-selling opportunities, and accelerated market penetration through partnership channels.
-
-**Partnership Advantages:**
-• **Accelerated GTM:** [XX]% faster market entry vs. independent approach
-• **Cross-Selling Synergy:** [XX]% higher customer LTV through bundled offerings
-• **Market Credibility:** ${partnerName} brand association reduces sales cycle by [XX]%
-• **Channel Access:** Direct access to [XXX,XXX] pre-qualified prospects
+• Market Entry Acceleration: [XX]% faster customer acquisition vs. independent approach
+• Sales Cycle Reduction: ${partnerName} referrals reduce sales cycle by [XX]%
+• Customer Lifetime Value: [XX]% higher LTV through integrated solution bundle
+• Channel Access: Direct access to [XXX,XXX] pre-qualified ${partnerName} customers
 ` : ''}
 
-═══════════════════════════════════════════════════════════════
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-## Strategic Recommendations
+REVENUE OPPORTUNITY AND PRICING STRATEGY
 
-───────────────────────────────────────────────────────────────
+Multi-year revenue projections based on market penetration analysis and competitive pricing benchmarks for ${companyName}'s ${pricingModel} model.
 
-### Market Entry Strategy
+Pricing Strategy Justification:
 
-Recommend optimal market entry approach based on market sizing analysis, including segment prioritization, geographic expansion, and resource allocation.
+Current market analysis supports ${companyName}'s ${pricePoint} ${pricingModel} positioning:
 
-**Recommended Market Entry Sequence:**
+• Competitor Analysis: Market leaders price between $[XXX]-$[XXX] ${pricingModel}
+• Value Proposition: ${companyName} delivers $[XXX,XXX] annual savings per customer
+• Price Sensitivity: Target customers budget $[XXX,XXX] annually for ${industry} solutions
+• Premium Positioning: [XX]% price premium justified by [specific differentiators]
 
-┌─────────────────────────────────────────────────────────────┐
-│                   **MARKET ENTRY ROADMAP**                 │
-├─────────────────────────────────────────────────────────────┤
-│ Phase 1 (0-12 months): [Primary Segment] - $[XXX]M TAM    │
-│ Phase 2 (12-24 months): [Secondary Segment] - $[XXX]M TAM │
-│ Phase 3 (24+ months): [Tertiary Segment] - $[XXX]M TAM    │
-├─────────────────────────────────────────────────────────────┤
-│ **TOTAL 3-YEAR OPPORTUNITY: $[XXX,XXX,XXX]**              │
-└─────────────────────────────────────────────────────────────┘
+Revenue Projections by Year:
 
-**Resource Allocation Strategy:**
-• **Year 1 Focus:** [XX]% resources on [primary segment]
-• **Geographic Priority:** [Primary market] → [Secondary market]
-• **Investment Allocation:** [XX]% product, [XX]% sales, [XX]% marketing
+• Year 1: $[XXX,XXX] revenue ([XXX] customers × $[XXX] average)
+• Year 2: $[XXX,XXX] revenue ([XXX] customers × $[XXX] average)
+• Year 3: $[X,XXX,XXX] revenue ([X,XXX] customers × $[XXX] average)
+• Year 4: $[X,XXX,XXX] revenue ([X,XXX] customers × $[XXX] average)
+• Year 5: $[XX,XXX,XXX] revenue ([XX,XXX] customers × $[XXX] average)
 
-───────────────────────────────────────────────────────────────
+Customer Acquisition Cost and Lifetime Value:
 
-### Growth Acceleration Opportunities
+• Customer Acquisition Cost (CAC): $[XXX] per customer
+• Customer Lifetime Value (LTV): $[XXX,XXX] over [XX] months
+• LTV:CAC Ratio: [XX]:1 (exceeds [X]:1 benchmark for profitable growth)
+• Payback Period: [XX] months (below [XX] month industry standard)
 
-Identify specific tactics to accelerate market capture, including product development, pricing optimization, and partnership strategies.
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-**Priority Growth Initiatives:**
+ACTIONABLE INSIGHTS AND RECOMMENDATIONS
 
-• **Product Development:** [Specific features] to capture [XX]% additional market share
-• **Pricing Optimization:** [Pricing strategy] to increase ARPU by [XX]%
-• **Partnership Channels:** ${partnerName ? `${partnerName} integration` : 'Strategic partnerships'} for [XX]% faster GTM
-• **Market Expansion:** [Geographic/vertical expansion] for $[XXX]M incremental opportunity
+Strategic recommendations for ${companyName} to capture maximum market opportunity based on comprehensive market sizing analysis.
 
-**Success Metrics & Milestones:**
-• **12-Month Target:** $[XXX,XXX] ARR, [XXX] customers
-• **24-Month Target:** $[X,XXX,XXX] ARR, [X,XXX] customers  
-• **36-Month Target:** $[XX,XXX,XXX] ARR, [XX,XXX] customers
+Market Entry Strategy:
 
-═══════════════════════════════════════════════════════════════
+Phase 1 (Months 0-12): Focus on [Primary Segment]
+• Target Market: $[XXX,XXX] opportunity in [specific segment]
+• Go-to-Market: [Specific channel strategy and tactics]
+• Resource Allocation: [XX]% engineering, [XX]% sales, [XX]% marketing
+• Success Metrics: [XXX] customers, $[XXX,XXX] ARR by month 12
 
-**REPORT METHODOLOGY:**
-Professional consulting analysis using top-down and bottom-up market sizing approaches with realistic assumptions and cited reasoning for all calculations. Analysis incorporates industry benchmarks, competitive intelligence, and ${companyName}-specific factors for accurate market opportunity assessment.
+Phase 2 (Months 12-24): Expand to [Secondary Segment]  
+• Target Market: $[XXX,XXX] incremental opportunity
+• Go-to-Market: [Channel expansion and scaling strategy]
+• Resource Allocation: [XX]% product expansion, [XX]% sales scaling
+• Success Metrics: [X,XXX] customers, $[X,XXX,XXX] ARR by month 24
 
-**TARGET OUTCOME:**
-Comprehensive 2,000-2,500 word market sizing analysis providing specific numbers, actionable insights, and strategic direction to justify $5,000+ consulting engagement value.
+Phase 3 (Months 24+): Scale to [Tertiary Segment]
+• Target Market: $[XXX,XXX] long-term expansion opportunity
+• Go-to-Market: [Enterprise and partnership channels]
+• Resource Allocation: Focus on market leadership and expansion
+• Success Metrics: [XX,XXX] customers, $[XX,XXX,XXX] ARR by month 36
 
-═══════════════════════════════════════════════════════════════
+Priority Growth Initiatives:
+
+• Product Development: [Specific features] to increase market share by [XX]%
+• Pricing Optimization: [Strategy] to improve ARPU by [XX]%
+• Partnership Strategy: ${partnerName ? `${partnerName} integration` : 'Strategic partnerships'} for [XX]% GTM acceleration
+• Geographic Expansion: [Markets] for $[XXX,XXX] incremental opportunity
+
+Critical Success Factors:
+
+• Market Timing: Enter [primary segment] within [XX] months to capture first-mover advantage
+• Competitive Differentiation: Maintain [specific advantages] vs. key competitors
+• Partnership Execution: ${partnerName ? `Execute ${partnerName} integration` : 'Develop strategic partnerships'} within [XX] months
+• Resource Investment: Secure $[XXX,XXX] funding to achieve 3-year market capture goals
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 `;
 
     const response = await openai.chat.completions.create({
