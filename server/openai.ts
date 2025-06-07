@@ -773,67 +773,149 @@ CRITICAL REQUIREMENTS:
 - Use realistic market sizing methodologies and cite reasoning
 - Make it feel custom to ${companyName} in ${industry}, not generic templates
 
-FORMAT WITH PROPER MARKDOWN FOR GOOGLE DOCS TRANSFER:
+FORMAT WITH PROFESSIONAL PRESENTATION STYLING FOR GOOGLE DOCS:
 
 # Market Sizing Analysis
 ## ${companyName} Market Opportunity Assessment
 
+═══════════════════════════════════════════════════════════════
+
 ## Executive Summary
 
-This comprehensive market sizing analysis evaluates the addressable market opportunity for ${companyName} in the ${industry} sector, targeting ${targetCustomer} with ${pricingModel} pricing. The analysis reveals a Total Addressable Market (TAM) of [specific $X billion], a Serviceable Addressable Market (SAM) of [specific $X million], and a realistic Serviceable Obtainable Market (SOM) of [specific $X million] over the next 5 years.
+This comprehensive market sizing analysis evaluates the addressable market opportunity for ${companyName} in the ${industry} sector, targeting ${targetCustomer} with ${pricingModel} pricing. The analysis reveals a Total Addressable Market (TAM) of [specific $X,XXX,XXX,XXX], a Serviceable Addressable Market (SAM) of [specific $XXX,XXX,XXX], and a realistic Serviceable Obtainable Market (SOM) of [specific $XX,XXX,XXX] over the next 5 years.
 
 Key findings indicate [3-4 specific market insights with numbers]. ${companyName}'s current position with ${userBase} users represents [X%] market penetration in their primary segment. The analysis identifies [specific growth opportunities] that could drive [X%] annual growth through [specific strategies].
 
+┌─────────────────────────────────────────────────────────────┐
+│                      **KEY FINDINGS**                      │
+├─────────────────────────────────────────────────────────────┤
+│ • Total Market Size: $[X,XXX] billion (${industry})        │
+│ • Addressable Market: $[XXX] million (${targetCustomer})   │
+│ • 5-Year Opportunity: $[XX] million realistic capture      │
+│ • Growth Rate: [XX]% CAGR exceeds industry average        │
+│ • Market Position: Strong competitive advantage identified │
+└─────────────────────────────────────────────────────────────┘
+
+───────────────────────────────────────────────────────────────
+
 ### Market Opportunity Headlines
-- **TAM:** $[X] billion total market for ${industry} solutions
-- **SAM:** $[X] million serviceable market for ${targetCustomer}
-- **SOM:** $[X] million obtainable market (Year 1-5 projections)
-- **Growth Rate:** [X]% CAGR over next 5 years
-- **Target Penetration:** [X]% market share achievable
+
+• **TAM:** $[X,XXX,XXX,XXX] total market for ${industry} solutions
+• **SAM:** $[XXX,XXX,XXX] serviceable market for ${targetCustomer}
+• **SOM:** $[XX,XXX,XXX] obtainable market (Year 1-5 projections)
+• **Growth Rate:** [XX]% CAGR over next 5 years
+• **Target Penetration:** [X.X]% market share achievable
+
+═══════════════════════════════════════════════════════════════
 
 ## Total Addressable Market (TAM) Analysis
 
+───────────────────────────────────────────────────────────────
+
 ### Market Definition & Boundaries
+
 Provide 2-3 paragraphs defining the total market for ${industry} solutions, including geographic scope, customer segments, and use cases. Explain methodology for TAM calculation.
 
+**TAM Calculation Formula:**
+\`\`\`
+TAM = [Total Users] x [Average Revenue Per User] x [Market Segments]
+TAM = [Geographic Markets] x [Customer Segments] x [Price Points]
+\`\`\`
+
+───────────────────────────────────────────────────────────────
+
 ### TAM Sizing by Geography
-| Region | Market Size | Growth Rate | Key Drivers |
-|--------|-------------|-------------|-------------|
-| North America | $[X] billion | [X]% CAGR | [Specific drivers] |
-| Europe | $[X] billion | [X]% CAGR | [Specific drivers] |
-| Asia-Pacific | $[X] billion | [X]% CAGR | [Specific drivers] |
-| **Global Total** | **$[X] billion** | **[X]% CAGR** | Digital transformation |
+
+┌─────────────────────────────────────────────────────────────┐
+│                    **GLOBAL TAM BREAKDOWN**                │
+├─────────────────────────────────────────────────────────────┤
+│ Region          │ Market Size    │ Growth Rate │ Key Drivers│
+│ North America   │ $[X,XXX] billion│ [XX]% CAGR │ [Drivers]  │
+│ Europe          │ $[X,XXX] billion│ [XX]% CAGR │ [Drivers]  │
+│ Asia-Pacific    │ $[X,XXX] billion│ [XX]% CAGR │ [Drivers]  │
+├─────────────────────────────────────────────────────────────┤
+│ **GLOBAL TOTAL**│**$[XX,XXX] bil**│**[XX]% CAGR**│Digital Transform│
+└─────────────────────────────────────────────────────────────┘
+
+───────────────────────────────────────────────────────────────
 
 ### Customer Segment Breakdown
+
 Analyze market size by customer segment relevant to ${companyName}'s target of ${targetCustomer}. Include segment definitions, sizing methodology, and growth projections.
 
+• **Primary Segment:** [Segment name] - $[XXX,XXX,XXX] market size
+• **Secondary Segment:** [Segment name] - $[XXX,XXX,XXX] market size  
+• **Tertiary Segment:** [Segment name] - $[XXX,XXX,XXX] market size
+
+───────────────────────────────────────────────────────────────
+
 ### 5-Year Growth Projections
+
 Detail market growth drivers, technology trends, and regulatory factors influencing ${industry} market expansion. Provide year-over-year projections with supporting rationale.
+
+**Market Growth Formula:**
+\`\`\`
+Year N Revenue = Base Year × (1 + Growth Rate)^N
+Projected 2029 TAM = $[XXX,XXX,XXX,XXX]
+\`\`\`
+
+═══════════════════════════════════════════════════════════════
 
 ## Serviceable Addressable Market (SAM)
 
+───────────────────────────────────────────────────────────────
+
 ### TAM to SAM Filtering Criteria
+
 Explain how the total market filters to serviceable market based on:
 
-- **Target Customer Criteria:** ${targetCustomer} segment represents [X]% of total market
-- **Geographic Focus:** ${companyName}'s current/planned geographic reach
-- **Price Point Accessibility:** Customers willing/able to pay ${pricePoint}
-- **Technology Fit:** Customers needing ${companyName}'s specific solution type
+• **Target Customer Criteria:** ${targetCustomer} segment represents [XX]% of total market
+• **Geographic Focus:** ${companyName}'s current/planned geographic reach  
+• **Price Point Accessibility:** Customers willing/able to pay ${pricePoint}
+• **Technology Fit:** Customers needing ${companyName}'s specific solution type
+
+───────────────────────────────────────────────────────────────
 
 ### SAM Calculation & Rationale
-Provide detailed SAM calculation: [Total market] × [Geographic filter %] × [Customer segment %] × [Price accessibility %] = $[X] million SAM. Explain each filter percentage with supporting data and reasoning.
+
+**SAM Calculation Formula:**
+\`\`\`
+SAM = TAM x Geographic Filter x Customer Segment x Price Accessibility
+SAM = $[XXX,XXX,XXX,XXX] x [XX]% x [XX]% x [XX]% = $[XXX,XXX,XXX]
+\`\`\`
+
+Provide detailed SAM calculation with supporting data and reasoning for each filter percentage.
+
+═══════════════════════════════════════════════════════════════
 
 ## Serviceable Obtainable Market (SOM)
 
+───────────────────────────────────────────────────────────────
+
 ### Realistic Capture Rate Analysis
+
 Analyze ${companyName}'s realistic market capture potential based on competitive positioning, go-to-market capabilities, and resource constraints. Consider current ${userBase} user base as baseline.
 
+**Market Capture Factors:**
+• **Competitive Advantage:** [Specific differentiators]
+• **Go-to-Market Strength:** [Distribution capabilities]  
+• **Resource Constraints:** [Team, funding, timeline limitations]
+• **Market Timing:** [Entry timing and market readiness]
+
+───────────────────────────────────────────────────────────────
+
 ### SOM Projections
-| Scenario | Year 1 | Year 3 | Year 5 | Market Share |
-|----------|--------|--------|--------|--------------|
-| Conservative | $[X]M | $[X]M | $[X]M | [X]% |
-| Moderate | $[X]M | $[X]M | $[X]M | [X]% |
-| Aggressive | $[X]M | $[X]M | $[X]M | [X]% |
+
+┌─────────────────────────────────────────────────────────────┐
+│                    **SOM SCENARIO ANALYSIS**               │
+├─────────────────────────────────────────────────────────────┤
+│ Scenario     │ Year 1     │ Year 3     │ Year 5     │ Share │
+│ Conservative │ $[XX]M     │ $[XXX]M    │ $[XXX]M    │ [X]%  │
+│ Moderate     │ $[XX]M     │ $[XXX]M    │ $[XXX]M    │ [X]%  │
+│ Aggressive   │ $[XX]M     │ $[XXX]M    │ $[XXX]M    │ [X]%  │
+├─────────────────────────────────────────────────────────────┤
+│ **RECOMMENDED**│**$[XX]M**  │**$[XXX]M** │**$[XXX]M** │**[X]%**│
+└─────────────────────────────────────────────────────────────┘
 
 ## Market Dynamics & Competition
 
