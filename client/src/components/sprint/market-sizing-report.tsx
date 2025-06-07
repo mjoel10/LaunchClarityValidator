@@ -44,9 +44,26 @@ export default function MarketSizingReport({ sprintId, intakeData }: MarketSizin
 
     setIsGenerating(true);
     try {
-      const response = await apiRequest('POST', `/api/sprints/${sprintId}/generate-market-sizing-report`);
+      const response = await fetch(`/api/sprints/${sprintId}/generate-market-sizing-report`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include'
+      });
+      
+      if (!response.ok) {
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+      }
+      
       const data = await response.json();
       setReport(data.report);
+      
+      // Refresh modules to show updated data
+      const modulesResponse = await fetch(`/api/sprints/${sprintId}/modules`, {
+        credentials: 'include'
+      });
+      
       toast({
         title: "Report Generated",
         description: "Market sizing analysis is ready. You can now copy it to your deliverable.",

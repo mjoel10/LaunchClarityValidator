@@ -472,15 +472,16 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "No intake data found for this sprint" });
       }
       
-      const report = await generateMarketSizingReport(intake);
+      const reportData = await generateMarketSizingReport(intake);
       
-      // Save to sprint module data
+      // Save to sprint module data with proper structure
       await storage.updateSprintModuleByType(sprintId, 'market_simulation', {
-        aiAnalysis: report,
+        aiAnalysis: reportData,
+        isCompleted: true,
         updatedAt: new Date(),
       });
       
-      res.json(report);
+      res.json(reportData);
     } catch (error: any) {
       console.error('Error generating market sizing report:', error);
       res.status(500).json({ message: "Failed to generate market sizing report: " + error.message });
