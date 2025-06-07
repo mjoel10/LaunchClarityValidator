@@ -52,6 +52,7 @@ import EnhancedMarketIntel from '@/components/sprint/enhanced-market-intel';
 import BlueOceanStrategy from '@/components/sprint/blue-ocean-strategy';
 import ImplementationRoadmap from '@/components/sprint/implementation-roadmap';
 import ActionPlans from '@/components/sprint/action-plans';
+import PartnershipViability from '@/components/sprint/partnership-viability';
 import { cn } from '@/lib/utils';
 
 const FEATURE_COMPONENTS = {
@@ -62,7 +63,7 @@ const FEATURE_COMPONENTS = {
   competitive_intelligence: CompetitiveIntelligence,
   risk_assessment: RiskAssessment,
   customer_voice_simulation: MarketSimulation, // Customer Voice uses Market Simulation component
-  partnership_viability: BusinessModelSimulator, // Partnership Viability uses Business Model component
+  partnership_viability: PartnershipViability,
   
   // Feasibility Sprint ($15K) - 4 additional modules
   light_customer_feedback: AsyncInterviews,
