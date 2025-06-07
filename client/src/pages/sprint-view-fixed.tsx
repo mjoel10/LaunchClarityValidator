@@ -213,7 +213,7 @@ export default function SprintView() {
   };
 
   const getModulesByTier = () => {
-    if (!modules) return { discovery: [], feasibility: [], validation: [] };
+    if (!modules || !Array.isArray(modules)) return { discovery: [], feasibility: [], validation: [] };
     
     // Discovery Sprint ($5K) - 6 core modules + 1 conditional partnership
     const discoveryModules = [
@@ -355,7 +355,7 @@ export default function SprintView() {
     );
   }
 
-  if (error || !sprint) {
+  if (error || !sprint || !modules) {
     return (
       <div className="min-h-screen bg-gray-50">
         <div className="flex items-center justify-center h-64">
@@ -367,12 +367,12 @@ export default function SprintView() {
 
   const modulesByTier = getModulesByTier();
   const isDiscoveryUnlocked = true; // Always unlocked for paid sprints
-  const isFeasibilityUnlocked = sprint.tier === 'feasibility' || sprint.tier === 'validation';
-  const isValidationUnlocked = sprint.tier === 'validation';
+  const isFeasibilityUnlocked = (sprint as any)?.tier === 'feasibility' || (sprint as any)?.tier === 'validation';
+  const isValidationUnlocked = (sprint as any)?.tier === 'validation';
 
   // Get correct module counts based on tier
   const getTierModuleCounts = () => {
-    switch (sprint?.tier) {
+    switch ((sprint as any)?.tier) {
       case 'discovery': return 7;
       case 'feasibility': return 11;
       case 'validation': return 16;
@@ -382,7 +382,7 @@ export default function SprintView() {
 
   // Get decision preview for header
   const getDecisionPreview = () => {
-    const completedModules = modules?.filter(m => m.isCompleted) || [];
+    const completedModules = (modules as any[])?.filter((m: any) => m.isCompleted) || [];
     const totalModules = getTierModuleCounts();
     const completionRate = (completedModules.length / totalModules) * 100;
     
@@ -447,10 +447,10 @@ export default function SprintView() {
           <div className="flex items-center justify-between">
             {/* Left Section - Company & Sprint Info */}
             <div className="flex-1">
-              <h1 className="text-4xl font-bold mb-1 tracking-tight">{sprint?.companyName || 'Company Name'}</h1>
+              <h1 className="text-4xl font-bold mb-1 tracking-tight">{(sprint as any)?.companyName || 'Company Name'}</h1>
               <p className="text-lg text-blue-100 font-medium">
-                {sprint?.tier?.charAt(0).toUpperCase() + sprint?.tier?.slice(1)} Sprint • 
-                ${sprint?.tier === 'discovery' ? '5,000' : sprint?.tier === 'feasibility' ? '15,000' : '35,000'}
+                {(sprint as any)?.tier?.charAt(0).toUpperCase() + (sprint as any)?.tier?.slice(1)} Sprint • 
+                ${(sprint as any)?.tier === 'discovery' ? '5,000' : (sprint as any)?.tier === 'feasibility' ? '15,000' : '35,000'}
               </p>
             </div>
             
@@ -523,9 +523,9 @@ export default function SprintView() {
                     />
                     <path
                       className={`${
-                        ((modules?.filter((m: any) => m.isCompleted).length || 0) / getTierModuleCounts()) * 100 >= 70 
+                        (((modules as any[])?.filter((m: any) => m.isCompleted).length || 0) / getTierModuleCounts()) * 100 >= 70 
                           ? 'text-emerald-400' 
-                          : ((modules?.filter((m: any) => m.isCompleted).length || 0) / getTierModuleCounts()) * 100 >= 50 
+                          : (((modules as any[])?.filter((m: any) => m.isCompleted).length || 0) / getTierModuleCounts()) * 100 >= 50 
                           ? 'text-amber-400'
                           : 'text-blue-400'
                       }`}
@@ -533,7 +533,7 @@ export default function SprintView() {
                       strokeWidth="3"
                       strokeLinecap="round"
                       fill="transparent"
-                      strokeDasharray={`${((modules?.filter((m: any) => m.isCompleted).length || 0) / getTierModuleCounts()) * 100}, 100`}
+                      strokeDasharray={`${(((modules as any[])?.filter((m: any) => m.isCompleted).length || 0) / getTierModuleCounts()) * 100}, 100`}
                       d="M18 2.0845
                         a 15.9155 15.9155 0 0 1 0 31.831
                         a 15.9155 15.9155 0 0 1 0 -31.831"
@@ -541,13 +541,13 @@ export default function SprintView() {
                   </svg>
                   <div className="absolute inset-0 flex items-center justify-center">
                     <span className="text-2xl font-bold text-white">
-                      {Math.round(((modules?.filter((m: any) => m.isCompleted).length || 0) / getTierModuleCounts()) * 100)}%
+                      {Math.round((((modules as any[])?.filter((m: any) => m.isCompleted).length || 0) / getTierModuleCounts()) * 100)}%
                     </span>
                   </div>
                 </div>
                 <div className="text-sm text-blue-100 font-medium mt-2">Sprint Complete</div>
                 <div className="text-xs text-blue-200 mt-1">
-                  {modules?.filter((m: any) => m.isCompleted).length || 0} of {getTierModuleCounts()} modules
+                  {(modules as any[])?.filter((m: any) => m.isCompleted).length || 0} of {getTierModuleCounts()} modules
                 </div>
               </div>
             </div>
@@ -563,7 +563,7 @@ export default function SprintView() {
               <CardHeader>
                 <CardTitle className="text-lg">Validation Features</CardTitle>
                 <CardDescription>
-                  16 total modules • {modules?.filter((m: any) => m.isCompleted).length || 0} completed
+                  16 total modules • {(modules as any[])?.filter((m: any) => m.isCompleted).length || 0} completed
                 </CardDescription>
               </CardHeader>
               <CardContent className="space-y-2">
