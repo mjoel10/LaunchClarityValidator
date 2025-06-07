@@ -1,0 +1,51 @@
+Update the generateAssumptionValidationPlaybook function in server/openai.ts. The current format is too confusing. Restructure the prompt to create a cleaner, more actionable report:
+
+Change the OpenAI prompt to:
+
+"Generate a clear, scannable Assumption & Risk Validation Playbook that shows SPECIFIC insights each module will deliver for the client's assumptions and risks.
+
+Format requirements:
+1. Remove all checkmarks (✓) - they're misleading
+2. Use clear headers without emojis
+3. Be SPECIFIC about deliverables, not vague promises
+4. Show concrete examples of what they'll learn
+
+Structure like this:
+
+ASSUMPTION & RISK VALIDATION PLAYBOOK
+[Company Name] - How We Validate Your Specific Assumptions
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+HOW EACH MODULE VALIDATES YOUR ASSUMPTIONS
+
+Your Assumption 1: [Their exact assumption text]
+
+MARKET SIZING ANALYSIS will reveal:
+- Specific market data point (e.g., 'Xero has 22% market share in creative sector')
+- Relevant trend (e.g., 'QuickBooks declining 5% yearly among photographers')
+- Validation insight (e.g., 'Your 30% assumption may be optimistic')
+
+COMPETITIVE INTELLIGENCE will show:
+- Which competitors offer what (e.g., '3 of 5 competitors are QuickBooks-only')
+- Pricing benchmarks (e.g., 'Xero integrations charge $12-18/month premium')
+- Market gaps (e.g., 'No competitor offers bi-directional sync')
+
+CUSTOMER VOICE SIMULATION will provide:
+- Sentiment percentages (e.g., '65% prefer QuickBooks due to familiarity')
+- Specific concerns (e.g., 'Learning curve is #1 objection to switching')
+- Price sensitivity (e.g., 'Resistance above $18/month')
+
+[Continue for each relevant module with SPECIFIC, not generic insights]
+
+For Feasibility/Validation sprints, show what ADDITIONAL validation each tier adds:
+
+FEASIBILITY ADDS:
+- 5 real customer interviews revealing: [specific insight types]
+- 1 demand test showing: [what it measures]
+
+VALIDATION ADDS:
+- 10-15 interviews providing: [statistical confidence level]
+- 2-3 demand tests proving: [market validation metrics]
+
+Focus on SPECIFIC insights and data points, not generic promises. Make it scannable and actionable. Show them exactly what intelligence they'll gain about their assumptions."

@@ -1184,7 +1184,7 @@ export async function generateAssumptionValidationPlaybook(intakeData: any) {
 
     console.log('A3. Creating prompt...');
     
-    const prompt = `Generate a personalized validation playbook for ${companyName} based on their specific assumptions and risks.
+    const prompt = `Generate a clear, scannable Assumption & Risk Validation Playbook that shows SPECIFIC insights each module will deliver for ${companyName}'s assumptions and risks.
 
 CLIENT'S SPECIFIC ASSUMPTIONS:
 ${assumptionsList}
@@ -1194,155 +1194,133 @@ ${risksList}
 
 COMPANY CONTEXT: ${companyName} - ${industry} company, ${currentStage} stage, ${businessModel} model, targeting ${targetCustomerDescription}, solving ${coreProblem}
 
-Create a detailed playbook that maps validation activities to our actual 16-module structure, showing how each module addresses THEIR SPECIFIC assumptions and risks. Use this exact format:
+Create a concrete, actionable playbook using this EXACT format:
 
 ASSUMPTION & RISK VALIDATION PLAYBOOK
-${companyName} Sprint Planning Guide
+${companyName} - How We Validate Your Specific Assumptions
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 EXECUTIVE SUMMARY
 
-This personalized validation playbook shows how our 16-module framework addresses ${companyName}'s specific assumptions and risks across Discovery ($5,000), Feasibility ($15,000), and Validation ($35,000) sprint tiers.
-
-KEY FINDINGS:
-• Most Critical Assumption: [Identify which of their 3 assumptions has highest business impact]
-• Highest Risk: [Identify which of their 5 risks poses biggest threat]
-• Recommended Sprint Tier: [Based on their stage and validation needs]
+MOST CRITICAL ASSUMPTION: [Identify which of their 3 assumptions has highest business impact and why]
+HIGHEST RISK: [Identify which of their 5 risks poses biggest threat and why]
+RECOMMENDED SPRINT TIER: [Discovery/Feasibility/Validation based on their needs]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-DISCOVERY SPRINT ($5K) - DESK RESEARCH ONLY
-Module-by-Module Validation for YOUR Assumptions
-
-🏢 INITIAL INTAKE - Captured Your Foundation
-✓ Documented your 3 core assumptions and 5 partnership risks
-✓ Established baseline for all subsequent validation activities
-
-📊 MARKET SIZING ANALYSIS - Validates: [Specify which of their assumptions this addresses]
-✓ TAM/SAM/SOM analysis specifically for ${targetCustomerDescription}
-✓ Addresses assumption: "${assumptions[0] || 'your market assumption'}"
-✓ Risk mitigation for: "${risks[0] || 'your market risk'}"
-
-🎯 ASSUMPTION TRACKER - This Validation Playbook
-✓ Detailed testing strategies for each of your specific assumptions
-✓ Risk mitigation framework for your 5 identified risks
-
-⚔️ COMPETITIVE INTELLIGENCE - Addresses: [Specify which assumption/risk]
-✓ Directly tests assumption: "${assumptions[1] || 'your competitive assumption'}"
-✓ Mitigates risk: "${risks[1] || 'your competitive risk'}"
-
-🛡️ RISK ASSESSMENT - Analyzes Your Specific Risks
-✓ Deep dive into: "${risks[2] || 'your operational risk'}"
-✓ Early warning systems for: "${risks[3] || 'your strategic risk'}"
-
-👥 CUSTOMER VOICE SIMULATION - Tests Through AI
-✓ Simulated customer responses to validate: "${assumptions[2] || 'your customer assumption'}"
-✓ Addresses concern: "${risks[4] || 'your customer risk'}"
-
-🤝 PARTNERSHIP VIABILITY - [Only if partnership toggle ON]
-✓ Partnership-specific validation for your business model
-✓ Risk assessment for partnership dependencies
-
-DISCOVERY SPRINT VALIDATION FOR YOUR ASSUMPTIONS:
+HOW EACH MODULE VALIDATES YOUR ASSUMPTIONS
 
 ASSUMPTION 1: "${assumptions[0] || 'Your first assumption'}"
-📍 Discovery Validation: [Detailed explanation of how Market Sizing Analysis and Competitive Intelligence modules validate this through desk research]
-📈 Success Metrics: [Specific criteria for validation]
-⚠️ Risk Indicators: [What would suggest this assumption is false]
+
+MARKET SIZING ANALYSIS will reveal:
+- Specific market data points (e.g., 'Xero has 22% market share in creative sector')
+- Relevant trends (e.g., 'QuickBooks declining 5% yearly among photographers')
+- Validation insights (e.g., 'Your 30% assumption may be optimistic based on adoption rates')
+
+COMPETITIVE INTELLIGENCE will show:
+- Which competitors offer what (e.g., '3 of 5 competitors are QuickBooks-only integrations')
+- Pricing benchmarks (e.g., 'Xero integrations charge $12-18/month premium over QuickBooks')
+- Market gaps (e.g., 'No competitor offers bi-directional sync with project management')
+
+CUSTOMER VOICE SIMULATION will provide:
+- Sentiment analysis (e.g., '65% prefer QuickBooks due to familiarity, 25% willing to switch')
+- Specific concerns (e.g., 'Learning curve is #1 objection, pricing #2')
+- Price sensitivity thresholds (e.g., 'Resistance above $18/month integration fee')
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ASSUMPTION 2: "${assumptions[1] || 'Your second assumption'}"
-📍 Discovery Validation: [How Customer Voice Simulation and Risk Assessment modules test this]
-📈 Success Metrics: [Specific measurable outcomes]
-⚠️ Risk Indicators: [Warning signs to watch for]
+
+RISK ASSESSMENT will analyze:
+- Technical feasibility scores (e.g., 'Xero API limitations impact 40% of desired features')
+- Implementation timeline reality (e.g., 'Full integration requires 8-12 months vs 6 months assumed')
+- Resource requirements (e.g., '3 full-time developers needed vs 1.5 budgeted')
+
+BUSINESS MODEL SIMULATION will test:
+- Revenue projections (e.g., 'Break-even requires 2,400 active users vs 1,000 estimated')
+- Cost structure impacts (e.g., 'API fees reduce margins by 12% vs 5% assumed')
+- Pricing sensitivity (e.g., 'Demand drops 35% above $25/month vs linear assumption')
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ASSUMPTION 3: "${assumptions[2] || 'Your third assumption'}"
-📍 Discovery Validation: [How multiple modules combine to test this assumption]
-📈 Success Metrics: [Clear validation criteria]
-⚠️ Risk Indicators: [Early warning signs]
+
+COMPETITIVE INTELLIGENCE will reveal:
+- Partnership landscape (e.g., 'Xero has 47 existing integrations, 12 in creative space')
+- Competitive responses (e.g., 'QuickBooks likely to develop competing feature within 18 months')
+- Market positioning opportunities (e.g., 'Focus on video production niche shows 67% less competition')
+
+CHANNEL RECOMMENDATIONS will identify:
+- Optimal go-to-market approach (e.g., 'Partner channel shows 3x higher conversion than direct')
+- Customer acquisition costs (e.g., 'CAC through Xero marketplace: $45 vs $120 direct')
+- Sales cycle realities (e.g., 'B2B sales average 4.2 months vs 2 months assumed')
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-FEASIBILITY SPRINT ($15K) - ADDS LIGHT VALIDATION
-Discovery Foundation + 4 Additional Modules
-
-💬 LIGHT CUSTOMER FEEDBACK - 5 Customer Interviews
-✓ Direct validation of: "${assumptions[0] || 'your first assumption'}"
-✓ Customer perspective on: "${risks[0] || 'your first risk'}"
-
-🏗️ BUSINESS MODEL SIMULATION - Financial Modeling
-✓ Tests viability of: "${assumptions[1] || 'your business model assumption'}"
-✓ Stress tests against: "${risks[1] || 'your financial risk'}"
-
-📍 CHANNEL RECOMMENDATIONS - Go-to-Market Strategy
-✓ Validates distribution assumption: "${assumptions[2] || 'your channel assumption'}"
-✓ Mitigates market access risk: "${risks[2] || 'your market risk'}"
-
-🎯 SWOT ANALYSIS - Strategic Assessment
-✓ Comprehensive analysis of strengths/weaknesses
-✓ Threats assessment for all 5 of your identified risks
-
-FEASIBILITY ADDITIONS FOR YOUR ASSUMPTIONS:
-[Detail how the 5 customer interviews and 1 demand test specifically validate each of their assumptions beyond what Discovery revealed]
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-VALIDATION SPRINT ($35K) - COMPREHENSIVE TESTING
-Feasibility Foundation + 5 Additional Modules
-
-👥 FULL INTERVIEW SUITE - 10-15 Customer Interviews
-✓ Statistically significant validation of all 3 assumptions
-✓ Deep risk assessment across customer segments
-
-🔄 MULTI-CHANNEL TESTING - 2-3 Demand Tests
-✓ Real market validation through paid ads and landing pages
-✓ Tests pricing assumptions and demand signals
-
-🔍 ENHANCED MARKET INTELLIGENCE - Competitive Deep-Dive
-✓ Advanced competitive positioning for your specific market
-✓ Threat assessment from established players
-
-🏔️ MARKET DEEP-DIVE - Segment Analysis
-✓ Detailed TAM/SAM/SOM validation with real data
-✓ Customer segment prioritization based on interview insights
-
-🗺️ STRATEGIC ROADMAP - 90-Day Implementation Plan
-✓ Actionable next steps based on validation results
-✓ Risk mitigation strategies integrated into execution plan
-
-VALIDATION COMPREHENSIVE TESTING FOR YOUR ASSUMPTIONS:
-[Show how 10-15 interviews and 2-3 demand tests provide definitive validation of each assumption with statistical confidence]
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-YOUR PERSONALIZED RISK MITIGATION FRAMEWORK
+YOUR RISK MITIGATION FRAMEWORK
 
 RISK 1: "${risks[0] || 'Your first risk'}"
-🚨 Early Warning Signs: [Specific indicators]
-🔬 Testing Approach: [Which modules detect this]
-🛡️ Mitigation Strategy: [How to address if confirmed]
+Early Warning Signs: [Specific measurable indicators]
+Detection Methods: [Which modules will identify this risk]
+Mitigation Actions: [Concrete steps to take if risk materializes]
 
 RISK 2: "${risks[1] || 'Your second risk'}"
-🚨 Early Warning Signs: [Specific indicators]
-🔬 Testing Approach: [Module-specific detection methods]
-🛡️ Mitigation Strategy: [Actionable response plan]
+Early Warning Signs: [Specific measurable indicators]
+Detection Methods: [Which modules will identify this risk]  
+Mitigation Actions: [Concrete steps to take if risk materializes]
 
-[Continue for all 5 risks...]
+RISK 3: "${risks[2] || 'Your third risk'}"
+Early Warning Signs: [Specific measurable indicators]
+Detection Methods: [Which modules will identify this risk]
+Mitigation Actions: [Concrete steps to take if risk materializes]
+
+RISK 4: "${risks[3] || 'Your fourth risk'}"
+Early Warning Signs: [Specific measurable indicators]
+Detection Methods: [Which modules will identify this risk]
+Mitigation Actions: [Concrete steps to take if risk materializes]
+
+RISK 5: "${risks[4] || 'Your fifth risk'}"
+Early Warning Signs: [Specific measurable indicators]
+Detection Methods: [Which modules will identify this risk]
+Mitigation Actions: [Concrete steps to take if risk materializes]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+WHAT EACH SPRINT TIER ADDS
+
+DISCOVERY SPRINT ($5,000) - Desk Research Foundation
+- Market sizing data and competitive landscape analysis
+- Customer sentiment from online sources and forums
+- Technical feasibility assessment from documentation
+- Business model stress testing with industry benchmarks
+
+FEASIBILITY SPRINT ($15,000) - Adds Light Customer Validation
+Discovery insights PLUS:
+- 5 customer interviews revealing actual user preferences and pain points
+- 1 demand test (landing page or survey) measuring real interest levels
+- Direct feedback on pricing and feature priorities
+- Validation confidence level: 70-80% for key assumptions
+
+VALIDATION SPRINT ($35,000) - Comprehensive Market Testing  
+Feasibility insights PLUS:
+- 10-15 customer interviews across multiple segments for statistical significance
+- 2-3 demand tests with paid advertising to measure true market response
+- Comprehensive competitive positioning and threat assessment
+- 90-day implementation roadmap with validated assumptions
+- Validation confidence level: 90-95% for key assumptions
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 SPRINT TIER RECOMMENDATION
 
-Based on ${companyName}'s ${currentStage} stage and validation needs:
-
 RECOMMENDED TIER: [Discovery/Feasibility/Validation]
-RATIONALE: [Specific reasoning based on their assumptions and risks]
-EXPECTED OUTCOMES: [What they'll learn at this investment level]
-SUCCESS CRITERIA: [How to measure validation success]
+RATIONALE: [Specific reasoning based on ${companyName}'s stage, assumptions, and risks]
+EXPECTED OUTCOMES: [Specific insights they'll gain at this investment level]
+SUCCESS CRITERIA: [How to measure if assumptions are validated or refuted]
+NEXT STEPS: [Immediate actions to take based on validation results]
 
-NEXT STEPS: [Immediate actions to take]
-
-This playbook provides ${companyName} with a clear roadmap for validating their specific assumptions and mitigating their identified risks through our structured 16-module validation framework.`;
+Focus on SPECIFIC insights and data points, not generic promises. Make it scannable and actionable. Show them exactly what intelligence they'll gain about their assumptions.`;
 
     console.log('A4. Calling OpenAI API...');
     
