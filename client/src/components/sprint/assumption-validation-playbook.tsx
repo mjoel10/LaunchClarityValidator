@@ -19,12 +19,13 @@ export default function AssumptionValidationPlaybook({ sprintId, intakeData }: A
   const queryClient = useQueryClient();
 
   const { data: modules, refetch } = useQuery({
-    queryKey: ['/api/sprints', sprintId, 'modules'],
-    staleTime: 0,
-    gcTime: 0
+    queryKey: [`/api/sprints/${sprintId}/modules`],
+    staleTime: 0
   });
   
-  const module = modules?.find((m: any) => m.moduleType === 'assumptions');
+  // Force array check and find assumptions module
+  const moduleArray = Array.isArray(modules) ? modules : [];
+  const module = moduleArray.find((m: any) => m.moduleType === 'assumptions');
 
   const generateMutation = useMutation({
     mutationFn: async () => {
@@ -33,7 +34,7 @@ export default function AssumptionValidationPlaybook({ sprintId, intakeData }: A
       return response.json();
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries({ queryKey: ['/api/sprints', sprintId, 'modules'] });
+      queryClient.invalidateQueries({ queryKey: [`/api/sprints/${sprintId}/modules`] });
       refetch();
       toast({
         title: "Assumption Playbook Generated",
@@ -57,14 +58,15 @@ export default function AssumptionValidationPlaybook({ sprintId, intakeData }: A
   // Debug logging
   console.log('AssumptionValidationPlaybook debug:', {
     modulesArray: modules,
-    modulesLength: modules?.length,
+    modulesLength: moduleArray?.length,
     moduleExists: !!module,
     aiAnalysisExists: !!module?.aiAnalysis,
     playbookExists: !!playbook,
     playbookLength: playbook?.length,
     isCompleted,
     moduleType: module?.moduleType,
-    allModuleTypes: modules?.map(m => m.moduleType)
+    allModuleTypes: moduleArray?.map(m => m.moduleType),
+    assumptionsModuleId: module?.id
   });
 
   const copyToClipboard = async () => {
