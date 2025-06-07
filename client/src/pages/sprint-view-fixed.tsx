@@ -400,9 +400,9 @@ export default function SprintView() {
     }
     
     if (completionRate >= 70) {
-      return { text: 'Ready for Decision', confidence: 85, color: 'text-green-300' };
+      return { text: 'Ready for Decision', confidence: Math.round(completionRate), color: 'text-green-300' };
     } else if (completionRate >= 50) {
-      return { text: 'Gathering Data', confidence: 65, color: 'text-yellow-300' };
+      return { text: 'Gathering Data', confidence: Math.round(completionRate), color: 'text-yellow-300' };
     }
     
     return { text: 'Early Analysis', confidence: Math.round(completionRate + 20), color: 'text-blue-300' };
