@@ -54,21 +54,27 @@ import ActionPlans from '@/components/sprint/action-plans';
 import { cn } from '@/lib/utils';
 
 const FEATURE_COMPONENTS = {
-  intake: InitialIntake,
-  market_simulation: MarketSizingReport,
-  assumptions: AssumptionValidationPlaybook,
+  // Discovery Sprint ($5K) - 6 core + 1 conditional
+  initial_intake: InitialIntake,
+  assumption_tracker: AssumptionValidationPlaybook,
+  market_sizing_analysis: MarketSizingReport,
   competitive_intelligence: CompetitiveIntelligence,
-  business_model_simulator: BusinessModelSimulator,
-  channel_recommender: ChannelRecommender,
-  strategic_analysis: StrategicAnalysisTools,
-  async_interviews: AsyncInterviews,
-  demand_test: DemandTestTracker,
-  full_interviews: FullInterviewSuite,
-  multi_channel_tests: MultiChannelTesting,
-  enhanced_market_intel: EnhancedMarketIntel,
-  blue_ocean_strategy: BlueOceanStrategy,
-  implementation_roadmap: ImplementationRoadmap,
-  action_plans: ActionPlans,
+  risk_assessment: MarketSimulation, // Risk Assessment uses Market Simulation component
+  customer_voice_simulation: MarketSimulation, // Customer Voice uses Market Simulation component
+  partnership_viability: BusinessModelSimulator, // Partnership Viability uses Business Model component
+  
+  // Feasibility Sprint ($15K) - 4 additional modules
+  light_customer_feedback: AsyncInterviews,
+  business_model_simulation: BusinessModelSimulator,
+  channel_recommendations: ChannelRecommender,
+  swot_analysis: StrategicAnalysisTools,
+  
+  // Validation Sprint ($35K) - 5 additional modules
+  full_interview_suite: FullInterviewSuite,
+  multi_channel_testing: MultiChannelTesting,
+  enhanced_market_intelligence: EnhancedMarketIntel,
+  market_deep_dive: MarketSizingReport, // Market Deep-Dive uses Market Sizing component
+  strategic_roadmap: StrategicAnalysisTools, // Strategic Roadmap uses Strategic Analysis component
 };
 
 export default function SprintView() {
