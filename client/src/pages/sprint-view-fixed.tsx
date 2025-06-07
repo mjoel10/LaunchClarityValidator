@@ -53,6 +53,7 @@ import BlueOceanStrategy from '@/components/sprint/blue-ocean-strategy';
 import ImplementationRoadmap from '@/components/sprint/implementation-roadmap';
 import ActionPlans from '@/components/sprint/action-plans';
 import PartnershipViability from '@/components/sprint/partnership-viability';
+import CustomerVoiceSimulation from '@/components/sprint/customer-voice-simulation';
 import { cn } from '@/lib/utils';
 
 const FEATURE_COMPONENTS = {

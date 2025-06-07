@@ -1,0 +1,132 @@
+**Update the Customer Voice Simulation module** that generates 100+ synthetic customer responses. The module should:
+
+1. Generate a detailed 2,000-2,500 word report with these exact sections:
+   * **Executive Summary** (200-300 words)
+   * **Simulation Methodology**
+      * Persona distribution and rationale
+      * Response generation approach
+      * Confidence levels in findings
+   * **Persona Analysis** (4 personas)
+      * Early Adopters (20%)
+      * Pragmatists (35%)
+      * Skeptics (25%)
+      * Critics (20%)
+   * **Assumption Validation Results**
+      * Response analysis for each assumption
+      * Validation confidence scores
+      * Surprising insights discovered
+   * **Key Themes & Patterns**
+      * Common objections
+      * Excitement drivers
+      * Deal breakers
+   * **Partnership Reception** (if partnership mode enabled)
+      * Trust and credibility factors
+      * Integration concerns
+      * Value perception of joint offering
+   * **Strategic Recommendations**
+      * Messaging adjustments
+      * Feature prioritization
+      * Go-to-market insights
+
+2. For each persona (300-400 words):
+   * Demographic and psychographic profile
+   * 5-7 direct quote examples that sound authentic
+   * Specific concerns in their voice
+   * Decision criteria and priorities
+   * Price sensitivity insights
+   * Competitor preferences
+
+3. When partnership mode is enabled:
+   * Focus responses on the JOINT experience (e.g., "HoneyBook + Xero integration")
+   * Include concerns about data sharing between partners
+   * Address trust issues with two companies handling their data
+   * Evaluate perceived value of the combined solution vs. separate tools
+   * Include quotes about partnership stability and longevity
+
+4. Response generation guidelines:
+   * Include specific objections with emotional context
+   * Use industry-specific terminology
+   * Vary response length and style by persona
+   * Include unexpected use cases discovered
+   * Surface non-obvious concerns
+
+5. Create frontend preview UI (like Risk Assessment has):
+   * Display "Analysis Will Include:" section
+   * Show icons for: Persona Profiles, Voice Samples, Validation Scores, Strategic Insights
+   * List what each persona type reveals
+   * Include "Generate Customer Voices" button
+
+6. CRITICAL FORMATTING REQUIREMENTS - Use this EXACT format:
+
+CUSTOMER VOICE SIMULATION
+LaunchClarity Market Intelligence Report
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+EXECUTIVE SUMMARY
+
+[First paragraph summarizing key customer insights discovered]
+
+[Second paragraph highlighting validation results and surprises]
+
+KEY FINDINGS:
+- Overall Receptivity: XX% positive, XX% neutral, XX% negative
+- Top Concern: [Most common objection]
+- Killer Feature: [Most requested capability]
+- Price Sensitivity: XX% find $XX/month acceptable
+- Adoption Timeline: XX% would try within 30 days
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. SIMULATION METHODOLOGY
+
+Approach:
+[Explanation of how responses were generated and analyzed]
+
+Confidence Levels:
+- High Confidence: [List findings]
+- Medium Confidence: [List findings]
+- Directional Only: [List findings]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+2. PERSONA ANALYSIS
+
+Early Adopters (20% of responses)
+─────────────────────────────────
+
+Profile:
+[Detailed persona description]
+
+Representative Quotes:
+- "I love that this could save me hours each week, but..."
+- "The integration better be seamless or I'm out..."
+- "At $15/month, that's less than my coffee budget..."
+
+Key Insights:
+[Analysis of this persona's responses]
+
+[Repeat for all 4 personas]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+3. ASSUMPTION VALIDATION RESULTS
+
+Assumption 1: [Text from intake]
+────────────────────────────────
+
+Validation Score: XX% confidence
+Supporting Quotes: XX responses
+Contradicting Quotes: XX responses
+
+Key Supporting Evidence:
+- "Quote demonstrating validation..."
+- "Another supporting perspective..."
+
+Key Concerns Raised:
+- "Quote showing skepticism..."
+- "Alternative viewpoint discovered..."
+
+[Repeat for all 3 assumptions]
+
+Present all findings as genuine market research. Never mention AI, synthetic, or simulation."

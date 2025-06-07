@@ -6,6 +6,263 @@ const openai = new OpenAI({
   timeout: 90000 // 90 seconds timeout for comprehensive reports
 });
 
+export async function generateCustomerVoiceSimulation(intakeData: any) {
+  try {
+    const companyName = intakeData.companyName || 'Your Company';
+    const industry = intakeData.industry || 'Technology';
+    const targetCustomer = intakeData.targetCustomerDescription || 'Small business owners';
+    const coreProblem = intakeData.coreProblem || 'Business challenge';
+    const valueProposition = intakeData.valueProposition || 'Value offering';
+    const pricePoint = intakeData.estimatedPricePoint || '29';
+    const currency = intakeData.currency || 'USD';
+    const businessModel = intakeData.businessModel || 'Subscription';
+    const currentStage = intakeData.currentStage || 'Pre-launch';
+    
+    // Get assumptions from intake data
+    const assumptions = [
+      intakeData.assumption1,
+      intakeData.assumption2, 
+      intakeData.assumption3
+    ].filter(Boolean);
+
+    // Check if partnership mode
+    const isPartnership = intakeData.isPartnershipEvaluation;
+    const partnerName = intakeData.partnershipCompany || '';
+    const partnershipContext = isPartnership ? ` - ${partnerName} Partnership` : '';
+
+    const prompt = `Generate comprehensive customer voice simulation for ${companyName} in ${industry} sector.
+
+COMPANY CONTEXT:
+- Business: ${companyName}${partnershipContext}
+- Industry: ${industry}
+- Target Customer: ${targetCustomer}
+- Core Problem: ${coreProblem}
+- Value Proposition: ${valueProposition}
+- Price Point: ${currency} ${pricePoint}/month
+- Business Model: ${businessModel}
+- Stage: ${currentStage}
+
+CUSTOMER ASSUMPTIONS TO VALIDATE:
+${assumptions.map((a, i) => `${i + 1}. "${a}"`).join('\n')}
+
+${isPartnership ? `
+PARTNERSHIP CONTEXT:
+This is a joint offering between ${companyName} and ${partnerName}. Generate responses that:
+- Reference the JOINT experience and integration concerns
+- Include trust issues with two companies handling data
+- Address partnership stability and longevity concerns
+- Evaluate combined solution value vs. separate tools
+- Include data sharing concerns between partners
+` : ''}
+
+Generate a detailed 2,000-2,500 word customer voice simulation report using this EXACT format:
+
+CUSTOMER VOICE SIMULATION
+${companyName}${partnershipContext} Market Intelligence Report
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+EXECUTIVE SUMMARY
+
+Generate 200-300 words summarizing key customer insights and validation results. Include emotional context and surprising discoveries. Make it feel like authentic market research.
+
+KEY FINDINGS:
+- Overall Receptivity: XX% positive, XX% neutral, XX% negative
+- Top Concern: [Most common objection]
+- Killer Feature: [Most requested capability] 
+- Price Sensitivity: XX% find $${pricePoint}/month acceptable
+- Adoption Timeline: XX% would try within 30 days
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. SIMULATION METHODOLOGY
+
+Approach:
+Describe methodology for generating and analyzing 100+ customer responses across 4 key personas. Include confidence levels and rationale.
+
+Confidence Levels:
+- High Confidence: [List findings with 80%+ validation]
+- Medium Confidence: [List findings with 60-79% validation]
+- Directional Only: [List findings with <60% validation]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+2. PERSONA ANALYSIS
+
+Early Adopters (20% of responses)
+─────────────────────────────────
+
+Profile:
+[300-400 word detailed persona description including demographics, psychographics, and decision criteria]
+
+Representative Quotes:
+- "Authentic quote showing enthusiasm with specific concerns..."
+- "Quote about price sensitivity from this persona's perspective..."
+- "Quote about competition or alternatives they're considering..."
+- "Quote about specific feature requirements..."
+- "Quote about timing and adoption concerns..."
+
+Key Insights:
+[Analysis of this persona's specific responses, objections, and decision factors]
+
+Pragmatists (35% of responses)
+─────────────────────────────
+
+Profile:
+[300-400 word detailed persona description]
+
+Representative Quotes:
+- "Need to see proof this actually works before I commit..."
+- "Quote about needing references and case studies..."
+- "Quote about integration and workflow concerns..."
+- "Quote about cost-benefit analysis requirements..."
+- "Quote about support and training needs..."
+
+Key Insights:
+[Analysis specific to pragmatist responses]
+
+Skeptics (25% of responses)
+──────────────────────────
+
+Profile:
+[300-400 word detailed persona description]
+
+Representative Quotes:
+- "Quote expressing doubt about value proposition..."
+- "Quote about preferring current solution/competitor..."
+- "Quote about being burned by similar promises before..."
+- "Quote about specific technical or business concerns..."
+- "Quote about budget constraints and priorities..."
+
+Key Insights:
+[Analysis of skeptical responses and conversion challenges]
+
+Critics (20% of responses)
+─────────────────────────
+
+Profile:
+[300-400 word detailed persona description]
+
+Representative Quotes:
+- "Quote expressing strong negative reaction..."
+- "Quote about fundamental disagreement with approach..."
+- "Quote about preferring alternative solutions..."
+- "Quote about specific deal-breakers..."
+- "Quote about industry or market concerns..."
+
+Key Insights:
+[Analysis of critical feedback and irreconcilable objections]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+3. ASSUMPTION VALIDATION RESULTS
+
+${assumptions.map((assumption, index) => `
+Assumption ${index + 1}: "${assumption}"
+────────────────────────────────
+
+Validation Score: XX% confidence
+Supporting Quotes: XX responses
+Contradicting Quotes: XX responses
+
+Key Supporting Evidence:
+- "Authentic quote demonstrating validation with emotional context..."
+- "Another supporting perspective from different persona..."
+- "Quote showing unexpected validation angle..."
+
+Key Concerns Raised:
+- "Quote showing skepticism with specific reasoning..."
+- "Alternative viewpoint that challenges the assumption..."
+- "Quote revealing implementation concerns..."
+
+Strategic Implications:
+[Analysis of how this validation impacts go-to-market strategy]
+`).join('')}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+4. KEY THEMES & PATTERNS
+
+Common Objections:
+- [List top 5 objections with frequency percentages]
+
+Excitement Drivers:
+- [List top 5 excitement drivers with supporting quotes]
+
+Deal Breakers:
+- [List top 3 deal breakers that eliminate prospects]
+
+Price Sensitivity Analysis:
+[Detailed analysis of pricing feedback across personas]
+
+Competitor Comparison:
+[How customers compare to existing alternatives]
+
+${isPartnership ? `
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+5. PARTNERSHIP RECEPTION
+
+Trust and Credibility Factors:
+[Analysis of how customers perceive joint offering credibility]
+
+Integration Concerns:
+- "Quote about data sharing between ${companyName} and ${partnerName}..."
+- "Quote about partnership stability concerns..."
+- "Quote about preferring single vendor..."
+
+Value Perception:
+[How customers evaluate combined vs separate solutions]
+
+Partnership-Specific Objections:
+[Unique concerns raised about the partnership model]
+` : ''}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+${isPartnership ? '6' : '5'}. STRATEGIC RECOMMENDATIONS
+
+Messaging Adjustments:
+[Specific recommendations for improving value proposition messaging]
+
+Feature Prioritization:
+[Which capabilities to emphasize based on customer feedback]
+
+Go-to-Market Insights:
+[Tactical recommendations for customer acquisition and onboarding]
+
+Risk Mitigation:
+[How to address top concerns and objections proactively]
+
+Market Positioning:
+[How to differentiate from alternatives based on customer perspectives]
+
+CRITICAL: Present all findings as genuine market research. Never mention AI, synthetic, or simulation. Make quotes feel authentic with industry-specific terminology and emotional context.`;
+
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o",
+      messages: [{ role: "user", content: prompt }],
+      temperature: 0.7,
+      max_tokens: 4000,
+    });
+
+    const reportContent = response.choices[0].message.content;
+    
+    return {
+      report: reportContent,
+      metadata: {
+        generatedAt: new Date().toISOString(),
+        wordCount: reportContent?.split(' ').length || 0,
+        companyName,
+        isPartnership
+      }
+    };
+  } catch (error: any) {
+    console.error('Error generating customer voice simulation:', error);
+    throw new Error('Failed to generate customer voice simulation: ' + error.message);
+  }
+}
+
 export async function generateMarketSimulation(intakeData: any) {
   try {
     const prompt = `
