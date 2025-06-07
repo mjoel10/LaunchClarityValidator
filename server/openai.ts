@@ -1150,8 +1150,12 @@ export async function generateAssumptionValidationPlaybook(intakeData: any) {
     const { 
       companyName, 
       industry,
-      targetCustomerDescription: targetCustomer,
+      targetCustomerDescription,
       currentStage,
+      businessModel,
+      productType,
+      coreProblem,
+      valueProposition,
       assumption1,
       assumption2,
       assumption3,
@@ -1173,20 +1177,17 @@ export async function generateAssumptionValidationPlaybook(intakeData: any) {
     const assumptionsList = assumptions.map((a: string, i: number) => `${i + 1}. "${a}"`).join('\n');
     const risksList = risks.map((r: string, i: number) => `${i + 1}. "${r}"`).join('\n');
 
-    const prompt = `Generate a comprehensive assumption validation playbook for ${companyName}, a ${industry} company targeting ${targetCustomer}.
+    const prompt = `Create an assumption validation playbook for ${companyName}, a ${industry} company with ${businessModel} model targeting ${targetCustomerDescription}.
 
-CLIENT ASSUMPTIONS TO VALIDATE:
+ASSUMPTIONS TO VALIDATE:
 ${assumptionsList}
 
-CLIENT RISKS & UNKNOWNS:
+RISKS TO MITIGATE:
 ${risksList}
 
-COMPANY CONTEXT:
-- Industry: ${industry}
-- Target Customer: ${targetCustomer}
-- Current Stage: ${currentStage}
+CONTEXT: ${currentStage} stage, ${productType}, solving ${coreProblem}
 
-FORMAT WITH EXACT PROFESSIONAL CONSULTING STANDARD:
+Generate a 1,200-word playbook with this exact format:
 
 ASSUMPTION & RISK VALIDATION PLAYBOOK
 ${companyName} Sprint Planning Guide
@@ -1389,7 +1390,7 @@ Focus on practical, actionable testing approaches that match the investment leve
         }
       ],
       temperature: 0.3,
-      max_tokens: 8000
+      max_tokens: 4000
     });
 
     let playbookContent = response.choices[0].message.content;
