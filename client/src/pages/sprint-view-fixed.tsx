@@ -55,8 +55,7 @@ import { cn } from '@/lib/utils';
 const FEATURE_COMPONENTS = {
   intake: InitialIntake,
   market_simulation: MarketSizingReport,
-  assumptions: AssumptionTrackerReport,
-  'assumption-tracker': AssumptionValidationPlaybook,
+  assumptions: AssumptionValidationPlaybook,
   business_model_simulator: BusinessModelSimulator,
   channel_recommender: ChannelRecommender,
   strategic_analysis: StrategicAnalysisTools,
@@ -132,11 +131,8 @@ export default function SprintView() {
     }
   });
 
-  useEffect(() => {
-    if (sprint && sprint.status === 'active' && !modulesLoading) {
-      regenerateModulesMutation.mutate();
-    }
-  }, [sprint?.status]);
+  // Removed automatic regeneration to preserve saved module data
+  // Modules will only regenerate when explicitly requested by user
 
   // Auto-save every 30 seconds
   useEffect(() => {

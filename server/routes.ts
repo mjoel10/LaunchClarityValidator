@@ -223,7 +223,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Regenerate sprint modules with correct tier access
+  // Regenerate sprint modules with correct tier access (preserves completed modules)
   app.post("/api/sprints/:id/regenerate-modules", async (req, res) => {
     try {
       const sprintId = Number(req.params.id);
@@ -233,10 +233,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ message: "Sprint not found" });
       }
 
-      // Delete existing modules
-      await db.delete(sprintModules).where(eq(sprintModules.sprintId, sprintId));
+      // Get existing modules to preserve completed ones with data
+      const existingModules = await storage.getSprintModules(sprintId);
+      const completedModules = existingModules.filter((m: any) => m.isCompleted && m.aiAnalysis);
       
-      // Reinitialize with correct tier access
+      // Only delete incomplete modules without saved data
+      for (const module of existingModules) {
+        if (!module.isCompleted || !module.aiAnalysis) {
+          await db.delete(sprintModules).where(eq(sprintModules.id, module.id));
+        }
+      }
+      
+      // Reinitialize missing modules with correct tier access
       await storage.initializeSprintModules(sprintId, sprint.tier);
       
       // Get updated modules
@@ -449,7 +457,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { playbook } = await generateAssumptionValidationPlaybook(intake);
       
       // Save to sprint module data
-      await storage.updateSprintModuleByType(sprintId, 'assumption-tracker', {
+      await storage.updateSprintModuleByType(sprintId, 'assumptions', {
         aiAnalysis: { playbook },
         isCompleted: true,
         updatedAt: new Date(),
