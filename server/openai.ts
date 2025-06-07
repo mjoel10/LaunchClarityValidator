@@ -1149,21 +1149,33 @@ export async function generateAssumptionValidationPlaybook(intakeData: any) {
   try {
     const { 
       companyName, 
-      assumptions = [], 
-      risks = [],
       industry,
-      targetCustomer,
+      targetCustomerDescription: targetCustomer,
       currentStage,
-      teamSize,
-      fundingStage
+      assumption1,
+      assumption2,
+      assumption3,
+      partnershipRisk1,
+      partnershipRisk2,
+      partnershipRisk3,
+      partnershipRisk4,
+      partnershipRisk5
     } = intakeData;
 
+    // Extract assumptions and risks from intake data
+    const assumptions = [assumption1, assumption2, assumption3].filter(Boolean);
+    const risks = [partnershipRisk1, partnershipRisk2, partnershipRisk3, partnershipRisk4, partnershipRisk5].filter(Boolean);
+
+    console.log('Debug - Assumptions found:', assumptions.length, assumptions);
+    console.log('Debug - Risks found:', risks.length, risks);
+
     if (!assumptions.length || !risks.length) {
+      console.log('Debug - Missing data. Assumptions:', assumptions.length, 'Risks:', risks.length);
       throw new Error('Assumptions and risks are required to generate validation playbook');
     }
 
-    const assumptionsList = assumptions.slice(0, 3).map((a: any, i: number) => `${i + 1}. "${a.text || a}"`).join('\n');
-    const risksList = risks.slice(0, 5).map((r: any, i: number) => `${i + 1}. "${r.text || r}"`).join('\n');
+    const assumptionsList = assumptions.map((a: string, i: number) => `${i + 1}. "${a}"`).join('\n');
+    const risksList = risks.map((r: string, i: number) => `${i + 1}. "${r}"`).join('\n');
 
     const prompt = `Generate a comprehensive assumption validation playbook for ${companyName}, a ${industry} company targeting ${targetCustomer}.
 
