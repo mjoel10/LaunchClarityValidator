@@ -450,8 +450,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       // Save to sprint module data
       await storage.updateSprintModuleByType(sprintId, 'assumption-tracker', {
-        content: JSON.stringify({ playbook }),
-        status: 'completed',
+        aiAnalysis: { playbook },
+        isCompleted: true,
         updatedAt: new Date(),
       });
       

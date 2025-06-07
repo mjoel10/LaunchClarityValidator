@@ -56,6 +56,7 @@ const FEATURE_COMPONENTS = {
   intake: InitialIntake,
   market_simulation: MarketSizingReport,
   assumptions: AssumptionTrackerReport,
+  'assumption-tracker': AssumptionValidationPlaybook,
   business_model_simulator: BusinessModelSimulator,
   channel_recommender: ChannelRecommender,
   strategic_analysis: StrategicAnalysisTools,
