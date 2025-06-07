@@ -1258,12 +1258,14 @@ CHANNEL RECOMMENDATIONS will identify:
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-YOUR RISK MITIGATION FRAMEWORK
+HOW WE ADDRESS YOUR 5 IDENTIFIED RISKS
 
 RISK 1: "${risks[0] || 'Your first risk'}"
 Early Warning Signs: [Specific measurable indicators]
 Detection Methods: [Which modules will identify this risk]
 Mitigation Actions: [Concrete steps to take if risk materializes]
+
+IMPORTANT: Use the exact heading "HOW WE ADDRESS YOUR 5 IDENTIFIED RISKS" - do not change this to any other variation like "YOUR RISK MITIGATION FRAMEWORK".
 
 RISK 2: "${risks[1] || 'Your second risk'}"
 Early Warning Signs: [Specific measurable indicators]
