@@ -472,26 +472,50 @@ export async function registerRoutes(app: Express): Promise<Server> {
 
   // Generate assumption validation playbook
   app.post("/api/sprints/:id/generate-assumption-playbook", async (req, res) => {
+    console.log('=== STARTING ASSUMPTION PLAYBOOK ROUTE ===');
     try {
       const sprintId = Number(req.params.id);
+      console.log(`1. Route handler started for sprint ID: ${sprintId}`);
+      
+      console.log('2. Fetching intake data...');
       const intake = await storage.getIntakeDataBySprintId(sprintId);
       
       if (!intake) {
+        console.log('3. ERROR: No intake data found');
         return res.status(400).json({ message: "No intake data found for this sprint" });
       }
       
-      const { playbook } = await generateAssumptionValidationPlaybook(intake);
+      console.log('3. Intake data found, structure:', {
+        companyName: intake.companyName,
+        hasAssumption1: !!intake.assumption1,
+        hasAssumption2: !!intake.assumption2,
+        hasAssumption3: !!intake.assumption3,
+        hasRisk1: !!intake.partnershipRisk1,
+        hasRisk2: !!intake.partnershipRisk2,
+        hasRisk3: !!intake.partnershipRisk3,
+        hasRisk4: !!intake.partnershipRisk4,
+        hasRisk5: !!intake.partnershipRisk5
+      });
       
+      console.log('4. CALLING generateAssumptionValidationPlaybook...');
+      const { playbook } = await generateAssumptionValidationPlaybook(intake);
+      console.log('5. Playbook generation completed successfully');
+      
+      console.log('6. Saving to database...');
       // Save to sprint module data
       await storage.updateSprintModuleByType(sprintId, 'assumptions', {
         aiAnalysis: { playbook },
         isCompleted: true,
         updatedAt: new Date(),
       });
+      console.log('7. Database save completed');
       
+      console.log('8. Sending response...');
       res.json({ playbook });
     } catch (error: any) {
-      console.error('Error generating assumption validation playbook:', error);
+      console.error('=== ASSUMPTION PLAYBOOK ERROR ===');
+      console.error('Error details:', error);
+      console.error('Error stack:', error.stack);
       res.status(500).json({ message: "Failed to generate assumption validation playbook: " + error.message });
     }
   });

@@ -1148,7 +1148,7 @@ Critical Success Factors:
 
 export async function generateAssumptionValidationPlaybook(intakeData: any) {
   try {
-    console.log('Starting assumption validation playbook generation...');
+    console.log('=== STARTING generateAssumptionValidationPlaybook ===');
     
     const { 
       companyName, 
@@ -1158,7 +1158,6 @@ export async function generateAssumptionValidationPlaybook(intakeData: any) {
       businessModel,
       productType,
       coreProblem,
-      valueProposition,
       assumption1,
       assumption2,
       assumption3,
@@ -1169,13 +1168,12 @@ export async function generateAssumptionValidationPlaybook(intakeData: any) {
       partnershipRisk5
     } = intakeData;
 
-    console.log('Extracting assumptions and risks...');
+    console.log('A1. Extracted data:', { companyName, industry, currentStage });
     
-    // Extract assumptions and risks from intake data
     const assumptions = [assumption1, assumption2, assumption3].filter(Boolean);
     const risks = [partnershipRisk1, partnershipRisk2, partnershipRisk3, partnershipRisk4, partnershipRisk5].filter(Boolean);
 
-    console.log(`Found ${assumptions.length} assumptions and ${risks.length} risks`);
+    console.log(`A2. Found ${assumptions.length} assumptions and ${risks.length} risks`);
 
     if (!assumptions.length || !risks.length) {
       throw new Error('Assumptions and risks are required to generate validation playbook');
@@ -1184,6 +1182,8 @@ export async function generateAssumptionValidationPlaybook(intakeData: any) {
     const assumptionsList = assumptions.map((a: string, i: number) => `${i + 1}. "${a}"`).join('\n');
     const risksList = risks.map((r: string, i: number) => `${i + 1}. "${r}"`).join('\n');
 
+    console.log('A3. Creating prompt...');
+    
     const prompt = `Create an assumption validation playbook for ${companyName}, a ${industry} company with ${businessModel} model targeting ${targetCustomerDescription}.
 
 ASSUMPTIONS TO VALIDATE:
@@ -1194,7 +1194,7 @@ ${risksList}
 
 CONTEXT: ${currentStage} stage, ${productType}, solving ${coreProblem}
 
-Generate a comprehensive 1,800-2,200 word playbook with detailed analysis for each assumption and risk (300-400 words per assumption). Use this exact format:
+Generate a comprehensive 1,800-2,200 word playbook with detailed analysis for each assumption and risk. Use this exact format:
 
 ASSUMPTION & RISK VALIDATION PLAYBOOK
 ${companyName} Sprint Planning Guide
@@ -1203,83 +1203,78 @@ ${companyName} Sprint Planning Guide
 
 EXECUTIVE SUMMARY
 
-This comprehensive validation playbook addresses ${companyName}'s 3 core assumptions and 5 key risks through structured testing approaches across three sprint investment levels. The analysis reveals which assumptions can be validated through desk research alone versus requiring primary customer research.
-
-Based on ${companyName}'s current ${currentStage} stage, the recommended approach balances validation rigor with resource constraints. Each assumption and risk includes specific testing methodologies tailored to Discovery ($5,000), Feasibility ($15,000), and Validation ($35,000) sprint tiers.
+This comprehensive validation playbook addresses ${companyName}'s core assumptions and risks through structured testing approaches across Discovery ($5,000), Feasibility ($15,000), and Validation ($35,000) sprint tiers.
 
 KEY FINDINGS:
-
-• Most Critical Assumption: [Identify which assumption has highest business impact]
-• Highest Impact Risk: [Identify highest potential damage risk]
-• Recommended Sprint: [Discovery/Feasibility/Validation based on context]
-• What Desk Research Can Answer: [List 3-4 key questions answerable without customers]
-• What Requires Customer Input: [List 3-4 questions requiring primary research]
+• Most Critical Assumption: [Identify highest business impact]
+• Highest Risk: [Identify biggest threat]  
+• Recommended Sprint Tier: [Based on stage and constraints]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-CORE ASSUMPTIONS VALIDATION
+ASSUMPTION TESTING FRAMEWORK
 
-[For each assumption, provide detailed analysis in this format:]
-
-Assumption 1: "[Quote exact assumption text]"
-─────────────────────────────────────────
-
-Why This Matters:
-[Explain specific business impact if assumption proves true/false, include revenue/cost implications]
-
-Discovery Sprint Approach (Desk Research Only):
-
-What we can learn: [Specific insights available from secondary research]
-Data sources: [Industry reports, competitor analysis, online communities, etc.]
-Limitations: [What cannot be answered without direct customer contact]
-
-Feasibility Sprint Approach (+ 5 Interviews + 1 Demand Test):
-
-Interview focus: [Specific questions for the 5 target customers]
-Demand test option: [Specific test like landing page signup, survey, prototype]
-Additional insights: [What this adds beyond Discovery findings]
-
-Validation Sprint Approach (+ 10-15 Interviews + 2-3 Demand Tests):
-
-Expanded interviews: [Broader customer segments and use cases to cover]
-Multiple demand tests: [Test 1: description], [Test 2: description], [Test 3: description]
-Statistical confidence: [What 15 interviews can definitively validate]
-
-Success Criteria:
-
-• Discovery: [Specific metric or finding that indicates proceed/stop]
-• Feasibility: [Minimum viable proof required to justify next level]
-• Validation: [Full confidence threshold for go-to-market decision]
-
-[Repeat this exact format for Assumptions 2 and 3]
+For each assumption, provide detailed analysis with Discovery, Feasibility, and Validation approaches.
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-KEY RISKS & UNKNOWNS
+RISK MITIGATION STRATEGIES
 
-[For each risk, provide analysis in this format:]
+For each risk, provide early warning signs, testing methods, and mitigation plans.
 
-Risk 1: "[Quote exact risk text]"
-───────────────────────────────────
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-Impact Level: [High/Medium/Low with rationale]
+SPRINT RECOMMENDATIONS
 
-What Desk Research Can Reveal:
-• [Available market data and industry precedents]
-• [Competitor case studies and outcomes]
-• [Regulatory or technical constraints]
+Provide specific tier recommendation with rationale and expected outcomes.`;
 
-What Requires Primary Research:
-• [Customer-specific insights needed]
-• [Market acceptance factors]
-• [Implementation challenges]
+    console.log('A4. Calling OpenAI API...');
+    
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
+      messages: [
+        {
+          role: "system", 
+          content: "You are a senior validation consultant creating detailed testing playbooks for startup assumptions and risks. Your analysis must provide specific, actionable testing strategies for each sprint investment level, with clear ROI justification for each tier. Generate 1,800-2,200 words of practical validation guidance.\n\nCRITICAL FORMATTING RULES:\n- Use ONLY plain text formatting - NO LaTeX, NO HTML, NO markdown\n- NEVER use \\text{} or any LaTeX notation\n- Use simple symbols: × for multiplication, = for equals\n- Use plain parentheses () for groupings\n- All content must be formatted for clean copy/paste into Google Docs"
+        },
+        {
+          role: "user",
+          content: prompt
+        }
+      ],
+      temperature: 0.3,
+      max_tokens: 8000
+    });
 
-Mitigation Approach by Sprint:
-• Discovery: [Initial risk assessment approach]
-• Feasibility: [Risk validation with 5 interviews]
-• Validation: [Comprehensive risk mitigation plan]
+    console.log('A5. OpenAI API response received, processing content...');
 
-[Repeat for Risks 2-5]
+    let playbookContent = response.choices[0].message.content;
+    
+    // Clean any LaTeX formatting that might slip through
+    if (playbookContent) {
+      playbookContent = playbookContent
+        .replace(/\\text\{([^}]+)\}/g, '$1')  // Remove \text{} wrappers
+        .replace(/\\times/g, '×')             // Replace LaTeX times with multiplication symbol
+        .replace(/\\cdot/g, '×')              // Replace LaTeX cdot with multiplication symbol
+        .replace(/\\div/g, '÷')               // Replace LaTeX div with division symbol
+        .replace(/\\equals/g, '=')            // Replace LaTeX equals
+        .replace(/\\\(/g, '(')                // Replace LaTeX parentheses
+        .replace(/\\\)/g, ')')                // Replace LaTeX parentheses
+        .replace(/\\,/g, ',')                 // Replace LaTeX comma spacing
+        .replace(/\\\$/g, '$')                // Replace escaped dollar signs
+        .replace(/\\&/g, '&');                // Replace escaped ampersands
+    }
+    
+    console.log('A6. Content cleaned, returning playbook');
+    
+    return {
+      playbook: playbookContent
+    };
+  } catch (error) {
+    console.error('Error generating assumption validation playbook:', error);
+    throw new Error('Failed to generate assumption validation playbook');
+  }
+}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
