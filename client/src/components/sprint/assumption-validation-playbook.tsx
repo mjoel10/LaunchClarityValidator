@@ -68,7 +68,10 @@ export default function AssumptionValidationPlaybook({ sprintId, intakeData }: A
     }
   };
 
-  const hasRequiredData = intakeData?.assumptions?.length >= 3 && intakeData?.risks?.length >= 5;
+  const hasRequiredData = intakeData && 
+    intakeData.assumption1 && intakeData.assumption2 && intakeData.assumption3 &&
+    intakeData.partnershipRisk1 && intakeData.partnershipRisk2 && intakeData.partnershipRisk3 && 
+    intakeData.partnershipRisk4 && intakeData.partnershipRisk5;
 
   return (
     <div className="space-y-6">
