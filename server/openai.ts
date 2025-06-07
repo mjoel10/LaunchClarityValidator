@@ -198,71 +198,128 @@ Respond with JSON in this exact format:
 }
 
 export async function generateCompetitiveIntelligence(intakeData: any) {
-  try {
-    const prompt = `
-You are the LaunchClarity Analysis Engine. Generate competitive intelligence for this business:
+  if (!openai) {
+    throw new Error('OpenAI client not initialized');
+  }
 
-Competitors: ${intakeData.competitors?.map((c: any) => `${c.name} - ${c.differentiator}`).join('; ')}
-Unique Advantage: ${intakeData.uniqueAdvantage}
-Business Model: ${intakeData.businessModel}
-Product Type: ${intakeData.productType}
-Industry: ${intakeData.industry}
-Value Proposition: ${intakeData.valueProposition}
+  const companyName = intakeData.companyName || 'your company';
+  const industry = intakeData.industry || 'technology';
+  const targetCustomer = intakeData.targetCustomerDescription || 'small businesses';
+  const businessModel = intakeData.businessModel || 'subscription';
+  const pricePoint = intakeData.estimatedPricePoint || '$100';
 
-Analyze the competitive landscape and provide strategic positioning recommendations.
+  const prompt = `Analyze the competitive landscape for ${companyName} in the ${industry} industry.
 
-Respond with JSON in this exact format:
+COMPANY CONTEXT:
+- Company: ${companyName}
+- Industry: ${industry}
+- Business Model: ${businessModel}
+- Target Customer: ${targetCustomer}
+- Price Point: ${pricePoint}
+- Geographic Markets: ${intakeData.geographicMarkets?.join(', ') || 'North America'}
+
+Generate a comprehensive competitive intelligence analysis with 4-6 key competitors.
+
+For each competitor, provide:
+1. Company overview (name, type, market position, founding year, headquarters, employee count, funding, valuation)
+2. Strengths (3-4 key competitive advantages with impact assessment)
+3. Weaknesses (3-4 vulnerabilities with opportunity analysis)
+4. Pricing strategy (model, tiers, value proposition)
+5. Market share data (percentage, growth rate, customer segments)
+6. Competitive advantages list
+7. Threat level assessment (low/medium/high/critical)
+8. Strategic recommendations for competing against them
+
+Include an executive summary with:
+- Total competitors analyzed
+- High threat competitor count
+- Market opportunities identified
+- Key strategic insights (5-6 bullet points)
+
+Return as JSON with this structure:
 {
-  "competitiveAnalysis": {
-    "directCompetitors": [
-      {
-        "name": "Competitor A",
-        "strengths": ["Market leader", "Strong brand"],
-        "weaknesses": ["High pricing", "Poor UX"],
-        "marketShare": "35%",
-        "threatLevel": "High"
-      }
-    ],
-    "indirectCompetitors": [
-      {
-        "name": "Alternative Solution B", 
-        "description": "Manual processes",
-        "threatLevel": "Medium"
-      }
-    ]
+  "summary": {
+    "total_competitors": 5,
+    "high_threat_count": 2,
+    "market_opportunities": 3,
+    "key_insights": ["insight 1", "insight 2", ...]
   },
-  "positioningGaps": [
+  "analysis": [
     {
-      "gap": "Affordable enterprise solution",
-      "opportunity": "Target mid-market with competitive pricing",
-      "difficulty": "Medium"
+      "competitor": {
+        "name": "CompetitorName",
+        "type": "Direct Competitor",
+        "marketPosition": "Market Leader",
+        "foundedYear": 2010,
+        "headquarters": "San Francisco, CA",
+        "employeeCount": "500-1000",
+        "funding": "$50M Series B",
+        "valuation": "$500M"
+      },
+      "strengths": [
+        {
+          "category": "Technology",
+          "description": "Advanced AI capabilities",
+          "impact": "High customer retention"
+        }
+      ],
+      "weaknesses": [
+        {
+          "category": "Pricing",
+          "description": "Higher cost than alternatives",
+          "opportunity": "Price-sensitive market entry"
+        }
+      ],
+      "pricing": {
+        "model": "Subscription",
+        "tiers": [
+          {
+            "name": "Basic",
+            "price": "$29/month",
+            "features": ["Feature 1", "Feature 2"]
+          }
+        ],
+        "value_proposition": "Enterprise-grade security and scale"
+      },
+      "market_share": {
+        "percentage": "25%",
+        "growth_rate": "15% YoY",
+        "customer_segments": ["Enterprise", "Mid-market"]
+      },
+      "competitive_advantages": ["Brand recognition", "Ecosystem partnerships"],
+      "threat_level": "high",
+      "strategic_recommendations": ["Focus on SMB market", "Emphasize ease of use"]
     }
-  ],
-  "battlecards": [
-    {
-      "competitor": "Main Competitor",
-      "ourAdvantage": "50% lower cost with same features",
-      "theirWeakness": "Complex setup process",
-      "winningMessage": "Get started in 5 minutes vs 5 weeks"
-    }
-  ],
-  "strategicRecommendations": [
-    "Focus on ease of implementation as key differentiator",
-    "Target mid-market segment underserved by enterprise solutions",
-    "Emphasize customer support quality in messaging"
   ]
 }`;
 
+  try {
     const response = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [{ role: "user", content: prompt }],
+      model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
+      messages: [
+        {
+          role: "system",
+          content: "You are a strategic business analyst specializing in competitive intelligence. Provide detailed, actionable competitor analysis with specific data and strategic insights."
+        },
+        {
+          role: "user",
+          content: prompt
+        }
+      ],
       response_format: { type: "json_object" },
+      temperature: 0.7,
+      max_tokens: 3000
     });
 
-    return JSON.parse(response.choices[0].message.content || '{}');
-  } catch (error) {
+    const content = response.choices[0].message.content;
+    if (!content) {
+      throw new Error('No content received from OpenAI');
+    }
+
+    return JSON.parse(content);
+  } catch (error: any) {
     console.error('Error generating competitive intelligence:', error);
-    throw new Error("Failed to generate competitive intelligence");
+    throw new Error(`Failed to generate competitive intelligence: ${error.message}`);
   }
 }
 
