@@ -1184,17 +1184,17 @@ export async function generateAssumptionValidationPlaybook(intakeData: any) {
 
     console.log('A3. Creating prompt...');
     
-    const prompt = `Create an assumption validation playbook for ${companyName}, a ${industry} company with ${businessModel} model targeting ${targetCustomerDescription}.
+    const prompt = `Generate a personalized validation playbook for ${companyName} based on their specific assumptions and risks.
 
-ASSUMPTIONS TO VALIDATE:
+CLIENT'S SPECIFIC ASSUMPTIONS:
 ${assumptionsList}
 
-RISKS TO MITIGATE:
+CLIENT'S SPECIFIC RISKS/UNKNOWNS:
 ${risksList}
 
-CONTEXT: ${currentStage} stage, ${productType}, solving ${coreProblem}
+COMPANY CONTEXT: ${companyName} - ${industry} company, ${currentStage} stage, ${businessModel} model, targeting ${targetCustomerDescription}, solving ${coreProblem}
 
-Generate a comprehensive 1,800-2,200 word playbook with detailed analysis for each assumption and risk. Use this exact format:
+Create a detailed playbook that maps validation activities to our actual 16-module structure, showing how each module addresses THEIR SPECIFIC assumptions and risks. Use this exact format:
 
 ASSUMPTION & RISK VALIDATION PLAYBOOK
 ${companyName} Sprint Planning Guide
@@ -1203,30 +1203,146 @@ ${companyName} Sprint Planning Guide
 
 EXECUTIVE SUMMARY
 
-This comprehensive validation playbook addresses ${companyName}'s core assumptions and risks through structured testing approaches across Discovery ($5,000), Feasibility ($15,000), and Validation ($35,000) sprint tiers.
+This personalized validation playbook shows how our 16-module framework addresses ${companyName}'s specific assumptions and risks across Discovery ($5,000), Feasibility ($15,000), and Validation ($35,000) sprint tiers.
 
 KEY FINDINGS:
-• Most Critical Assumption: [Identify highest business impact]
-• Highest Risk: [Identify biggest threat]  
-• Recommended Sprint Tier: [Based on stage and constraints]
+• Most Critical Assumption: [Identify which of their 3 assumptions has highest business impact]
+• Highest Risk: [Identify which of their 5 risks poses biggest threat]
+• Recommended Sprint Tier: [Based on their stage and validation needs]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-ASSUMPTION TESTING FRAMEWORK
+DISCOVERY SPRINT ($5K) - DESK RESEARCH ONLY
+Module-by-Module Validation for YOUR Assumptions
 
-For each assumption, provide detailed analysis with Discovery, Feasibility, and Validation approaches.
+🏢 INITIAL INTAKE - Captured Your Foundation
+✓ Documented your 3 core assumptions and 5 partnership risks
+✓ Established baseline for all subsequent validation activities
+
+📊 MARKET SIZING ANALYSIS - Validates: [Specify which of their assumptions this addresses]
+✓ TAM/SAM/SOM analysis specifically for ${targetCustomerDescription}
+✓ Addresses assumption: "${assumptions[0] || 'your market assumption'}"
+✓ Risk mitigation for: "${risks[0] || 'your market risk'}"
+
+🎯 ASSUMPTION TRACKER - This Validation Playbook
+✓ Detailed testing strategies for each of your specific assumptions
+✓ Risk mitigation framework for your 5 identified risks
+
+⚔️ COMPETITIVE INTELLIGENCE - Addresses: [Specify which assumption/risk]
+✓ Directly tests assumption: "${assumptions[1] || 'your competitive assumption'}"
+✓ Mitigates risk: "${risks[1] || 'your competitive risk'}"
+
+🛡️ RISK ASSESSMENT - Analyzes Your Specific Risks
+✓ Deep dive into: "${risks[2] || 'your operational risk'}"
+✓ Early warning systems for: "${risks[3] || 'your strategic risk'}"
+
+👥 CUSTOMER VOICE SIMULATION - Tests Through AI
+✓ Simulated customer responses to validate: "${assumptions[2] || 'your customer assumption'}"
+✓ Addresses concern: "${risks[4] || 'your customer risk'}"
+
+🤝 PARTNERSHIP VIABILITY - [Only if partnership toggle ON]
+✓ Partnership-specific validation for your business model
+✓ Risk assessment for partnership dependencies
+
+DISCOVERY SPRINT VALIDATION FOR YOUR ASSUMPTIONS:
+
+ASSUMPTION 1: "${assumptions[0] || 'Your first assumption'}"
+📍 Discovery Validation: [Detailed explanation of how Market Sizing Analysis and Competitive Intelligence modules validate this through desk research]
+📈 Success Metrics: [Specific criteria for validation]
+⚠️ Risk Indicators: [What would suggest this assumption is false]
+
+ASSUMPTION 2: "${assumptions[1] || 'Your second assumption'}"
+📍 Discovery Validation: [How Customer Voice Simulation and Risk Assessment modules test this]
+📈 Success Metrics: [Specific measurable outcomes]
+⚠️ Risk Indicators: [Warning signs to watch for]
+
+ASSUMPTION 3: "${assumptions[2] || 'Your third assumption'}"
+📍 Discovery Validation: [How multiple modules combine to test this assumption]
+📈 Success Metrics: [Clear validation criteria]
+⚠️ Risk Indicators: [Early warning signs]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-RISK MITIGATION STRATEGIES
+FEASIBILITY SPRINT ($15K) - ADDS LIGHT VALIDATION
+Discovery Foundation + 4 Additional Modules
 
-For each risk, provide early warning signs, testing methods, and mitigation plans.
+💬 LIGHT CUSTOMER FEEDBACK - 5 Customer Interviews
+✓ Direct validation of: "${assumptions[0] || 'your first assumption'}"
+✓ Customer perspective on: "${risks[0] || 'your first risk'}"
+
+🏗️ BUSINESS MODEL SIMULATION - Financial Modeling
+✓ Tests viability of: "${assumptions[1] || 'your business model assumption'}"
+✓ Stress tests against: "${risks[1] || 'your financial risk'}"
+
+📍 CHANNEL RECOMMENDATIONS - Go-to-Market Strategy
+✓ Validates distribution assumption: "${assumptions[2] || 'your channel assumption'}"
+✓ Mitigates market access risk: "${risks[2] || 'your market risk'}"
+
+🎯 SWOT ANALYSIS - Strategic Assessment
+✓ Comprehensive analysis of strengths/weaknesses
+✓ Threats assessment for all 5 of your identified risks
+
+FEASIBILITY ADDITIONS FOR YOUR ASSUMPTIONS:
+[Detail how the 5 customer interviews and 1 demand test specifically validate each of their assumptions beyond what Discovery revealed]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-SPRINT RECOMMENDATIONS
+VALIDATION SPRINT ($35K) - COMPREHENSIVE TESTING
+Feasibility Foundation + 5 Additional Modules
 
-Provide specific tier recommendation with rationale and expected outcomes.`;
+👥 FULL INTERVIEW SUITE - 10-15 Customer Interviews
+✓ Statistically significant validation of all 3 assumptions
+✓ Deep risk assessment across customer segments
+
+🔄 MULTI-CHANNEL TESTING - 2-3 Demand Tests
+✓ Real market validation through paid ads and landing pages
+✓ Tests pricing assumptions and demand signals
+
+🔍 ENHANCED MARKET INTELLIGENCE - Competitive Deep-Dive
+✓ Advanced competitive positioning for your specific market
+✓ Threat assessment from established players
+
+🏔️ MARKET DEEP-DIVE - Segment Analysis
+✓ Detailed TAM/SAM/SOM validation with real data
+✓ Customer segment prioritization based on interview insights
+
+🗺️ STRATEGIC ROADMAP - 90-Day Implementation Plan
+✓ Actionable next steps based on validation results
+✓ Risk mitigation strategies integrated into execution plan
+
+VALIDATION COMPREHENSIVE TESTING FOR YOUR ASSUMPTIONS:
+[Show how 10-15 interviews and 2-3 demand tests provide definitive validation of each assumption with statistical confidence]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+YOUR PERSONALIZED RISK MITIGATION FRAMEWORK
+
+RISK 1: "${risks[0] || 'Your first risk'}"
+🚨 Early Warning Signs: [Specific indicators]
+🔬 Testing Approach: [Which modules detect this]
+🛡️ Mitigation Strategy: [How to address if confirmed]
+
+RISK 2: "${risks[1] || 'Your second risk'}"
+🚨 Early Warning Signs: [Specific indicators]
+🔬 Testing Approach: [Module-specific detection methods]
+🛡️ Mitigation Strategy: [Actionable response plan]
+
+[Continue for all 5 risks...]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SPRINT TIER RECOMMENDATION
+
+Based on ${companyName}'s ${currentStage} stage and validation needs:
+
+RECOMMENDED TIER: [Discovery/Feasibility/Validation]
+RATIONALE: [Specific reasoning based on their assumptions and risks]
+EXPECTED OUTCOMES: [What they'll learn at this investment level]
+SUCCESS CRITERIA: [How to measure validation success]
+
+NEXT STEPS: [Immediate actions to take]
+
+This playbook provides ${companyName} with a clear roadmap for validating their specific assumptions and mitigating their identified risks through our structured 16-module validation framework.`;
 
     console.log('A4. Calling OpenAI API...');
     
