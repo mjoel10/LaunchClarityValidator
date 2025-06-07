@@ -18,7 +18,7 @@ export default function AssumptionValidationPlaybook({ sprintId, intakeData }: A
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: module } = useQuery({
+  const { data: module, refetch } = useQuery({
     queryKey: ['/api/sprints', sprintId, 'modules'],
     select: (modules: any[]) => modules?.find((m: any) => m.moduleType === 'assumptions')
   });
@@ -31,6 +31,7 @@ export default function AssumptionValidationPlaybook({ sprintId, intakeData }: A
     },
     onSuccess: (data) => {
       queryClient.invalidateQueries({ queryKey: ['/api/sprints', sprintId, 'modules'] });
+      refetch();
       toast({
         title: "Assumption Playbook Generated",
         description: "Comprehensive validation strategies ready for each sprint tier."
@@ -49,6 +50,16 @@ export default function AssumptionValidationPlaybook({ sprintId, intakeData }: A
 
   const playbook = module?.aiAnalysis?.playbook || '';
   const isCompleted = module?.isCompleted;
+  
+  // Debug logging
+  console.log('AssumptionValidationPlaybook debug:', {
+    moduleExists: !!module,
+    aiAnalysisExists: !!module?.aiAnalysis,
+    playbookExists: !!playbook,
+    playbookLength: playbook?.length,
+    isCompleted,
+    moduleType: module?.moduleType
+  });
 
   const copyToClipboard = async () => {
     try {
