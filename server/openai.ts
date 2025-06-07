@@ -1195,13 +1195,7 @@ PARTNERSHIP CONTEXT:
 - Business Model: ${businessModel}
 - Price Point: ${pricePoint}
 
-Focus on:
-- Risks specific to the partnership between ${companyName} and ${partnerName}
-- Risks from both companies' perspectives
-- Mutual risks affecting both parties
-- Partnership-specific mitigation strategies
-
-Use the actual company names "${companyName}" and "${partnerName}" throughout your analysis.` : `
+Focus on partnership-specific risks and mitigation strategies.` : `
 Generate a comprehensive risk assessment report of 2,000-2,500 words analyzing risks for ${companyName} in the ${industry} sector.
 
 COMPANY CONTEXT:
@@ -1232,8 +1226,6 @@ ${companyName}${partnerName ? ` - ${partnerName} Partnership` : ''} Validation S
 EXECUTIVE SUMMARY
 
 The comprehensive risk assessment for ${companyName} in the ${industry} sector reveals a complex risk landscape requiring strategic mitigation across multiple categories. This analysis evaluates 6 primary risk categories with detailed probability assessments, impact quantification, and targeted mitigation strategies to ensure project success.
-
-${isPartnership ? `The proposed partnership between ${companyName} and ${partnerName} introduces unique risk factors that require careful management from both parties' perspectives. Key partnership-specific risks include integration dependencies, revenue sharing complexities, and mutual brand exposure considerations.` : `${companyName}'s current position in the ${targetCustomer} market presents both opportunities and challenges, with primary risks centered around market dynamics, competitive pressures, and operational scaling requirements.`}
 
 KEY FINDINGS:
 - Critical Risks (Score >15): [Number] risks identified requiring immediate attention
@@ -1277,90 +1269,27 @@ Risk Tolerance Levels:
 
 Market Risks
 ────────────
-
-Risk 1: [Specific market risk name relevant to ${companyName}]
-- Probability: High (XX%)
-- Impact: $XXK - $XXXK potential revenue impact
-- Risk Score: XX/25
-- Root Cause: [Detailed analysis of underlying market dynamics]
-- Mitigation Strategy: [Specific actions with responsible parties and 30/60/90-day milestones]
-- Early Warning Indicators: [Specific metrics to monitor]
-- Residual Risk: XX/25 after mitigation implementation
-
-Risk 2: [Second market risk]
-- Probability: Medium (XX%)
-- Impact: [Specific impact assessment]
-- Risk Score: XX/25
-- Root Cause: [Analysis]
-- Mitigation Strategy: [Detailed plan]
-- Residual Risk: XX/25
-
-[Continue for 3-5 market risks total]
+[Analyze 3-5 specific market risks for ${companyName} with probability, impact, and mitigation strategies]
 
 Technical/Product Risks
 ──────────────────────
-
-Risk 1: [Specific technical risk for ${companyName}]
-- Probability: High (XX%)
-- Impact: [Development delays, cost overruns, customer impact]
-- Risk Score: XX/25
-- Root Cause: [Technical complexity analysis]
-- Mitigation Strategy: [Technical solutions, resource allocation, timeline adjustments]
-- Residual Risk: XX/25
-
-[Continue for all technical risks]
+[Analyze 3-5 specific technical risks with detailed assessments]
 
 Financial Risks
 ──────────────
-
-Risk 1: [Cash flow, funding, pricing risks specific to ${companyName}]
-- Probability: Medium (XX%)
-- Impact: $XXK working capital impact
-- Risk Score: XX/25
-- Root Cause: [Financial model analysis]
-- Mitigation Strategy: [Financial controls, scenario planning]
-- Residual Risk: XX/25
-
-[Continue for financial risks]
+[Analyze 3-5 financial risks with dollar impact quantification]
 
 Operational Risks
 ────────────────
-
-Risk 1: [Staffing, process, capacity risks for ${companyName}]
-- Probability: Medium-High (XX%)
-- Impact: [Operational efficiency and customer satisfaction impact]
-- Risk Score: XX/25
-- Root Cause: [Operational analysis]
-- Mitigation Strategy: [Process improvements, resource planning]
-- Residual Risk: XX/25
-
-[Continue for operational risks]
+[Analyze 3-5 operational risks with efficiency impact assessment]
 
 Competitive Risks
 ────────────────
-
-Risk 1: [Competitive pressure specific to ${companyName} in ${industry}]
-- Probability: High (XX%)
-- Impact: Market share and pricing pressure
-- Risk Score: XX/25
-- Root Cause: [Competitive landscape analysis]
-- Mitigation Strategy: [Differentiation, speed to market]
-- Residual Risk: XX/25
-
-[Continue for competitive risks]
+[Analyze 3-5 competitive risks specific to ${industry} sector]
 
 Regulatory/Compliance Risks
 ─────────────────────────
-
-Risk 1: [Industry-specific regulatory risks for ${companyName}]
-- Probability: Medium (XX%)
-- Impact: Compliance costs and operational restrictions
-- Risk Score: XX/25
-- Root Cause: [Regulatory environment analysis]
-- Mitigation Strategy: [Compliance framework, legal review]
-- Residual Risk: XX/25
-
-[Continue for regulatory risks]
+[Analyze 3-5 regulatory risks relevant to ${companyName}]
 
 ${isPartnership ? `
 
@@ -1370,126 +1299,37 @@ ${isPartnership ? `
 
 ${companyName}'s Partnership Risks
 ─────────────────────────────────
-
-Risk 1: Partner Dependency Risk
-- Probability: Medium-High (XX%)
-- Impact: Revenue concentration and strategic vulnerability
-- Risk Score: XX/25
-- Specific Concern: Over-reliance on ${partnerName} for critical functionality
-- Mitigation: [Diversification strategy, contract terms]
-
-Risk 2: Integration Quality Risk
-- Probability: Medium (XX%)
-- Impact: Customer experience and support burden
-- Risk Score: XX/25
-- Specific Concern: Technical integration challenges with ${partnerName}
-- Mitigation: [Testing protocols, support frameworks]
-
-[Continue for ${companyName}-specific partnership risks]
+[Specific risks from ${companyName}'s perspective]
 
 ${partnerName}'s Partnership Risks
 ────────────────────────────────
-
-Risk 1: Resource Allocation Risk
-- Probability: Medium (XX%)
-- Impact: Integration support and maintenance burden
-- Risk Score: XX/25
-- Specific Concern: ${partnerName}'s commitment to partnership success
-- Mitigation: [Clear SLAs, resource commitments]
-
-Risk 2: Brand Association Risk
-- Probability: Low-Medium (XX%)
-- Impact: Reputation impact from ${companyName} performance
-- Risk Score: XX/25
-- Specific Concern: Quality control and brand protection
-- Mitigation: [Quality standards, performance monitoring]
-
-[Continue for ${partnerName}-specific partnership risks]
+[Specific risks from ${partnerName}'s perspective]
 
 Mutual Partnership Risks
 ───────────────────────
-
-Risk 1: Strategic Misalignment
-- Probability: Medium (XX%)
-- Impact: Partnership effectiveness and goal achievement
-- Risk Score: XX/25
-- Shared Concern: Diverging priorities and objectives
-- Joint Mitigation: [Governance structure, regular alignment meetings]
-
-Risk 2: Market Timing Risk
-- Probability: Medium-High (XX%)
-- Impact: Competitive advantage and market opportunity
-- Risk Score: XX/25
-- Shared Concern: Speed to market execution
-- Joint Mitigation: [Accelerated timeline, resource prioritization]
-
-[Continue for mutual risks]` : ''}
+[Shared risks affecting both parties]` : ''}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ${isPartnership ? '4' : '3'}. RISK PRIORITY MATRIX
 
 TOP 10 CRITICAL RISKS (Ranked by Risk Score):
-
-1. [Risk Name] - Score: XX/25 - Category: [Market/Technical/etc.]
-2. [Risk Name] - Score: XX/25 - Category: [Category]
-3. [Risk Name] - Score: XX/25 - Category: [Category]
-4. [Risk Name] - Score: XX/25 - Category: [Category]
-5. [Risk Name] - Score: XX/25 - Category: [Category]
-6. [Risk Name] - Score: XX/25 - Category: [Category]
-7. [Risk Name] - Score: XX/25 - Category: [Category]
-8. [Risk Name] - Score: XX/25 - Category: [Category]
-9. [Risk Name] - Score: XX/25 - Category: [Category]
-10. [Risk Name] - Score: XX/25 - Category: [Category]
-
-Risk Heat Map Distribution:
-- Critical Risks (20-25): [X] risks requiring immediate action
-- High Risks (15-19): [X] risks needing priority attention
-- Medium Risks (8-14): [X] risks for active monitoring
-- Low Risks (1-7): [X] risks for periodic review
+[List top 10 risks with specific scores and categories]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ${isPartnership ? '5' : '4'}. MITIGATION STRATEGIES
 
-Critical Risk Mitigation (Score >15):
-[Detailed mitigation plans for each critical risk with specific actions, responsible parties, timelines, and success metrics]
-
-Preventive Measures:
-[Proactive strategies to prevent risk occurrence]
-
-Contingency Plans:
-[Response strategies if risks materialize]
-
-Early Warning System:
-[Monitoring frameworks and trigger indicators]
+[Detailed mitigation plans for critical risks with specific actions, timelines, and success metrics]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ${isPartnership ? '6' : '5'}. RISK MANAGEMENT ROADMAP
 
 90-Day Risk Reduction Plan:
+[Specific implementation timeline with resource requirements and success metrics]
 
-Days 1-30: Critical Risk Mitigation
-[Specific actions for highest priority risks]
-
-Days 31-60: High Risk Management  
-[Implementation of priority mitigation strategies]
-
-Days 61-90: Medium Risk Monitoring
-[Establishment of ongoing risk management processes]
-
-Resource Requirements:
-- Financial Investment: $XXK - $XXXK
-- Personnel: [Specific roles and time commitments]
-- Technology: [Systems and tools needed]
-
-Success Metrics:
-- Target risk score reduction: XX% overall
-- Critical risk elimination: [Number] risks moved below threshold
-- Mitigation effectiveness: [Specific KPIs]
-
-This comprehensive risk assessment provides ${companyName} with actionable intelligence to proactively manage risks and ensure ${isPartnership ? `partnership` : `project`} success in the ${industry} sector.`;
+This comprehensive risk assessment provides ${companyName} with actionable intelligence to proactively manage risks and ensure project success in the ${industry} sector.`;
 
   try {
     const response = await openai.chat.completions.create({
@@ -1520,7 +1360,7 @@ This comprehensive risk assessment provides ${companyName} with actionable intel
       partnershipType
     };
 
-  } catch (error) {
+  } catch (error: any) {
     console.error('Error generating risk assessment:', error);
     throw new Error("Failed to generate risk assessment: " + error.message);
   }
