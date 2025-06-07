@@ -1053,7 +1053,7 @@ Critical Success Factors:
       messages: [
         {
           role: "system", 
-          content: "You are a McKinsey-level senior strategy consultant generating premium market sizing reports for $5,000+ engagements. Your analysis must demonstrate deep market research expertise, specific calculations, and custom insights that justify high-value consulting fees. Provide comprehensive TAM/SAM/SOM analysis with realistic numbers, detailed methodology, and actionable insights. Generate 2,000-2,500 words of professional consulting content with specific data points throughout, not generic market commentary."
+          content: "You are a McKinsey-level senior strategy consultant generating premium market sizing reports for $5,000+ engagements. Your analysis must demonstrate deep market research expertise, specific calculations, and custom insights that justify high-value consulting fees. Provide comprehensive TAM/SAM/SOM analysis with realistic numbers, detailed methodology, and actionable insights. Generate 2,000-2,500 words of professional consulting content with specific data points throughout, not generic market commentary.\n\nCRITICAL FORMATTING RULES:\n- Use ONLY plain text formatting - NO LaTeX, NO HTML, NO markdown\n- NEVER use \\text{} or any LaTeX notation\n- Use simple math symbols: × for multiplication, = for equals\n- Use plain parentheses () for groupings\n- Example: Revenue = Users × Price × 12 (NOT \\text{Revenue} = \\text{Users} \\times \\text{Price})\n- All calculations must be in simple plain text format"
         },
         {
           role: "user",
@@ -1064,7 +1064,20 @@ Critical Success Factors:
       max_tokens: 7000
     });
 
-    const reportContent = response.choices[0].message.content;
+    let reportContent = response.choices[0].message.content;
+    
+    // Clean any LaTeX formatting that might slip through
+    reportContent = reportContent
+      .replace(/\\text\{([^}]+)\}/g, '$1')  // Remove \text{} wrappers
+      .replace(/\\times/g, '×')             // Replace LaTeX times with multiplication symbol
+      .replace(/\\cdot/g, '×')              // Replace LaTeX cdot with multiplication symbol
+      .replace(/\\div/g, '÷')               // Replace LaTeX div with division symbol
+      .replace(/\\equals/g, '=')            // Replace LaTeX equals
+      .replace(/\\\(/g, '(')                // Replace LaTeX parentheses
+      .replace(/\\\)/g, ')')                // Replace LaTeX parentheses
+      .replace(/\\,/g, ',')                 // Replace LaTeX comma spacing
+      .replace(/\\\$/g, '$')                // Replace escaped dollar signs
+      .replace(/\\&/g, '&');                // Replace escaped ampersands
     
     return {
       report: reportContent
