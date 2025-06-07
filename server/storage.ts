@@ -94,7 +94,16 @@ export class DatabaseStorage implements IStorage {
   async initializeSprintModules(sprintId: number, tier: string): Promise<void> {
     const allModules = this.getAllModulesWithTierInfo(tier);
     
-    const modulesToInsert = allModules.map((module: {type: string, isLocked: boolean, requiredTier: string}) => ({
+    // Check if this is a partnership evaluation to conditionally add partnership_viability
+    const intakeData = await this.getIntakeDataBySprintId(sprintId);
+    const isPartnership = intakeData?.isPartnershipEvaluation || false;
+    
+    let finalModules = [...allModules];
+    if (isPartnership) {
+      finalModules.push({ type: 'partnership_viability', isLocked: false, requiredTier: 'discovery' });
+    }
+    
+    const modulesToInsert = finalModules.map((module: {type: string, isLocked: boolean, requiredTier: string}) => ({
       sprintId,
       moduleType: module.type,
       isLocked: module.isLocked,
@@ -106,34 +115,32 @@ export class DatabaseStorage implements IStorage {
   }
 
   private getAllModulesWithTierInfo(tier: string): Array<{type: string, isLocked: boolean, requiredTier: string}> {
+    // Discovery Sprint ($5K) - 7 modules (6 core + 1 partnership conditional)
     const discoveryModules = [
-      { type: 'intake', isLocked: false, requiredTier: 'discovery' },
-      { type: 'market_simulation', isLocked: false, requiredTier: 'discovery' },
-      { type: 'assumptions', isLocked: false, requiredTier: 'discovery' },
-      { type: 'competitive_intel', isLocked: false, requiredTier: 'discovery' },
+      { type: 'initial_intake', isLocked: false, requiredTier: 'discovery' },
+      { type: 'assumption_tracker', isLocked: false, requiredTier: 'discovery' },
+      { type: 'market_sizing_analysis', isLocked: false, requiredTier: 'discovery' },
+      { type: 'competitive_intelligence', isLocked: false, requiredTier: 'discovery' },
       { type: 'risk_assessment', isLocked: false, requiredTier: 'discovery' },
-      { type: 'swot_analysis', isLocked: false, requiredTier: 'discovery' }
+      { type: 'customer_voice_simulation', isLocked: false, requiredTier: 'discovery' }
+      // partnership_viability is conditionally added based on intake data
     ];
 
+    // Feasibility Sprint ($15K) - 4 additional modules  
     const feasibilityModules = [
-      { type: 'business_model_simulator', isLocked: tier === 'discovery', requiredTier: 'feasibility' },
-      { type: 'channel_recommender', isLocked: tier === 'discovery', requiredTier: 'feasibility' },
-      { type: 'async_interviews', isLocked: tier === 'discovery', requiredTier: 'feasibility' },
-      { type: 'demand_test', isLocked: tier === 'discovery', requiredTier: 'feasibility' },
-      { type: 'go_pivot_defer', isLocked: tier === 'discovery', requiredTier: 'feasibility' }
+      { type: 'light_customer_feedback', isLocked: tier === 'discovery', requiredTier: 'feasibility' },
+      { type: 'business_model_simulation', isLocked: tier === 'discovery', requiredTier: 'feasibility' },
+      { type: 'channel_recommendations', isLocked: tier === 'discovery', requiredTier: 'feasibility' },
+      { type: 'swot_analysis', isLocked: tier === 'discovery', requiredTier: 'feasibility' }
     ];
 
+    // Validation Sprint ($35K) - 5 additional modules
     const validationModules = [
-      { type: 'full_interviews', isLocked: tier !== 'validation', requiredTier: 'validation' },
-      { type: 'multi_channel_tests', isLocked: tier !== 'validation', requiredTier: 'validation' },
-      { type: 'enhanced_market_intel', isLocked: tier !== 'validation', requiredTier: 'validation' },
-      { type: 'strategic_analysis', isLocked: tier !== 'validation', requiredTier: 'validation' },
-      { type: 'blue_ocean_strategy', isLocked: tier !== 'validation', requiredTier: 'validation' },
-      { type: 'implementation_roadmap', isLocked: tier !== 'validation', requiredTier: 'validation' },
-      { type: 'action_plans', isLocked: tier !== 'validation', requiredTier: 'validation' },
-      { type: 'battlecards', isLocked: tier !== 'validation', requiredTier: 'validation' },
-      { type: 'partnership_evaluation', isLocked: tier !== 'validation', requiredTier: 'validation' },
-      { type: 'go_pivot_kill', isLocked: tier !== 'validation', requiredTier: 'validation' }
+      { type: 'full_interview_suite', isLocked: tier !== 'validation', requiredTier: 'validation' },
+      { type: 'multi_channel_testing', isLocked: tier !== 'validation', requiredTier: 'validation' },
+      { type: 'enhanced_market_intelligence', isLocked: tier !== 'validation', requiredTier: 'validation' },
+      { type: 'market_deep_dive', isLocked: tier !== 'validation', requiredTier: 'validation' },
+      { type: 'strategic_roadmap', isLocked: tier !== 'validation', requiredTier: 'validation' }
     ];
 
     return [...discoveryModules, ...feasibilityModules, ...validationModules];
