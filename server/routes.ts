@@ -430,14 +430,18 @@ export async function registerRoutes(app: Express): Promise<Server> {
   // Generate competitive intelligence analysis
   app.post("/api/sprints/:id/modules/competitive_intelligence/generate", async (req, res) => {
     try {
+      console.log('Starting competitive intelligence generation...');
       const sprintId = Number(req.params.id);
       const intake = await storage.getIntakeDataBySprintId(sprintId);
       
       if (!intake) {
+        console.log('No intake data found for sprint:', sprintId);
         return res.status(400).json({ message: "No intake data found for this sprint" });
       }
       
+      console.log('Intake data found, calling OpenAI function...');
       const analysis = await generateCompetitiveIntelligence(intake);
+      console.log('OpenAI function completed, saving to database...');
       
       // Save to sprint module and mark as completed
       await storage.updateSprintModuleByType(sprintId, 'competitive_intelligence', {
@@ -446,6 +450,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
         updatedAt: new Date(),
       });
       
+      console.log('Analysis saved successfully');
       res.json(analysis);
     } catch (error: any) {
       console.error('Error generating competitive intelligence:', error);
