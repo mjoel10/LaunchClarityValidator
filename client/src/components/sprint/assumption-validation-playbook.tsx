@@ -18,10 +18,13 @@ export default function AssumptionValidationPlaybook({ sprintId, intakeData }: A
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const { data: module, refetch } = useQuery({
+  const { data: modules, refetch } = useQuery({
     queryKey: ['/api/sprints', sprintId, 'modules'],
-    select: (modules: any[]) => modules?.find((m: any) => m.moduleType === 'assumptions')
+    staleTime: 0,
+    gcTime: 0
   });
+  
+  const module = modules?.find((m: any) => m.moduleType === 'assumptions');
 
   const generateMutation = useMutation({
     mutationFn: async () => {
@@ -53,12 +56,15 @@ export default function AssumptionValidationPlaybook({ sprintId, intakeData }: A
   
   // Debug logging
   console.log('AssumptionValidationPlaybook debug:', {
+    modulesArray: modules,
+    modulesLength: modules?.length,
     moduleExists: !!module,
     aiAnalysisExists: !!module?.aiAnalysis,
     playbookExists: !!playbook,
     playbookLength: playbook?.length,
     isCompleted,
-    moduleType: module?.moduleType
+    moduleType: module?.moduleType,
+    allModuleTypes: modules?.map(m => m.moduleType)
   });
 
   const copyToClipboard = async () => {
