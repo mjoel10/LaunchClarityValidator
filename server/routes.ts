@@ -336,6 +336,14 @@ export async function registerRoutes(app: Express): Promise<Server> {
   app.get("/api/sprints/:id/modules", async (req, res) => {
     try {
       const sprintId = Number(req.params.id);
+      
+      // Add cache-busting headers
+      res.set({
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
+      });
+      
       const modules = await storage.getSprintModules(sprintId);
       res.json(modules);
     } catch (error: any) {
