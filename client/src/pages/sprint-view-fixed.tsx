@@ -63,7 +63,7 @@ const FEATURE_COMPONENTS = {
   market_sizing_analysis: MarketSizingReport,
   competitive_intelligence: CompetitiveIntelligence,
   risk_assessment: RiskAssessment,
-  customer_voice_simulation: MarketSimulation, // Customer Voice uses Market Simulation component
+  customer_voice_simulation: CustomerVoiceSimulation,
   partnership_viability: PartnershipViability,
   
   // Feasibility Sprint ($15K) - 4 additional modules
