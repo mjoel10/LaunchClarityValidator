@@ -19,8 +19,10 @@ export default function AssumptionValidationPlaybook({ sprintId, intakeData }: A
   const queryClient = useQueryClient();
 
   const { data: modules, refetch } = useQuery({
-    queryKey: [`/api/sprints/${sprintId}/modules`, Date.now()],
+    queryKey: [`/api/sprints/${sprintId}/modules`],
+    enabled: !!sprintId,
     staleTime: 0,
+    cacheTime: 0,
     refetchOnMount: true,
     refetchOnWindowFocus: true
   });
