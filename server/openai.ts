@@ -507,74 +507,7 @@ Respond with JSON in this exact format:
   }
 }
 
-export async function generateRiskAssessment(intakeData: any) {
-  try {
-    const prompt = `
-You are the LaunchClarity Analysis Engine. Generate risk assessment for:
 
-Business Model: ${intakeData.businessModel}
-Current Stage: ${intakeData.currentStage}
-Industry: ${intakeData.industry}
-Sales Complexity: ${intakeData.salesComplexity}
-Delivery Complexity: ${intakeData.deliveryComplexity}
-Previously Tested: ${intakeData.previouslyTested}
-
-Analyze risks across 5 dimensions with mitigation strategies.
-
-Respond with JSON in this exact format:
-{
-  "riskAssessment": {
-    "technical": {
-      "score": 35,
-      "level": "Medium",
-      "factors": ["Integration complexity", "Scalability concerns"],
-      "mitigation": "Phased technical development with MVP approach"
-    },
-    "market": {
-      "score": 65,
-      "level": "High", 
-      "factors": ["Unproven demand", "Competitive pressure"],
-      "mitigation": "Extensive customer validation before full launch"
-    },
-    "competitive": {
-      "score": 45,
-      "level": "Medium",
-      "factors": ["Established players", "Low barriers to entry"],
-      "mitigation": "Focus on unique value proposition and customer experience"
-    },
-    "execution": {
-      "score": 50,
-      "level": "Medium",
-      "factors": ["Resource constraints", "Team experience"],
-      "mitigation": "Hire experienced advisors and prioritize key hires"
-    },
-    "financial": {
-      "score": 40,
-      "level": "Medium",
-      "factors": ["Funding requirements", "Revenue timeline"],
-      "mitigation": "Secure 18-month runway and focus on early revenue"
-    }
-  },
-  "overallRisk": "Medium-High",
-  "keyMitigationPriorities": [
-    "Validate market demand through customer interviews",
-    "Secure experienced technical leadership",
-    "Develop clear competitive differentiation"
-  ]
-}`;
-
-    const response = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [{ role: "user", content: prompt }],
-      response_format: { type: "json_object" },
-    });
-
-    return JSON.parse(response.choices[0].message.content || '{}');
-  } catch (error) {
-    console.error('Error generating risk assessment:', error);
-    throw new Error("Failed to generate risk assessment");
-  }
-}
 
 export async function generateAssumptions(intakeData: any) {
   try {
@@ -1228,6 +1161,368 @@ Critical Success Factors:
   } catch (error) {
     console.error('Error generating market sizing report:', error);
     throw new Error('Failed to generate market sizing report');
+  }
+}
+
+export async function generateRiskAssessment(intakeData: any) {
+  if (!openai) {
+    throw new Error('OpenAI client not initialized');
+  }
+
+  const isPartnership = intakeData.isPartnershipEvaluation;
+  const companyName = intakeData.companyName || 'your company';
+  const partnerName = intakeData.potentialPartnerName || intakeData.evaluatedPartner;
+  const partnershipType = intakeData.partnershipType || 'Strategic Partnership';
+  const industry = intakeData.industry || 'technology';
+  const targetCustomer = intakeData.targetCustomerDescription || 'small businesses';
+  const businessModel = intakeData.businessModel || 'subscription';
+  const pricePoint = intakeData.estimatedPricePoint || '$100';
+  const currentStage = intakeData.currentStage || 'Growth';
+  
+  if (!companyName) {
+    throw new Error('Company name is required for generating risk assessment');
+  }
+
+  const prompt = isPartnership ? `
+Generate a comprehensive risk assessment report of 2,000-2,500 words for the PARTNERSHIP between ${companyName} and ${partnerName}.
+
+PARTNERSHIP CONTEXT:
+- Company: ${companyName} (${currentStage} stage)
+- Partner: ${partnerName}
+- Partnership Type: ${partnershipType}
+- Target Market: ${targetCustomer}
+- Industry: ${industry}
+- Business Model: ${businessModel}
+- Price Point: ${pricePoint}
+
+Focus on:
+- Risks specific to the partnership between ${companyName} and ${partnerName}
+- Risks from both companies' perspectives
+- Mutual risks affecting both parties
+- Partnership-specific mitigation strategies
+
+Use the actual company names "${companyName}" and "${partnerName}" throughout your analysis.` : `
+Generate a comprehensive risk assessment report of 2,000-2,500 words analyzing risks for ${companyName} in the ${industry} sector.
+
+COMPANY CONTEXT:
+- Company: ${companyName} (${currentStage} stage)
+- Target Market: ${targetCustomer}
+- Industry: ${industry}
+- Business Model: ${businessModel}
+- Price Point: ${pricePoint}
+
+Focus on general business risks for ${companyName}.`;
+
+  const fullPrompt = `${prompt}
+
+CRITICAL REQUIREMENTS:
+- Generate 2,000-2,500 words with professional risk analysis depth
+- Analyze 6 risk categories with 3-5 specific risks each
+- Include probability ratings, impact assessments, and mitigation strategies
+- Use specific percentages, dollar amounts, and concrete timelines
+- Make it feel custom to ${companyName} in ${industry}, not generic templates
+
+FORMAT WITH EXACT PROFESSIONAL RISK ANALYSIS STANDARD:
+
+RISK ASSESSMENT REPORT
+${companyName}${partnerName ? ` - ${partnerName} Partnership` : ''} Validation Sprint Risk Analysis
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+EXECUTIVE SUMMARY
+
+The comprehensive risk assessment for ${companyName} in the ${industry} sector reveals a complex risk landscape requiring strategic mitigation across multiple categories. This analysis evaluates 6 primary risk categories with detailed probability assessments, impact quantification, and targeted mitigation strategies to ensure project success.
+
+${isPartnership ? `The proposed partnership between ${companyName} and ${partnerName} introduces unique risk factors that require careful management from both parties' perspectives. Key partnership-specific risks include integration dependencies, revenue sharing complexities, and mutual brand exposure considerations.` : `${companyName}'s current position in the ${targetCustomer} market presents both opportunities and challenges, with primary risks centered around market dynamics, competitive pressures, and operational scaling requirements.`}
+
+KEY FINDINGS:
+- Critical Risks (Score >15): [Number] risks identified requiring immediate attention
+- Highest Risk: [Risk name] - Score: XX/25 with potential $XXK impact
+- Total Mitigation Investment: $XXK - $XXXK over 90-day period
+- Risk Reduction Timeline: XX days to achieve target risk profile
+- Success Probability: XX% with comprehensive mitigation implementation
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. RISK ASSESSMENT METHODOLOGY
+
+Framework Overview:
+Our risk assessment utilizes a quantitative scoring framework combining probability and impact assessments to generate actionable risk scores. Each risk is evaluated on a 1-25 scale using standardized criteria for consistency and prioritization.
+
+Risk Scoring Formula: Risk Score = Probability (1-5) × Impact (1-5)
+
+Probability Ratings:
+- High (5): >70% likelihood of occurrence
+- Medium-High (4): 50-70% likelihood  
+- Medium (3): 30-50% likelihood
+- Medium-Low (2): 10-30% likelihood
+- Low (1): <10% likelihood
+
+Impact Ratings:
+- High (5): >$500K impact or critical business disruption
+- Medium-High (4): $100K-$500K impact or significant disruption
+- Medium (3): $25K-$100K impact or moderate disruption
+- Medium-Low (2): $5K-$25K impact or minor disruption
+- Low (1): <$5K impact or minimal disruption
+
+Risk Tolerance Levels:
+- Critical (Score 20-25): Immediate action required, executive escalation
+- High (Score 15-19): Priority mitigation needed within 30 days
+- Medium (Score 8-14): Monitor and manage with 60-day action plan
+- Low (Score 1-7): Accept risk or implement basic monitoring
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+2. CATEGORY RISK ANALYSIS
+
+Market Risks
+────────────
+
+Risk 1: [Specific market risk name relevant to ${companyName}]
+- Probability: High (XX%)
+- Impact: $XXK - $XXXK potential revenue impact
+- Risk Score: XX/25
+- Root Cause: [Detailed analysis of underlying market dynamics]
+- Mitigation Strategy: [Specific actions with responsible parties and 30/60/90-day milestones]
+- Early Warning Indicators: [Specific metrics to monitor]
+- Residual Risk: XX/25 after mitigation implementation
+
+Risk 2: [Second market risk]
+- Probability: Medium (XX%)
+- Impact: [Specific impact assessment]
+- Risk Score: XX/25
+- Root Cause: [Analysis]
+- Mitigation Strategy: [Detailed plan]
+- Residual Risk: XX/25
+
+[Continue for 3-5 market risks total]
+
+Technical/Product Risks
+──────────────────────
+
+Risk 1: [Specific technical risk for ${companyName}]
+- Probability: High (XX%)
+- Impact: [Development delays, cost overruns, customer impact]
+- Risk Score: XX/25
+- Root Cause: [Technical complexity analysis]
+- Mitigation Strategy: [Technical solutions, resource allocation, timeline adjustments]
+- Residual Risk: XX/25
+
+[Continue for all technical risks]
+
+Financial Risks
+──────────────
+
+Risk 1: [Cash flow, funding, pricing risks specific to ${companyName}]
+- Probability: Medium (XX%)
+- Impact: $XXK working capital impact
+- Risk Score: XX/25
+- Root Cause: [Financial model analysis]
+- Mitigation Strategy: [Financial controls, scenario planning]
+- Residual Risk: XX/25
+
+[Continue for financial risks]
+
+Operational Risks
+────────────────
+
+Risk 1: [Staffing, process, capacity risks for ${companyName}]
+- Probability: Medium-High (XX%)
+- Impact: [Operational efficiency and customer satisfaction impact]
+- Risk Score: XX/25
+- Root Cause: [Operational analysis]
+- Mitigation Strategy: [Process improvements, resource planning]
+- Residual Risk: XX/25
+
+[Continue for operational risks]
+
+Competitive Risks
+────────────────
+
+Risk 1: [Competitive pressure specific to ${companyName} in ${industry}]
+- Probability: High (XX%)
+- Impact: Market share and pricing pressure
+- Risk Score: XX/25
+- Root Cause: [Competitive landscape analysis]
+- Mitigation Strategy: [Differentiation, speed to market]
+- Residual Risk: XX/25
+
+[Continue for competitive risks]
+
+Regulatory/Compliance Risks
+─────────────────────────
+
+Risk 1: [Industry-specific regulatory risks for ${companyName}]
+- Probability: Medium (XX%)
+- Impact: Compliance costs and operational restrictions
+- Risk Score: XX/25
+- Root Cause: [Regulatory environment analysis]
+- Mitigation Strategy: [Compliance framework, legal review]
+- Residual Risk: XX/25
+
+[Continue for regulatory risks]
+
+${isPartnership ? `
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+3. PARTNERSHIP RISK ANALYSIS
+
+${companyName}'s Partnership Risks
+─────────────────────────────────
+
+Risk 1: Partner Dependency Risk
+- Probability: Medium-High (XX%)
+- Impact: Revenue concentration and strategic vulnerability
+- Risk Score: XX/25
+- Specific Concern: Over-reliance on ${partnerName} for critical functionality
+- Mitigation: [Diversification strategy, contract terms]
+
+Risk 2: Integration Quality Risk
+- Probability: Medium (XX%)
+- Impact: Customer experience and support burden
+- Risk Score: XX/25
+- Specific Concern: Technical integration challenges with ${partnerName}
+- Mitigation: [Testing protocols, support frameworks]
+
+[Continue for ${companyName}-specific partnership risks]
+
+${partnerName}'s Partnership Risks
+────────────────────────────────
+
+Risk 1: Resource Allocation Risk
+- Probability: Medium (XX%)
+- Impact: Integration support and maintenance burden
+- Risk Score: XX/25
+- Specific Concern: ${partnerName}'s commitment to partnership success
+- Mitigation: [Clear SLAs, resource commitments]
+
+Risk 2: Brand Association Risk
+- Probability: Low-Medium (XX%)
+- Impact: Reputation impact from ${companyName} performance
+- Risk Score: XX/25
+- Specific Concern: Quality control and brand protection
+- Mitigation: [Quality standards, performance monitoring]
+
+[Continue for ${partnerName}-specific partnership risks]
+
+Mutual Partnership Risks
+───────────────────────
+
+Risk 1: Strategic Misalignment
+- Probability: Medium (XX%)
+- Impact: Partnership effectiveness and goal achievement
+- Risk Score: XX/25
+- Shared Concern: Diverging priorities and objectives
+- Joint Mitigation: [Governance structure, regular alignment meetings]
+
+Risk 2: Market Timing Risk
+- Probability: Medium-High (XX%)
+- Impact: Competitive advantage and market opportunity
+- Risk Score: XX/25
+- Shared Concern: Speed to market execution
+- Joint Mitigation: [Accelerated timeline, resource prioritization]
+
+[Continue for mutual risks]` : ''}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+${isPartnership ? '4' : '3'}. RISK PRIORITY MATRIX
+
+TOP 10 CRITICAL RISKS (Ranked by Risk Score):
+
+1. [Risk Name] - Score: XX/25 - Category: [Market/Technical/etc.]
+2. [Risk Name] - Score: XX/25 - Category: [Category]
+3. [Risk Name] - Score: XX/25 - Category: [Category]
+4. [Risk Name] - Score: XX/25 - Category: [Category]
+5. [Risk Name] - Score: XX/25 - Category: [Category]
+6. [Risk Name] - Score: XX/25 - Category: [Category]
+7. [Risk Name] - Score: XX/25 - Category: [Category]
+8. [Risk Name] - Score: XX/25 - Category: [Category]
+9. [Risk Name] - Score: XX/25 - Category: [Category]
+10. [Risk Name] - Score: XX/25 - Category: [Category]
+
+Risk Heat Map Distribution:
+- Critical Risks (20-25): [X] risks requiring immediate action
+- High Risks (15-19): [X] risks needing priority attention
+- Medium Risks (8-14): [X] risks for active monitoring
+- Low Risks (1-7): [X] risks for periodic review
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+${isPartnership ? '5' : '4'}. MITIGATION STRATEGIES
+
+Critical Risk Mitigation (Score >15):
+[Detailed mitigation plans for each critical risk with specific actions, responsible parties, timelines, and success metrics]
+
+Preventive Measures:
+[Proactive strategies to prevent risk occurrence]
+
+Contingency Plans:
+[Response strategies if risks materialize]
+
+Early Warning System:
+[Monitoring frameworks and trigger indicators]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+${isPartnership ? '6' : '5'}. RISK MANAGEMENT ROADMAP
+
+90-Day Risk Reduction Plan:
+
+Days 1-30: Critical Risk Mitigation
+[Specific actions for highest priority risks]
+
+Days 31-60: High Risk Management  
+[Implementation of priority mitigation strategies]
+
+Days 61-90: Medium Risk Monitoring
+[Establishment of ongoing risk management processes]
+
+Resource Requirements:
+- Financial Investment: $XXK - $XXXK
+- Personnel: [Specific roles and time commitments]
+- Technology: [Systems and tools needed]
+
+Success Metrics:
+- Target risk score reduction: XX% overall
+- Critical risk elimination: [Number] risks moved below threshold
+- Mitigation effectiveness: [Specific KPIs]
+
+This comprehensive risk assessment provides ${companyName} with actionable intelligence to proactively manage risks and ensure ${isPartnership ? `partnership` : `project`} success in the ${industry} sector.`;
+
+  try {
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
+      messages: [
+        {
+          role: "system",
+          content: "You are a McKinsey-level senior risk management consultant generating premium risk assessment reports for $5,000+ engagements. Your analysis must demonstrate deep risk expertise, quantitative rigor, and actionable mitigation strategies that justify high-value consulting fees. Each risk should be substantial with specific probability assessments, dollar impact quantification, and concrete mitigation plans. Use actual percentages, dollar amounts, and realistic timelines throughout. Generate 2,000-2,500 words of professional risk analysis that reads like expert strategic assessment, not generic templates."
+        },
+        {
+          role: "user",
+          content: fullPrompt
+        }
+      ],
+      temperature: 0.3,
+      max_tokens: 6000
+    });
+
+    const content = response.choices[0].message.content;
+    if (!content) {
+      throw new Error('No content received from OpenAI');
+    }
+
+    return {
+      report: content,
+      companyName,
+      partnerName,
+      partnershipType
+    };
+
+  } catch (error) {
+    console.error('Error generating risk assessment:', error);
+    throw new Error("Failed to generate risk assessment: " + error.message);
   }
 }
 

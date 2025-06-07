@@ -1,0 +1,144 @@
+**Update the Risk Assessment module** that generates a comprehensive risk analysis report. The module should:
+
+1. Generate a detailed 2,000-2,500 word report with these exact sections:
+   * **Executive Summary** (200-300 words)
+   * **Risk Assessment Methodology**
+      * Risk scoring framework
+      * Probability and impact definitions
+      * Risk tolerance thresholds
+   * **Category Risk Analysis** (6 categories)
+      * Market Risks
+      * Technical/Product Risks
+      * Financial Risks
+      * Operational Risks
+      * Competitive Risks
+      * Regulatory/Compliance Risks
+   * **Partnership Risk Factors** (if partnership mode enabled)
+      * Risks for Client Company
+      * Risks for Partner Company
+      * Mutual/Shared Risks
+   * **Risk Priority Matrix**
+      * Top 10 risks ranked by severity
+      * Visual heat map description
+      * Critical path dependencies
+   * **Mitigation Strategies**
+      * Preventive measures
+      * Contingency plans
+      * Early warning indicators
+   * **Risk Management Roadmap**
+      * 90-day risk reduction plan
+      * Resource requirements
+      * Success metrics
+
+2. For each risk category (250-350 words):
+   * Identify 3-5 specific risks
+   * Probability rating: High (>70%), Medium (30-70%), Low (<30%)
+   * Impact rating: High/Medium/Low with dollar impact where possible
+   * Root cause analysis
+   * Mitigation tactics with owners and timelines
+   * Residual risk after mitigation
+
+3. Risk scoring methodology:
+   * Risk Score = Probability × Impact (1-25 scale)
+   * Include both inherent and residual risk scores
+   * Flag any risks above tolerance threshold (score >15)
+   * Create early warning indicator system
+
+4. For Partnership Mode (when enabled), analyze risks from BOTH perspectives:
+   * Client Company Risks: Partner dependency, revenue share, support burden, brand association, technical lock-in
+   * Partner Company Risks: Integration quality, resource allocation, market cannibalization, reputation
+   * Mutual Risks: Misalignment, communication breakdown, market timing, competitive response
+   * Include probability/impact from both viewpoints
+   * Joint mitigation strategies
+   * Success criteria for both parties
+
+5. CRITICAL FORMATTING REQUIREMENTS - Use this EXACT format:
+
+RISK ASSESSMENT REPORT
+[Company Name] Validation Sprint Risk Analysis
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+EXECUTIVE SUMMARY
+
+[First paragraph summarizing overall risk profile and top concerns]
+
+[Second paragraph highlighting critical mitigation priorities]
+
+KEY FINDINGS:
+- Critical Risks (Score >15): [Number] risks identified
+- Highest Risk: [Risk name] - Score: XX/25
+- Total Mitigation Investment: $XXK - $XXXK
+- Risk Reduction Timeline: XX days
+- Success Probability: XX% with mitigation
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. RISK ASSESSMENT METHODOLOGY
+
+Framework Overview:
+[Explanation of risk scoring approach]
+
+Risk Tolerance Levels:
+- Critical (Score 20-25): Immediate action required
+- High (Score 15-19): Priority mitigation needed
+- Medium (Score 8-14): Monitor and manage
+- Low (Score 1-7): Accept or monitor
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+2. CATEGORY RISK ANALYSIS
+
+Market Risks
+────────────
+
+Risk 1: [Specific risk name]
+- Probability: High (XX%)
+- Impact: $XXK - $XXXK revenue impact
+- Score: XX/25
+- Root Cause: [Detailed explanation]
+- Mitigation: [Specific actions with timeline]
+- Residual Risk: XX/25 after mitigation
+
+[Continue for all risks in category]
+
+[Repeat structure for all 6 categories]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+3. PARTNERSHIP RISK ANALYSIS [Only if partnership mode enabled]
+
+[Company Name]'s Risks
+─────────────────────
+
+[List specific risks from client perspective]
+
+[Partner Name]'s Risks
+────────────────────
+
+[List specific risks from partner perspective]
+
+Mutual Risks
+────────────
+
+[List shared risks affecting both parties]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+4. RISK PRIORITY MATRIX
+
+[Top 10 risks table with scores and rankings]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+5. MITIGATION STRATEGIES
+
+[Comprehensive mitigation plans for critical risks]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+6. RISK MANAGEMENT ROADMAP
+
+[90-day implementation plan]
+
+Use specific percentages, dollar amounts, and concrete mitigation strategies throughout. When partnership mode is enabled, ensure balanced analysis from both parties' perspectives.
