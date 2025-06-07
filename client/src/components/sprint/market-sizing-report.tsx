@@ -141,10 +141,11 @@ export default function MarketSizingReport({ sprintId, intakeData }: MarketSizin
                 </p>
               </div>
               
-              <div 
-                className="prose max-w-none bg-white border rounded-lg p-6"
-                dangerouslySetInnerHTML={{ __html: report }}
-              />
+              <div className="bg-white border rounded-lg p-6">
+                <pre className="whitespace-pre-wrap font-mono text-sm leading-relaxed text-gray-900 overflow-x-auto">
+                  {report}
+                </pre>
+              </div>
             </div>
           )}
         </CardContent>
