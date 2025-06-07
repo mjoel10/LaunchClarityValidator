@@ -22,22 +22,21 @@ export default function AssumptionValidationPlaybook({ sprintId, intakeData }: A
     queryKey: [`/api/sprints/${sprintId}/modules`],
     enabled: !!sprintId,
     staleTime: 0,
-    cacheTime: 0,
     refetchOnMount: true,
     refetchOnWindowFocus: true
   });
   
-  // Force array check and find assumptions module
+  // Force array check and find assumption tracker module
   const moduleArray = Array.isArray(modules) ? modules : [];
-  const module = moduleArray.find((m: any) => m.moduleType === 'assumptions');
+  const module = moduleArray.find((m: any) => m.moduleType === 'assumption_tracker');
   
-  // Fallback query specifically for assumptions module if not found in main query
+  // Fallback query specifically for assumption tracker module if not found in main query
   const { data: assumptionsModule } = useQuery({
-    queryKey: [`/api/sprints/${sprintId}/modules/assumptions`],
+    queryKey: [`/api/sprints/${sprintId}/modules/assumption_tracker`],
     queryFn: async () => {
       const response = await fetch(`/api/sprints/${sprintId}/modules`);
       const allModules = await response.json();
-      return allModules.find((m: any) => m.moduleType === 'assumptions');
+      return allModules.find((m: any) => m.moduleType === 'assumption_tracker');
     },
     enabled: !module && !!sprintId,
     staleTime: 0

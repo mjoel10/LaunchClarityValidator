@@ -466,7 +466,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const report = await generateAssumptionReport(intake);
       
       // Save to sprint module data
-      await storage.updateSprintModuleByType(sprintId, 'assumptions', {
+      await storage.updateSprintModuleByType(sprintId, 'assumption_tracker', {
         aiAnalysis: report,
         updatedAt: new Date(),
       });
@@ -511,7 +511,7 @@ export async function registerRoutes(app: Express): Promise<Server> {
       
       console.log('6. Saving to database...');
       // Save to sprint module data
-      await storage.updateSprintModuleByType(sprintId, 'assumptions', {
+      await storage.updateSprintModuleByType(sprintId, 'assumption_tracker', {
         aiAnalysis: { playbook },
         isCompleted: true,
         updatedAt: new Date(),
