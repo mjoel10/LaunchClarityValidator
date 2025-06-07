@@ -160,62 +160,54 @@ export default function SprintView() {
 
   const getModuleIcon = (moduleType: string) => {
     const iconMap: Record<string, any> = {
-      intake: Building2,
-      market_simulation: BarChart3,
-      assumptions: Target,
-      competitive_intel: Sword,
+      // Discovery Sprint ($5K) - 6 core + 1 conditional
+      initial_intake: Building2,
+      assumption_tracker: Target,
+      market_sizing_analysis: BarChart3,
+      competitive_intelligence: Sword,
       risk_assessment: Shield,
+      customer_voice_simulation: Users,
+      partnership_viability: Handshake,
+      
+      // Feasibility Sprint ($15K) - 4 additional modules
+      light_customer_feedback: Users,
+      business_model_simulation: TrendingUp,
+      channel_recommendations: Target,
       swot_analysis: Shield,
-      business_model_simulator: TrendingUp,
-      channel_recommender: Target,
-      strategic_analysis: Brain,
-      battlecards: Sword,
-      implementation_roadmap: MapPin,
-      action_plans: Calendar,
-      partnership_evaluation: Handshake,
-      async_interviews: Users,
-      demand_test: BarChart3,
-      full_interviews: Users,
-      multi_channel_tests: Target,
-      blue_ocean_strategy: Waves,
-      enhanced_market_intel: Eye,
-      go_defer_decision: CheckCircle2,
-      go_pivot_defer: CheckCircle2,
-      go_pivot_kill: CheckCircle2,
+      
+      // Validation Sprint ($35K) - 5 additional modules
+      full_interview_suite: Users,
+      multi_channel_testing: Target,
+      enhanced_market_intelligence: Eye,
+      market_deep_dive: BarChart3,
+      strategic_roadmap: MapPin,
     };
     return iconMap[moduleType] || FileText;
   };
 
   const getModuleName = (moduleType: string) => {
     const nameMap: Record<string, string> = {
-      intake: 'Initial Intake',
-      market_simulation: 'Market Sizing Analysis',
-      assumptions: 'Assumption Tracker',
-      competitive_intel: 'Competitive Intelligence',
+      // Discovery Sprint ($5K) - 6 core + 1 conditional
+      initial_intake: 'Initial Intake',
+      assumption_tracker: 'Assumption Tracker',
+      market_sizing_analysis: 'Market Sizing Analysis',
+      competitive_intelligence: 'Competitive Intelligence',
       risk_assessment: 'Risk Assessment',
+      customer_voice_simulation: 'Customer Voice Simulation',
+      partnership_viability: 'Partnership Viability',
+      
+      // Feasibility Sprint ($15K) - 4 additional modules
+      light_customer_feedback: 'Light Customer Feedback',
+      business_model_simulation: 'Business Model Simulation',
+      channel_recommendations: 'Channel Recommendations',
       swot_analysis: 'SWOT Analysis',
       
-      // Feasibility Sprint Features
-      business_model_simulator: 'Business Model Simulator',
-      channel_recommender: 'Channel Recommender',
-      async_interviews: 'Async Interview Suite',
-      demand_test: 'Demand Test Tracker',
-      
-      // Validation Sprint Features
-      strategic_analysis: 'Strategic Analysis Tools',
-      battlecards: 'Competitive Battlecards',
-      implementation_roadmap: 'Implementation Roadmap',
-      action_plans: '90-Day Action Plans',
-      partnership_evaluation: 'Partnership Evaluation',
-      full_interviews: 'Full Interview Suite',
-      multi_channel_tests: 'Multi-Channel Testing',
-      enhanced_market_intel: 'Enhanced Market Intelligence',
-      blue_ocean_strategy: 'Blue Ocean Strategy Analysis',
-      
-      // Decision Points
-      go_defer_decision: 'Go/Defer Decision Framework',
-      go_pivot_defer: 'Go/Pivot/Defer Decision',
-      go_pivot_kill: 'Go/Pivot/Kill Decision',
+      // Validation Sprint ($35K) - 5 additional modules
+      full_interview_suite: 'Full Interview Suite',
+      multi_channel_testing: 'Multi-Channel Testing',
+      enhanced_market_intelligence: 'Enhanced Market Intelligence',
+      market_deep_dive: 'Market Deep-Dive',
+      strategic_roadmap: 'Strategic Roadmap',
     };
     return nameMap[moduleType] || moduleType.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
   };
@@ -223,9 +215,33 @@ export default function SprintView() {
   const getModulesByTier = () => {
     if (!modules) return { discovery: [], feasibility: [], validation: [] };
     
-    const discoveryModules = ['intake', 'market_simulation', 'assumptions', 'competitive_intel', 'risk_assessment', 'swot_analysis'];
-    const feasibilityModules = ['business_model_simulator', 'channel_recommender', 'async_interviews', 'demand_test'];
-    const validationModules = ['full_interviews', 'multi_channel_tests', 'enhanced_market_intel', 'implementation_roadmap', 'battlecards'];
+    // Discovery Sprint ($5K) - 6 core modules + 1 conditional partnership
+    const discoveryModules = [
+      'initial_intake', 
+      'assumption_tracker', 
+      'market_sizing_analysis', 
+      'competitive_intelligence', 
+      'risk_assessment', 
+      'customer_voice_simulation',
+      'partnership_viability'
+    ];
+    
+    // Feasibility Sprint ($15K) - 4 additional modules
+    const feasibilityModules = [
+      'light_customer_feedback', 
+      'business_model_simulation', 
+      'channel_recommendations', 
+      'swot_analysis'
+    ];
+    
+    // Validation Sprint ($35K) - 5 additional modules
+    const validationModules = [
+      'full_interview_suite', 
+      'multi_channel_testing', 
+      'enhanced_market_intelligence', 
+      'market_deep_dive', 
+      'strategic_roadmap'
+    ];
 
     // Sort modules by predefined order
     const sortByOrder = (moduleList: string[], filteredModules: any[]) => {
