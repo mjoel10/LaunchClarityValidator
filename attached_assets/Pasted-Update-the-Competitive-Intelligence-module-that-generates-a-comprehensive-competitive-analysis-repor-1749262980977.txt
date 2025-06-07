@@ -1,0 +1,59 @@
+Update the Competitive Intelligence module that generates a comprehensive competitive analysis report. The module should:
+1. Generate a detailed 2,000-2,500 word report with these exact sections:
+   * Executive Summary (200-300 words)
+   * Competitive Landscape Overview
+      * Market structure and dynamics
+      * Key player categories
+      * Market concentration analysis
+   * Direct Competitor Profiles (5-7 competitors)
+      * Company overview and positioning
+      * Product/service comparison
+      * Pricing and business model
+      * Strengths and vulnerabilities
+   * Competitive Positioning Matrix
+      * Feature comparison table
+      * Market position mapping
+      * Differentiation opportunities
+   * Market Gaps & Opportunities
+      * Unserved customer needs
+      * Feature gaps in current solutions
+      * Emerging market trends
+   * Partnership Competitive Impact (if applicable)
+      * How partnership changes competitive dynamics
+      * New competitive advantages
+      * Potential competitive responses
+   * Strategic Recommendations
+      * Positioning strategy
+      * Differentiation tactics
+      * Competitive response playbook
+2. For each competitor profile (200-300 words):
+   * Company basics: Founded, size, funding, market share
+   * Core value proposition and target customers
+   * Key features and capabilities
+   * Pricing: Specific tiers and price points
+   * Recent developments and momentum
+   * Why they win/lose deals
+   * Vulnerabilities to exploit
+3. Competitive positioning analysis:
+   * Create 2x2 positioning matrix (e.g., Price vs. Features)
+   * Identify blue ocean opportunities
+   * Analyze switching costs and barriers
+   * Map customer journey differences
+4. CRITICAL FORMATTING REQUIREMENTS - Use this EXACT format:
+COMPETITIVE INTELLIGENCE ANALYSIS [Company Name] Market Position Assessment
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EXECUTIVE SUMMARY
+[First paragraph describing competitive landscape and key players]
+[Second paragraph highlighting main competitive advantages and threats]
+KEY FINDINGS: • Primary Competitors: [List top 3] • Market Leader: [Company] with XX% market share • Key Differentiator: [Your main advantage] • Biggest Threat: [Main competitive risk] • Market Opportunity: $XXM in [specific segment]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. COMPETITIVE LANDSCAPE OVERVIEW
+Market Structure: [Analysis of how the market is organized]
+Key Player Categories: • Enterprise Solutions: [List 2-3 players] • Mid-Market Focus: [List 2-3 players] • SMB/Startup Tools: [List 2-3 players] • Emerging Disruptors: [List 1-2 players]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+1. DIRECT COMPETITOR PROFILES
+Competitor 1: [Company Name] ─────────────────────────────
+Overview: [Comprehensive company description]
+[Continue with detailed profile structure]
+[Repeat for all 5-7 competitors]
+Include specific data points, actual pricing, and real market intelligence throughout

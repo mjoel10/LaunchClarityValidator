@@ -44,6 +44,7 @@ import AssumptionTrackerReport from '@/components/sprint/assumption-tracker-repo
 import AssumptionValidationPlaybook from '@/components/sprint/assumption-validation-playbook';
 import MarketSizingReport from '@/components/sprint/market-sizing-report';
 import CompetitiveIntelligence from '@/components/sprint/competitive-intelligence';
+import RiskAssessment from '@/components/sprint/risk-assessment';
 import DemandTestTracker from '@/components/sprint/demand-test-tracker';
 import FullInterviewSuite from '@/components/sprint/full-interview-suite';
 import MultiChannelTesting from '@/components/sprint/multi-channel-testing';

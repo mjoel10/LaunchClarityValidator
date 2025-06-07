@@ -453,6 +453,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Generate risk assessment analysis
+  app.post("/api/sprints/:id/modules/risk_assessment/generate", async (req, res) => {
+    try {
+      const sprintId = Number(req.params.id);
+      const intake = await storage.getIntakeDataBySprintId(sprintId);
+      
+      if (!intake) {
+        return res.status(400).json({ message: "No intake data found for this sprint" });
+      }
+      
+      const analysis = await generateRiskAssessment(intake);
+      
+      // Save to sprint module and mark as completed
+      await storage.updateSprintModuleByType(sprintId, 'risk_assessment', {
+        aiAnalysis: analysis,
+        isCompleted: true,
+        updatedAt: new Date(),
+      });
+      
+      res.json(analysis);
+    } catch (error: any) {
+      console.error('Error generating risk assessment:', error);
+      res.status(500).json({ message: "Failed to generate risk assessment: " + error.message });
+    }
+  });
+
   // Generate assumption validation report
   app.post("/api/sprints/:id/generate-assumption-report", async (req, res) => {
     try {
