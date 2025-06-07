@@ -484,6 +484,32 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Generate customer voice simulation analysis
+  app.post("/api/sprints/:id/modules/customer_voice_simulation/generate", async (req, res) => {
+    try {
+      const sprintId = Number(req.params.id);
+      const intake = await storage.getIntakeDataBySprintId(sprintId);
+      
+      if (!intake) {
+        return res.status(400).json({ message: "No intake data found for this sprint" });
+      }
+      
+      const analysis = await generateCustomerVoiceSimulation(intake);
+      
+      // Save to sprint module and mark as completed
+      await storage.updateSprintModuleByType(sprintId, 'customer_voice_simulation', {
+        aiAnalysis: analysis,
+        isCompleted: true,
+        updatedAt: new Date(),
+      });
+      
+      res.json(analysis);
+    } catch (error: any) {
+      console.error('Error generating customer voice simulation:', error);
+      res.status(500).json({ message: "Failed to generate customer voice simulation: " + error.message });
+    }
+  });
+
   // Generate assumption validation report
   app.post("/api/sprints/:id/generate-assumption-report", async (req, res) => {
     try {

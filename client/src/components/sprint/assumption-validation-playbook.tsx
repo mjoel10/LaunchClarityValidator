@@ -1,11 +1,10 @@
-import { useState } from 'react';
-import { Button } from '@/components/ui/button';
+import React, { useState, useEffect } from 'react';
+import { useQuery, useMutation } from '@tanstack/react-query';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Loader2, Copy, CheckCircle, Target, Shield, AlertTriangle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Loader2, Target, Copy, CheckCircle } from 'lucide-react';
+import { queryClient } from '@/lib/queryClient';
 import { useToast } from '@/hooks/use-toast';
-import { apiRequest } from '@/lib/queryClient';
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 
 interface AssumptionValidationPlaybookProps {
   sprintId: number;
@@ -14,88 +13,78 @@ interface AssumptionValidationPlaybookProps {
 
 export default function AssumptionValidationPlaybook({ sprintId, intakeData }: AssumptionValidationPlaybookProps) {
   const [isGenerating, setIsGenerating] = useState(false);
+  const [report, setReport] = useState<string>('');
   const [copied, setCopied] = useState(false);
   const { toast } = useToast();
-  const queryClient = useQueryClient();
 
-  const { data: modules, refetch } = useQuery({
+  // Load existing saved report
+  const { data: modules } = useQuery({
     queryKey: [`/api/sprints/${sprintId}/modules`],
-    enabled: !!sprintId,
-    staleTime: 0,
-    refetchOnMount: true,
-    refetchOnWindowFocus: true
   });
-  
-  // Force array check and find assumption tracker module
-  const moduleArray = Array.isArray(modules) ? modules : [];
-  const module = moduleArray.find((m: any) => m.moduleType === 'assumption_tracker');
-  
-  // Fallback query specifically for assumption tracker module if not found in main query
-  const { data: assumptionsModule } = useQuery({
-    queryKey: [`/api/sprints/${sprintId}/modules/assumption_tracker`],
-    queryFn: async () => {
-      const response = await fetch(`/api/sprints/${sprintId}/modules`);
-      const allModules = await response.json();
-      return allModules.find((m: any) => m.moduleType === 'assumption_tracker');
-    },
-    enabled: !module && !!sprintId,
-    staleTime: 0
-  });
-  
-  const finalModule = module || assumptionsModule;
 
-  const generateMutation = useMutation({
-    mutationFn: async () => {
-      setIsGenerating(true);
-      const response = await apiRequest("POST", `/api/sprints/${sprintId}/generate-assumption-playbook`);
-      return response.json();
-    },
-    onSuccess: (data) => {
+  // Load saved report when component mounts
+  useEffect(() => {
+    if (modules) {
+      const assumptionModule = modules.find((m: any) => m.moduleType === 'assumption_tracker');
+      if (assumptionModule?.aiAnalysis?.playbook) {
+        setReport(assumptionModule.aiAnalysis.playbook);
+      }
+    }
+  }, [modules]);
+
+  const generateReport = async () => {
+    if (!intakeData?.companyName) {
+      toast({
+        title: "Missing Information",
+        description: "Please complete the Initial Intake first to generate assumption validation playbook.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setIsGenerating(true);
+    try {
+      const response = await fetch(`/api/sprints/${sprintId}/generate-assumption-playbook`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to generate assumption validation playbook');
+      }
+
+      const data = await response.json();
+      setReport(data.playbook);
+      
+      // Invalidate queries to refresh the module data
       queryClient.invalidateQueries({ queryKey: [`/api/sprints/${sprintId}/modules`] });
-      refetch();
+      
       toast({
-        title: "Assumption Playbook Generated",
-        description: "Comprehensive validation strategies ready for each sprint tier."
+        title: "Assumption Validation Playbook Generated",
+        description: "Comprehensive assumption validation playbook generated successfully.",
       });
-      setIsGenerating(false);
-    },
-    onError: (error: any) => {
+    } catch (error) {
+      console.error('Error generating report:', error);
       toast({
-        title: "Generation Failed",
-        description: error.message || "Failed to generate assumption validation playbook.",
-        variant: "destructive"
+        title: "Generation Failed", 
+        description: "Unable to generate assumption validation playbook. Please try again.",
+        variant: "destructive",
       });
+    } finally {
       setIsGenerating(false);
     }
-  });
-
-  const playbook = finalModule?.aiAnalysis?.playbook || '';
-  const isCompleted = finalModule?.isCompleted;
-  
-  // Debug logging
-  console.log('AssumptionValidationPlaybook debug:', {
-    modulesArray: modules,
-    modulesLength: moduleArray?.length,
-    primaryModule: !!module,
-    fallbackModule: !!assumptionsModule,
-    finalModuleExists: !!finalModule,
-    aiAnalysisExists: !!finalModule?.aiAnalysis,
-    playbookExists: !!playbook,
-    playbookLength: playbook?.length,
-    isCompleted,
-    moduleType: finalModule?.moduleType,
-    allModuleTypes: moduleArray?.map(m => m.moduleType),
-    finalModuleId: finalModule?.id
-  });
+  };
 
   const copyToClipboard = async () => {
     try {
-      await navigator.clipboard.writeText(playbook);
+      await navigator.clipboard.writeText(report);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
       toast({
         title: "Copied to Clipboard",
-        description: "Assumption validation playbook copied successfully.",
+        description: "Assumption validation playbook copied. Paste into Google Docs for client delivery.",
       });
     } catch (error) {
       toast({
@@ -106,19 +95,17 @@ export default function AssumptionValidationPlaybook({ sprintId, intakeData }: A
     }
   };
 
-  const hasRequiredData = intakeData && 
-    intakeData.assumption1 && intakeData.assumption2 && intakeData.assumption3 &&
-    intakeData.partnershipRisk1 && intakeData.partnershipRisk2 && intakeData.partnershipRisk3 && 
-    intakeData.partnershipRisk4 && intakeData.partnershipRisk5;
-
   return (
     <div className="space-y-6">
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center justify-between">
-            Assumption & Risk Validation Playbook
+            <div className="flex items-center gap-2">
+              <Target className="w-5 h-5 text-orange-600" />
+              Assumption Validation Playbook
+            </div>
             <div className="flex gap-2">
-              {playbook && (
+              {report && (
                 <Button
                   onClick={copyToClipboard}
                   variant="outline"
@@ -133,15 +120,15 @@ export default function AssumptionValidationPlaybook({ sprintId, intakeData }: A
                   ) : (
                     <>
                       <Copy className="h-4 w-4" />
-                      Copy Playbook
+                      Copy Report
                     </>
                   )}
                 </Button>
               )}
               <Button
-                onClick={() => generateMutation.mutate()}
-                disabled={isGenerating || !hasRequiredData}
-                className="flex items-center gap-2"
+                onClick={generateReport}
+                disabled={isGenerating}
+                className="flex items-center gap-2 bg-orange-600 hover:bg-orange-700"
               >
                 {isGenerating ? (
                   <>
@@ -149,67 +136,43 @@ export default function AssumptionValidationPlaybook({ sprintId, intakeData }: A
                     Generating...
                   </>
                 ) : (
-                  'Generate Playbook'
+                  report ? 'Regenerate Report' : 'Generate Report'
                 )}
               </Button>
             </div>
           </CardTitle>
         </CardHeader>
         <CardContent>
-          {!hasRequiredData && !isGenerating && (
+          {!report && !isGenerating && (
             <div className="text-center py-12 text-muted-foreground">
-              <p className="text-lg mb-2">Ready to Generate Validation Playbook</p>
-              <p className="text-sm mb-4">
-                Requires 3 assumptions and 5 risks from Initial Intake to create comprehensive validation strategies.
-              </p>
-              {intakeData?.assumptions?.length < 3 && (
-                <p className="text-sm text-orange-600">
-                  Missing assumptions: {intakeData?.assumptions?.length || 0}/3 provided
-                </p>
-              )}
-              {intakeData?.risks?.length < 5 && (
-                <p className="text-sm text-orange-600">
-                  Missing risks: {intakeData?.risks?.length || 0}/5 provided
-                </p>
-              )}
-            </div>
-          )}
-
-          {hasRequiredData && !playbook && !isGenerating && (
-            <div className="text-center py-12 text-muted-foreground">
-              <p className="text-lg mb-2">Ready to Generate Validation Playbook</p>
+              <div className="mx-auto w-12 h-12 bg-orange-100 dark:bg-orange-900/20 rounded-lg flex items-center justify-center mb-4">
+                <Target className="w-6 h-6 text-orange-600 dark:text-orange-400" />
+              </div>
+              <p className="text-lg mb-2">Ready to Generate Assumption Validation Playbook</p>
               <p className="text-sm">
-                Click "Generate Playbook" to create detailed validation strategies for each assumption and risk, 
-                with specific approaches for Discovery ($5K), Feasibility ($15K), and Validation ($35K) sprint tiers.
+                Click "Generate Report" to create a comprehensive validation playbook 
+                with specific testing methods and success criteria for each critical assumption.
               </p>
             </div>
           )}
 
           {isGenerating && (
             <div className="text-center py-12">
-              <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4" />
+              <Loader2 className="h-8 w-8 animate-spin mx-auto mb-4 text-orange-600" />
               <p className="text-lg font-medium">Generating Assumption Validation Playbook...</p>
               <p className="text-sm text-muted-foreground mt-2">
-                Creating validation strategies for {intakeData?.assumptions?.length} assumptions and {intakeData?.risks?.length} risks 
-                across Discovery, Feasibility, and Validation sprint tiers. This may take 30-45 seconds.
+                Creating detailed validation strategies for critical business assumptions...
               </p>
             </div>
           )}
 
-          {playbook && (
-            <div className="space-y-4">
-              <div className="bg-green-50 border border-green-200 rounded-lg p-4">
-                <h4 className="font-medium text-green-900 mb-2">Validation Playbook Ready</h4>
-                <p className="text-sm text-green-700">
-                  Comprehensive 1,800+ word validation playbook with specific testing strategies for each sprint tier. 
-                  Includes desk research approaches, interview guides, and decision criteria.
-                </p>
-              </div>
-              
-              <div className="bg-white border rounded-lg p-6">
-                <pre className="whitespace-pre-wrap font-mono text-sm leading-relaxed text-gray-900 overflow-x-auto">
-                  {playbook}
-                </pre>
+          {report && !isGenerating && (
+            <div className="prose prose-sm max-w-none dark:prose-invert">
+              <div 
+                className="whitespace-pre-wrap font-mono text-sm leading-relaxed bg-gray-50 dark:bg-gray-900 p-6 rounded-lg border"
+                style={{ fontFamily: 'Monaco, Consolas, "Liberation Mono", "Courier New", monospace' }}
+              >
+                {report}
               </div>
             </div>
           )}
