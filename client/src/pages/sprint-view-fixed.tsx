@@ -60,7 +60,7 @@ const FEATURE_COMPONENTS = {
   assumption_tracker: AssumptionValidationPlaybook,
   market_sizing_analysis: MarketSizingReport,
   competitive_intelligence: CompetitiveIntelligence,
-  risk_assessment: MarketSimulation, // Risk Assessment uses Market Simulation component
+  risk_assessment: RiskAssessment,
   customer_voice_simulation: MarketSimulation, // Customer Voice uses Market Simulation component
   partnership_viability: BusinessModelSimulator, // Partnership Viability uses Business Model component
   

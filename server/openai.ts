@@ -203,96 +203,170 @@ export async function generateCompetitiveIntelligence(intakeData: any) {
     throw new Error('OpenAI client not initialized');
   }
 
+  const isPartnership = intakeData.isPartnershipEvaluation;
   const companyName = intakeData.companyName || 'your company';
+  const partnerName = intakeData.potentialPartnerName || intakeData.evaluatedPartner;
+  const partnershipType = intakeData.partnershipType || 'Strategic Partnership';
   const industry = intakeData.industry || 'technology';
   const targetCustomer = intakeData.targetCustomerDescription || 'small businesses';
   const businessModel = intakeData.businessModel || 'subscription';
   const pricePoint = intakeData.estimatedPricePoint || '$100';
+  const currentStage = intakeData.currentStage || 'Growth';
+  
+  if (!companyName) {
+    throw new Error('Company name is required for generating competitive intelligence');
+  }
 
-  const prompt = `Analyze the competitive landscape for ${companyName} in the ${industry} industry.
+  const prompt = isPartnership ? `
+Generate a comprehensive competitive intelligence analysis report of 2,000-2,500 words for the PARTNERSHIP between ${companyName} and ${partnerName}.
 
-COMPANY CONTEXT:
-- Company: ${companyName}
+PARTNERSHIP CONTEXT:
+- Company: ${companyName} (${currentStage} stage)
+- Partner: ${partnerName}
+- Partnership Type: ${partnershipType}
+- Target Market: ${targetCustomer}
 - Industry: ${industry}
 - Business Model: ${businessModel}
-- Target Customer: ${targetCustomer}
 - Price Point: ${pricePoint}
-- Geographic Markets: ${intakeData.geographicMarkets?.join(', ') || 'North America'}
 
-Generate a comprehensive competitive intelligence analysis with 4-6 key competitors.
+Focus on:
+- How the partnership changes competitive dynamics
+- Competitors who might also pursue ${partnerName} partnerships
+- Integration/partnership competitive landscape
+- New competitive advantages from the partnership
+- Potential competitive responses
 
-For each competitor, provide:
-1. Company overview (name, type, market position, founding year, headquarters, employee count, funding, valuation)
-2. Strengths (3-4 key competitive advantages with impact assessment)
-3. Weaknesses (3-4 vulnerabilities with opportunity analysis)
-4. Pricing strategy (model, tiers, value proposition)
-5. Market share data (percentage, growth rate, customer segments)
-6. Competitive advantages list
-7. Threat level assessment (low/medium/high/critical)
-8. Strategic recommendations for competing against them
+Use the actual company names "${companyName}" and "${partnerName}" throughout your analysis.` : `
+Generate a comprehensive competitive intelligence analysis report of 2,000-2,500 words analyzing ${companyName}'s competitive position in the ${industry} sector.
 
-Include an executive summary with:
-- Total competitors analyzed
-- High threat competitor count
-- Market opportunities identified
-- Key strategic insights (5-6 bullet points)
+COMPANY CONTEXT:
+- Company: ${companyName} (${currentStage} stage)
+- Target Market: ${targetCustomer}
+- Industry: ${industry}
+- Business Model: ${businessModel}
+- Price Point: ${pricePoint}
 
-Return as JSON with this structure:
-{
-  "summary": {
-    "total_competitors": 5,
-    "high_threat_count": 2,
-    "market_opportunities": 3,
-    "key_insights": ["insight 1", "insight 2", ...]
-  },
-  "analysis": [
-    {
-      "competitor": {
-        "name": "CompetitorName",
-        "type": "Direct Competitor",
-        "marketPosition": "Market Leader",
-        "foundedYear": 2010,
-        "headquarters": "San Francisco, CA",
-        "employeeCount": "500-1000",
-        "funding": "$50M Series B",
-        "valuation": "$500M"
-      },
-      "strengths": [
-        {
-          "category": "Technology",
-          "description": "Advanced AI capabilities",
-          "impact": "High customer retention"
-        }
-      ],
-      "weaknesses": [
-        {
-          "category": "Pricing",
-          "description": "Higher cost than alternatives",
-          "opportunity": "Price-sensitive market entry"
-        }
-      ],
-      "pricing": {
-        "model": "Subscription",
-        "tiers": [
-          {
-            "name": "Basic",
-            "price": "$29/month",
-            "features": ["Feature 1", "Feature 2"]
-          }
-        ],
-        "value_proposition": "Enterprise-grade security and scale"
-      },
-      "market_share": {
-        "percentage": "25%",
-        "growth_rate": "15% YoY",
-        "customer_segments": ["Enterprise", "Mid-market"]
-      },
-      "competitive_advantages": ["Brand recognition", "Ecosystem partnerships"],
-      "threat_level": "high",
-      "strategic_recommendations": ["Focus on SMB market", "Emphasize ease of use"]
-    }
-  ]
-}`;
+Focus on the general competitive landscape for ${companyName}.`;
+
+  const fullPrompt = `${prompt}
+
+CRITICAL REQUIREMENTS:
+- Generate 2,000-2,500 words with McKinsey-level depth and specific market intelligence
+- Analyze 5-7 direct competitors with detailed profiles (200-300 words each)
+- Include specific pricing data, market share percentages, and funding information
+- Make it feel custom to ${companyName} in ${industry}, not generic templates
+
+FORMAT WITH EXACT PROFESSIONAL CONSULTING STANDARD:
+
+COMPETITIVE INTELLIGENCE ANALYSIS
+${companyName}${partnerName ? ` - ${partnerName} Partnership` : ''} Market Position Assessment
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+EXECUTIVE SUMMARY
+
+The competitive landscape for ${companyName} in the ${industry} sector reveals a dynamic market with both established incumbents and emerging disruptors. This comprehensive analysis evaluates 5-7 key competitors across market positioning, pricing strategies, and competitive advantages to identify ${companyName}'s optimal positioning strategy.
+
+${isPartnership ? `The proposed partnership between ${companyName} and ${partnerName} represents a strategic opportunity to strengthen competitive positioning through [specific advantages]. Key competitive dynamics include [specific insights about partnership impact on competition].` : `${companyName}'s position in the ${targetCustomer} segment shows [specific competitive assessment]. Market dynamics favor companies that [specific strategic insight].`}
+
+KEY FINDINGS:
+• Primary Competitors: [List top 3 with specific percentages]
+• Market Leader: [Company] with XX% market share in ${targetCustomer} segment
+• Key Differentiator: [Specific advantage for ${companyName}]
+• Biggest Threat: [Main competitive risk with specific reasoning]
+• Market Opportunity: $XXM in [specific unaddressed segment]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+1. COMPETITIVE LANDSCAPE OVERVIEW
+
+Market Structure: The ${industry} market serving ${targetCustomer} is characterized by [specific market structure analysis with actual market dynamics]. Market concentration shows [specific concentration metrics] with the top 3 players controlling approximately [percentage]% of market share.
+
+Key Player Categories:
+• Enterprise Solutions: [List 2-3 specific companies with brief descriptions]
+• Mid-Market Focus: [List 2-3 specific companies with positioning]
+• SMB/Startup Tools: [List 2-3 specific companies with target segments]
+• Emerging Disruptors: [List 1-2 companies with disruptive approaches]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+2. DIRECT COMPETITOR PROFILES
+
+Competitor 1: [Company Name]
+─────────────────────────────────────────
+
+Overview: [Comprehensive 200-300 word analysis including:
+- Founded year, headquarters, employee count, funding status
+- Core value proposition and target customers
+- Key features and capabilities
+- Recent developments and market momentum
+- Why they win/lose deals
+- Specific vulnerabilities to exploit]
+
+Pricing Strategy: [Detailed pricing analysis with specific tiers and price points]
+
+Market Position: [Specific market share percentage and growth metrics]
+
+Competitive Threat Level: [High/Medium/Low with specific reasoning]
+
+[Repeat detailed profile structure for 5-7 total competitors]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+3. COMPETITIVE POSITIONING MATRIX
+
+Feature Comparison Analysis:
+[Create detailed feature comparison showing where ${companyName} leads/lags]
+
+Market Position Mapping:
+[2x2 matrix analysis (e.g., Price vs. Features) with specific positioning]
+
+Differentiation Opportunities:
+[Specific areas where ${companyName} can differentiate from competitors]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+4. MARKET GAPS & OPPORTUNITIES
+
+Unserved Customer Needs:
+[Specific customer needs not addressed by current competitors]
+
+Feature Gaps in Current Solutions:
+[Specific functionality gaps that ${companyName} could address]
+
+Emerging Market Trends:
+[Specific trends that create new competitive opportunities]
+
+${isPartnership ? `
+
+5. PARTNERSHIP COMPETITIVE IMPACT
+
+How Partnership Changes Competitive Dynamics:
+[Specific analysis of how ${companyName}-${partnerName} partnership alters competition]
+
+New Competitive Advantages:
+[Specific advantages gained through the partnership]
+
+Potential Competitive Responses:
+[Likely competitor reactions and counter-strategies]` : ''}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+${isPartnership ? '6' : '5'}. STRATEGIC RECOMMENDATIONS
+
+Positioning Strategy:
+[Specific recommendations for how ${companyName} should position against competitors]
+
+Differentiation Tactics:
+[Concrete tactics to differentiate from key competitors]
+
+Competitive Response Playbook:
+[Specific strategies for responding to competitive threats]
+
+Implementation Priorities:
+[Prioritized list of immediate competitive actions]
+
+This analysis provides ${companyName} with actionable intelligence to strengthen competitive positioning and capitalize on market opportunities in the ${industry} sector.`;
 
   try {
     const response = await openai.chat.completions.create({
@@ -300,16 +374,15 @@ Return as JSON with this structure:
       messages: [
         {
           role: "system",
-          content: "You are a strategic business analyst specializing in competitive intelligence. Provide detailed, actionable competitor analysis with specific data and strategic insights."
+          content: "You are a McKinsey-level senior strategy consultant generating premium competitive intelligence reports for $5,000+ engagements. Your analysis must demonstrate deep strategic thinking, market expertise, and custom insights that justify high-value consulting fees. Each competitor profile should be substantial with rich context, not bullet points. Use specific company names, actual pricing data, and real market intelligence. Generate 2,000-2,500 words of professional consulting content that reads like bespoke strategic analysis, not generic templates."
         },
         {
           role: "user",
-          content: prompt
+          content: fullPrompt
         }
       ],
-      response_format: { type: "json_object" },
-      temperature: 0.7,
-      max_tokens: 3000
+      temperature: 0.3,
+      max_tokens: 6000
     });
 
     const content = response.choices[0].message.content;
@@ -317,10 +390,16 @@ Return as JSON with this structure:
       throw new Error('No content received from OpenAI');
     }
 
-    return JSON.parse(content);
-  } catch (error: any) {
+    return {
+      report: content,
+      companyName,
+      partnerName,
+      partnershipType
+    };
+
+  } catch (error) {
     console.error('Error generating competitive intelligence:', error);
-    throw new Error(`Failed to generate competitive intelligence: ${error.message}`);
+    throw new Error("Failed to generate competitive intelligence");
   }
 }
 
