@@ -917,45 +917,146 @@ Analyze ${companyName}'s realistic market capture potential based on competitive
 │ **RECOMMENDED**│**$[XX]M**  │**$[XXX]M** │**$[XXX]M** │**[X]%**│
 └─────────────────────────────────────────────────────────────┘
 
+═══════════════════════════════════════════════════════════════
+
 ## Market Dynamics & Competition
 
+───────────────────────────────────────────────────────────────
+
 ### Market Segmentation Analysis
-| Segment | Size ($M) | Growth Rate | Competitive Density | Fit Score |
-|---------|-----------|-------------|---------------------|-----------|
-| [Segment 1] | $[X]M | [X]% | High/Medium/Low | [1-10] |
-| [Segment 2] | $[X]M | [X]% | High/Medium/Low | [1-10] |
-| [Segment 3] | $[X]M | [X]% | High/Medium/Low | [1-10] |
+
+┌─────────────────────────────────────────────────────────────┐
+│                  **SEGMENT OPPORTUNITY MATRIX**            │
+├─────────────────────────────────────────────────────────────┤
+│ Segment      │ Size ($M) │ Growth │ Competition │ Fit Score │
+│ [Segment 1]  │ $[XXX]M   │ [XX]%  │ High/Med/Low│ [X]/10    │
+│ [Segment 2]  │ $[XXX]M   │ [XX]%  │ High/Med/Low│ [X]/10    │
+│ [Segment 3]  │ $[XXX]M   │ [XX]%  │ High/Med/Low│ [X]/10    │
+├─────────────────────────────────────────────────────────────┤
+│ **TOP TARGET**│**$[XXX]M**│**[XX]%**│**Low**     │**[X]/10** │
+└─────────────────────────────────────────────────────────────┘
+
+───────────────────────────────────────────────────────────────
 
 ### Competitive Density & Market Share
+
 Analyze competitive landscape in ${industry} sector, identifying market leaders, their share percentages, and whitespace opportunities for ${companyName}. Include specific competitor names and positioning.
 
+**Competitive Landscape:**
+• **Market Leader:** [Company Name] - [XX]% market share
+• **Key Challenger:** [Company Name] - [XX]% market share  
+• **Emerging Players:** [Company Names] - [XX]% combined share
+• **White Space Opportunity:** [XX]% unaddressed market
+
+───────────────────────────────────────────────────────────────
+
 ### Highest Opportunity Segments
+
 Identify the 2-3 customer segments with highest potential for ${companyName} based on size, growth, competitive density, and strategic fit. Explain prioritization rationale.
 
+**Priority Ranking:**
+• **#1 Priority:** [Segment] - $[XXX]M opportunity, [specific rationale]
+• **#2 Priority:** [Segment] - $[XXX]M opportunity, [specific rationale]
+• **#3 Priority:** [Segment] - $[XXX]M opportunity, [specific rationale]
+
 ${partnerName ? `
+═══════════════════════════════════════════════════════════════
+
 ## Partnership Market Opportunity
 
+───────────────────────────────────────────────────────────────
+
 ### ${partnerName} Customer Base Analysis
+
 Analyze ${partnerName}'s customer base overlap with ${companyName}'s target market. Estimate addressable customers within ${partnerName}'s ecosystem.
 
+**Customer Base Analysis:**
+• **${partnerName} Total Customers:** [XXX,XXX] active customers
+• **Target Market Overlap:** [XX]% ([XXX,XXX] customers)
+• **Addressable Segment:** [XXX,XXX] qualified prospects
+• **Revenue Opportunity:** $[XXX,XXX,XXX] potential value
+
+───────────────────────────────────────────────────────────────
+
 ### Incremental Market Opportunity
-Calculate incremental market opportunity through ${partnershipType} with ${partnerName}. Example: "Of ${partnerName}'s [X] customers, approximately [X]% ([X] customers) need ${companyName}'s ${industry} solution, representing $[X]M incremental market opportunity."
+
+Calculate incremental market opportunity through ${partnershipType} with ${partnerName}. 
+
+**Partnership Market Calculation:**
+\`\`\`
+Partnership Opportunity = ${partnerName} Customers x Overlap % x Conversion Rate
+Partnership Opportunity = [XXX,XXX] x [XX]% x [XX]% = $[XXX,XXX,XXX]
+\`\`\`
+
+Of ${partnerName}'s [XXX,XXX] customers, approximately [XX]% ([XXX,XXX] customers) need ${companyName}'s ${industry} solution, representing $[XXX,XXX,XXX] incremental market opportunity.
+
+───────────────────────────────────────────────────────────────
 
 ### Joint Market Capture Potential
+
 Assess combined go-to-market potential, cross-selling opportunities, and accelerated market penetration through partnership channels.
+
+**Partnership Advantages:**
+• **Accelerated GTM:** [XX]% faster market entry vs. independent approach
+• **Cross-Selling Synergy:** [XX]% higher customer LTV through bundled offerings
+• **Market Credibility:** ${partnerName} brand association reduces sales cycle by [XX]%
+• **Channel Access:** Direct access to [XXX,XXX] pre-qualified prospects
 ` : ''}
+
+═══════════════════════════════════════════════════════════════
 
 ## Strategic Recommendations
 
+───────────────────────────────────────────────────────────────
+
 ### Market Entry Strategy
+
 Recommend optimal market entry approach based on market sizing analysis, including segment prioritization, geographic expansion, and resource allocation.
 
+**Recommended Market Entry Sequence:**
+
+┌─────────────────────────────────────────────────────────────┐
+│                   **MARKET ENTRY ROADMAP**                 │
+├─────────────────────────────────────────────────────────────┤
+│ Phase 1 (0-12 months): [Primary Segment] - $[XXX]M TAM    │
+│ Phase 2 (12-24 months): [Secondary Segment] - $[XXX]M TAM │
+│ Phase 3 (24+ months): [Tertiary Segment] - $[XXX]M TAM    │
+├─────────────────────────────────────────────────────────────┤
+│ **TOTAL 3-YEAR OPPORTUNITY: $[XXX,XXX,XXX]**              │
+└─────────────────────────────────────────────────────────────┘
+
+**Resource Allocation Strategy:**
+• **Year 1 Focus:** [XX]% resources on [primary segment]
+• **Geographic Priority:** [Primary market] → [Secondary market]
+• **Investment Allocation:** [XX]% product, [XX]% sales, [XX]% marketing
+
+───────────────────────────────────────────────────────────────
+
 ### Growth Acceleration Opportunities
+
 Identify specific tactics to accelerate market capture, including product development, pricing optimization, and partnership strategies.
 
-TONE: Professional consulting language with specific numbers and calculations throughout.
-TARGET: 2,000-2,500 words with dense insights and data points.
-METHODOLOGY: Use realistic market sizing approaches and cite reasoning for all calculations.
+**Priority Growth Initiatives:**
+
+• **Product Development:** [Specific features] to capture [XX]% additional market share
+• **Pricing Optimization:** [Pricing strategy] to increase ARPU by [XX]%
+• **Partnership Channels:** ${partnerName ? `${partnerName} integration` : 'Strategic partnerships'} for [XX]% faster GTM
+• **Market Expansion:** [Geographic/vertical expansion] for $[XXX]M incremental opportunity
+
+**Success Metrics & Milestones:**
+• **12-Month Target:** $[XXX,XXX] ARR, [XXX] customers
+• **24-Month Target:** $[X,XXX,XXX] ARR, [X,XXX] customers  
+• **36-Month Target:** $[XX,XXX,XXX] ARR, [XX,XXX] customers
+
+═══════════════════════════════════════════════════════════════
+
+**REPORT METHODOLOGY:**
+Professional consulting analysis using top-down and bottom-up market sizing approaches with realistic assumptions and cited reasoning for all calculations. Analysis incorporates industry benchmarks, competitive intelligence, and ${companyName}-specific factors for accurate market opportunity assessment.
+
+**TARGET OUTCOME:**
+Comprehensive 2,000-2,500 word market sizing analysis providing specific numbers, actionable insights, and strategic direction to justify $5,000+ consulting engagement value.
+
+═══════════════════════════════════════════════════════════════
 `;
 
     const response = await openai.chat.completions.create({
