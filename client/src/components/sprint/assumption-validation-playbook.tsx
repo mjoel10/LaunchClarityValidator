@@ -68,21 +68,23 @@ export default function AssumptionValidationPlaybook({ sprintId, intakeData }: A
     }
   });
 
-  const playbook = module?.aiAnalysis?.playbook || '';
-  const isCompleted = module?.isCompleted;
+  const playbook = finalModule?.aiAnalysis?.playbook || '';
+  const isCompleted = finalModule?.isCompleted;
   
   // Debug logging
   console.log('AssumptionValidationPlaybook debug:', {
     modulesArray: modules,
     modulesLength: moduleArray?.length,
-    moduleExists: !!module,
-    aiAnalysisExists: !!module?.aiAnalysis,
+    primaryModule: !!module,
+    fallbackModule: !!assumptionsModule,
+    finalModuleExists: !!finalModule,
+    aiAnalysisExists: !!finalModule?.aiAnalysis,
     playbookExists: !!playbook,
     playbookLength: playbook?.length,
     isCompleted,
-    moduleType: module?.moduleType,
+    moduleType: finalModule?.moduleType,
     allModuleTypes: moduleArray?.map(m => m.moduleType),
-    assumptionsModuleId: module?.id
+    finalModuleId: finalModule?.id
   });
 
   const copyToClipboard = async () => {
