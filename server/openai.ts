@@ -1194,7 +1194,7 @@ ${risksList}
 
 COMPANY CONTEXT: ${companyName} - ${industry} company, ${currentStage} stage, ${businessModel} model, targeting ${targetCustomerDescription}, solving ${coreProblem}
 
-Create a concrete, actionable playbook using this EXACT format:
+Create a concrete, actionable playbook using this EXACT format. You MUST use the exact headings provided - do not substitute similar phrases:
 
 ASSUMPTION & RISK VALIDATION PLAYBOOK
 ${companyName} - How We Validate Your Specific Assumptions
