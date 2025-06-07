@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Loader2, Copy, CheckCircle } from 'lucide-react';
@@ -15,6 +16,21 @@ export default function MarketSizingReport({ sprintId, intakeData }: MarketSizin
   const [report, setReport] = useState<string>('');
   const [copied, setCopied] = useState(false);
   const { toast } = useToast();
+
+  // Load existing saved report
+  const { data: modules } = useQuery({
+    queryKey: [`/api/sprints/${sprintId}/modules`],
+  });
+
+  // Load saved report when component mounts
+  useEffect(() => {
+    if (modules) {
+      const marketModule = modules.find((m: any) => m.moduleType === 'market_simulation');
+      if (marketModule?.aiAnalysis?.report) {
+        setReport(marketModule.aiAnalysis.report);
+      }
+    }
+  }, [modules]);
 
   const generateReport = async () => {
     if (!intakeData?.companyName) {
