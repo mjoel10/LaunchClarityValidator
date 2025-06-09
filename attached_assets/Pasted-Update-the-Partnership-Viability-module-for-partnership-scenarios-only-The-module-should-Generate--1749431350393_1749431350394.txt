@@ -1,0 +1,82 @@
+Update the Partnership Viability module for partnership scenarios only. The module should:
+Generate a detailed 2,000-2,500 word report with these exact sections:
+
+
+Executive Summary (200-300 words)
+Partnership Fit Assessment
+Strategic Alignment Score
+Cultural Compatibility Score
+Technical Feasibility Score
+Financial Impact Score
+Market Synergies Score
+Risk Factor Score
+Detailed Compatibility Analysis
+Business model alignment
+Customer base overlap
+Technology integration requirements
+Operational considerations
+Partnership Structure Options
+Integration models (API, embedded, white-label)
+Revenue sharing scenarios
+Go-to-market approaches
+Support and maintenance models
+Implementation Roadmap
+Phase 1: Technical integration (Days 1-30)
+Phase 2: Pilot program (Days 31-60)
+Phase 3: Full launch (Days 61-90)
+Phase 4: Scale and optimize (Days 90+)
+Financial Projections
+Revenue impact modeling
+Cost structure analysis
+ROI calculations
+Break-even analysis
+Success Metrics & Governance
+KPIs and targets
+Review cadence
+Escalation processes
+Exit strategies
+For each fit dimension (200-250 words):
+
+
+Score 1-10 with detailed justification
+Specific examples and evidence
+Comparison to successful partnerships
+Red flags or concerns
+Improvement recommendations
+Financial modeling approach:
+
+
+Conservative, realistic, and optimistic scenarios
+Monthly projections for Year 1
+Quarterly projections for Years 2-3
+Key assumptions clearly stated
+CRITICAL FORMATTING REQUIREMENTS - Use this EXACT format:
+
+
+PARTNERSHIP VIABILITY ANALYSIS [Company 1] × [Company 2] Strategic Alliance Assessment
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+EXECUTIVE SUMMARY
+[First paragraph describing partnership opportunity and fit]
+[Second paragraph highlighting key benefits and risks]
+KEY FINDINGS: • Overall Viability Score: XX/60 (based on 6 dimensions) • Strongest Alignment: [Dimension] at X/10 • Biggest Concern: [Dimension] at X/10 • Revenue Opportunity: $X.XM in Year 1 • Implementation Timeline: XX days to launch
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARTNERSHIP FIT ASSESSMENT
+Strategic Alignment: X/10 ────────────────────────
+Analysis: [Detailed assessment of strategic fit]
+Evidence: • [Specific proof point 1] • [Specific proof point 2] • [Specific proof point 3]
+Concerns: • [Red flag or risk 1] • [Red flag or risk 2]
+[Repeat for all 6 dimensions]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+DETAILED COMPATIBILITY ANALYSIS
+Business Model Alignment ────────────────────────
+[Deep dive into how business models complement or conflict]
+[Continue with other compatibility factors]
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+PARTNERSHIP STRUCTURE OPTIONS
+Option 1: Deep API Integration ──────────────────────────────
+Description: [Detailed explanation of this model]
+Pros: • [Specific advantage 1] • [Specific advantage 2]
+Cons: • [Specific disadvantage 1] • [Specific disadvantage 2]
+Revenue Model: [Specific split and terms]
+[Continue for 2-3 viable options]
+Use real partnership benchmarks and industry standards throughout.

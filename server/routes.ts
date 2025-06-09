@@ -7,7 +7,7 @@ import { insertUserSchema, insertSprintSchema, insertIntakeDataSchema, insertCom
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 import { z } from "zod";
-import { generateMarketSimulation, generateAssumptionAnalysis, generateCompetitiveIntelligence, generateMarketSizing, generateRiskAssessment, generateGoDecision, generateAssumptions, generateAssumptionReport, generateAssumptionValidationPlaybook, generateMarketSizingReport, generateCustomerVoiceSimulation } from "./openai";
+import { generateMarketSimulation, generateAssumptionAnalysis, generateCompetitiveIntelligence, generateMarketSizing, generateRiskAssessment, generateGoDecision, generateAssumptions, generateAssumptionReport, generateAssumptionValidationPlaybook, generateMarketSizingReport, generateCustomerVoiceSimulation, generatePartnershipViability } from "./openai";
 
 if (!process.env.STRIPE_SECRET_KEY) {
   throw new Error('Missing required Stripe secret: STRIPE_SECRET_KEY');
@@ -609,6 +609,36 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error: any) {
       console.error('Error generating market sizing report:', error);
       res.status(500).json({ message: "Failed to generate market sizing report: " + error.message });
+    }
+  });
+
+  // Generate partnership viability analysis
+  app.post("/api/sprints/:id/modules/partnership_viability/generate", async (req, res) => {
+    try {
+      const sprintId = Number(req.params.id);
+      const intake = await storage.getIntakeDataBySprintId(sprintId);
+      
+      if (!intake) {
+        return res.status(400).json({ message: "No intake data found for this sprint" });
+      }
+      
+      if (!intake.isPartnershipEvaluation) {
+        return res.status(400).json({ message: "Partnership viability analysis is only available for partnership evaluations" });
+      }
+      
+      const analysis = await generatePartnershipViability(intake);
+      
+      // Save to sprint module and mark as completed
+      await storage.updateSprintModuleByType(sprintId, 'partnership_viability', {
+        aiAnalysis: analysis,
+        isCompleted: true,
+        updatedAt: new Date(),
+      });
+      
+      res.json(analysis);
+    } catch (error: any) {
+      console.error('Error generating partnership viability analysis:', error);
+      res.status(500).json({ message: "Failed to generate partnership viability analysis: " + error.message });
     }
   });
 

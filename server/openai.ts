@@ -1849,6 +1849,479 @@ Focus on SPECIFIC insights and data points, not generic promises. Make it scanna
   }
 }
 
+export async function generatePartnershipViability(intakeData: any) {
+  if (!openai) {
+    throw new Error('OpenAI client not initialized');
+  }
+
+  // Ensure this is a partnership evaluation
+  if (!intakeData.isPartnershipEvaluation) {
+    throw new Error('Partnership viability analysis is only available for partnership evaluations');
+  }
+
+  const companyName = intakeData.companyName || 'Your Company';
+  const partnerName = intakeData.potentialPartnerName || intakeData.evaluatedPartner || 'Partner Company';
+  const partnershipType = intakeData.partnershipType || 'Strategic Partnership';
+  const industry = intakeData.industry || 'Technology';
+  const targetCustomer = intakeData.targetCustomerDescription || 'small businesses';
+  const businessModel = intakeData.businessModel || 'Subscription';
+  const pricePoint = intakeData.estimatedPricePoint || '$99';
+  const currentStage = intakeData.currentStage || 'Growth';
+  const userBase = intakeData.currentUsers || '10K+ users';
+  const primaryGoal = intakeData.primaryPartnershipGoal || 'market expansion';
+
+  if (!companyName || !partnerName) {
+    throw new Error('Both company name and partner name are required for partnership viability analysis');
+  }
+
+  const prompt = `Generate a comprehensive Partnership Viability Analysis of 2,000-2,500 words for the strategic partnership between ${companyName} and ${partnerName}.
+
+PARTNERSHIP CONTEXT:
+- Company 1: ${companyName} (${currentStage} stage, ${userBase})
+- Company 2: ${partnerName}
+- Partnership Type: ${partnershipType}
+- Industry: ${industry}
+- Target Market: ${targetCustomer}
+- Business Model: ${businessModel}
+- Price Point: ${pricePoint}/month
+- Primary Goal: ${primaryGoal}
+
+CRITICAL REQUIREMENTS:
+- Generate 2,000-2,500 words with McKinsey-level depth and analysis
+- Provide detailed scoring (1-10) for all 6 fit dimensions with specific justification
+- Include realistic financial projections for Conservative, Realistic, and Optimistic scenarios
+- Create specific partnership structure options with pros/cons and revenue models
+- Provide 90-day implementation roadmap with detailed phases
+- Use actual industry benchmarks and real partnership examples where relevant
+- Make analysis feel custom to ${companyName} × ${partnerName}, not generic templates
+
+FORMAT WITH EXACT PROFESSIONAL CONSULTING STANDARD:
+
+PARTNERSHIP VIABILITY ANALYSIS
+${companyName} × ${partnerName} Strategic Alliance Assessment
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+EXECUTIVE SUMMARY
+
+The proposed strategic partnership between ${companyName} and ${partnerName} represents a compelling opportunity to [specific opportunity description based on their businesses]. This comprehensive viability assessment evaluates six critical dimensions of partnership fit to determine the likelihood of successful collaboration and mutual value creation.
+
+Initial analysis reveals strong alignment in [specific area] with particular synergies in [specific examples]. The partnership addresses ${companyName}'s need for [specific need] while providing ${partnerName} with [specific value]. Key concerns center around [specific risks] which require careful management during implementation.
+
+KEY FINDINGS:
+• Overall Viability Score: XX/60 (based on 6 dimensions)
+• Strongest Alignment: [Dimension] at X/10
+• Biggest Concern: [Dimension] at X/10
+• Revenue Opportunity: $X.XM in Year 1
+• Implementation Timeline: XX days to launch
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PARTNERSHIP FIT ASSESSMENT
+
+Strategic Alignment: X/10
+────────────────────────
+
+Analysis: [Detailed assessment of how the companies' strategic objectives, market positioning, and long-term visions align. Include specific examples of complementary goals and potential conflicts.]
+
+Evidence:
+• [Specific proof point 1 with details]
+• [Specific proof point 2 with details]
+• [Specific proof point 3 with details]
+
+Concerns:
+• [Red flag or risk 1 with specific impact]
+• [Red flag or risk 2 with specific impact]
+
+Cultural Compatibility: X/10
+────────────────────────
+
+Analysis: [Assessment of organizational cultures, working styles, decision-making processes, and values alignment between the two companies.]
+
+Evidence:
+• [Specific cultural alignment example 1]
+• [Specific cultural alignment example 2]
+• [Specific cultural alignment example 3]
+
+Concerns:
+• [Cultural risk or mismatch 1]
+• [Cultural risk or mismatch 2]
+
+Technical Feasibility: X/10
+────────────────────────
+
+Analysis: [Evaluation of technical integration requirements, API compatibility, system architecture alignment, and implementation complexity.]
+
+Evidence:
+• [Technical compatibility point 1]
+• [Technical compatibility point 2]
+• [Technical compatibility point 3]
+
+Concerns:
+• [Technical integration challenge 1]
+• [Technical integration challenge 2]
+
+Financial Impact: X/10
+────────────────────────
+
+Analysis: [Assessment of financial benefits, cost implications, revenue sharing potential, and overall economic value creation for both parties.]
+
+Evidence:
+• [Financial benefit example 1]
+• [Financial benefit example 2]
+• [Financial benefit example 3]
+
+Concerns:
+• [Financial risk or concern 1]
+• [Financial risk or concern 2]
+
+Market Synergies: X/10
+────────────────────────
+
+Analysis: [Evaluation of market overlap, customer base synergies, cross-selling opportunities, and combined market positioning strength.]
+
+Evidence:
+• [Market synergy example 1]
+• [Market synergy example 2]
+• [Market synergy example 3]
+
+Concerns:
+• [Market conflict or cannibalization risk 1]
+• [Market conflict or cannibalization risk 2]
+
+Risk Factor: X/10
+────────────────────────
+
+Analysis: [Assessment of partnership risks including dependency, competitive threats, execution risks, and exit scenario complexity.]
+
+Evidence:
+• [Risk mitigation factor 1]
+• [Risk mitigation factor 2]
+• [Risk mitigation factor 3]
+
+Concerns:
+• [Significant risk factor 1]
+• [Significant risk factor 2]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+DETAILED COMPATIBILITY ANALYSIS
+
+Business Model Alignment
+────────────────────────
+
+[Deep dive into how the business models complement or conflict, including revenue streams, pricing strategies, customer acquisition approaches, and value chain positioning.]
+
+Customer Base Overlap
+────────────────────────
+
+[Analysis of customer segment alignment, potential for cross-selling, customer behavior patterns, and market expansion opportunities.]
+
+Technology Integration Requirements
+────────────────────────
+
+[Detailed technical assessment including API requirements, data sharing protocols, system integration complexity, and ongoing maintenance needs.]
+
+Operational Considerations
+────────────────────────
+
+[Evaluation of operational processes, support structures, quality standards, and day-to-day collaboration requirements.]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+PARTNERSHIP STRUCTURE OPTIONS
+
+Option 1: Deep API Integration
+──────────────────────────────
+
+Description: [Detailed explanation of deep technical integration model with API connectivity, data synchronization, and unified user experience.]
+
+Pros:
+• [Specific advantage 1 with business impact]
+• [Specific advantage 2 with business impact]
+• [Specific advantage 3 with business impact]
+
+Cons:
+• [Specific disadvantage 1 with mitigation strategy]
+• [Specific disadvantage 2 with mitigation strategy]
+
+Revenue Model: [Specific revenue sharing split, pricing structure, and financial terms]
+
+Implementation Complexity: [High/Medium/Low with specific requirements]
+
+Option 2: White-Label Partnership
+──────────────────────────────
+
+Description: [Detailed explanation of white-label model with branding, customization, and market positioning considerations.]
+
+Pros:
+• [Specific advantage 1]
+• [Specific advantage 2]
+• [Specific advantage 3]
+
+Cons:
+• [Specific disadvantage 1]
+• [Specific disadvantage 2]
+
+Revenue Model: [Specific terms and financial structure]
+
+Implementation Complexity: [Assessment with timeline]
+
+Option 3: Strategic Referral Program
+──────────────────────────────
+
+Description: [Detailed explanation of referral-based partnership with qualification criteria, incentive structures, and mutual promotion strategies.]
+
+Pros:
+• [Specific advantage 1]
+• [Specific advantage 2]
+• [Specific advantage 3]
+
+Cons:
+• [Specific disadvantage 1]
+• [Specific disadvantage 2]
+
+Revenue Model: [Commission structure and payment terms]
+
+Implementation Complexity: [Assessment with requirements]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+IMPLEMENTATION ROADMAP
+
+Phase 1: Technical Integration (Days 1-30)
+──────────────────────────────
+
+Week 1-2: Technical Discovery
+• API documentation review and technical requirements gathering
+• Security and compliance assessment
+• Integration architecture design and approval
+
+Week 3-4: Core Integration Development
+• API connectivity implementation
+• Data mapping and synchronization setup
+• Initial testing and validation protocols
+
+Phase 2: Pilot Program (Days 31-60)
+──────────────────────────────
+
+Week 5-6: Pilot Setup
+• Limited customer pilot group selection
+• Training materials and support documentation
+• Pilot monitoring and feedback systems
+
+Week 7-8: Pilot Execution
+• Active pilot program with selected customers
+• Performance monitoring and data collection
+• Issue identification and resolution
+
+Phase 3: Full Launch (Days 61-90)
+──────────────────────────────
+
+Week 9-10: Launch Preparation
+• Full integration testing and quality assurance
+• Marketing materials and communication strategies
+• Support team training and process documentation
+
+Week 11-12: Market Launch
+• Public announcement and customer communication
+• Full customer onboarding and support activation
+• Performance tracking and optimization
+
+Phase 4: Scale and Optimize (Days 90+)
+──────────────────────────────
+
+Ongoing Activities:
+• Performance monitoring and optimization
+• Customer feedback integration and product improvements
+• Expansion planning and additional integration opportunities
+• Quarterly business reviews and strategic alignment assessment
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+FINANCIAL PROJECTIONS
+
+Conservative Scenario
+────────────────────────
+
+Assumptions:
+• Customer adoption rate: [X]% in Year 1
+• Average revenue per customer: $[XXX]/month
+• Partnership revenue share: [XX]% to ${companyName}
+• Implementation costs: $[XX,XXX]
+
+Year 1 Projections:
+• Month 1-3: $[X,XXX] (pilot phase)
+• Month 4-6: $[XX,XXX] (early adoption)
+• Month 7-9: $[XX,XXX] (growth phase)
+• Month 10-12: $[XX,XXX] (mature adoption)
+• Total Year 1 Revenue: $[XXX,XXX]
+
+Realistic Scenario
+────────────────────────
+
+Assumptions:
+• Customer adoption rate: [X]% in Year 1
+• Average revenue per customer: $[XXX]/month
+• Partnership revenue share: [XX]% to ${companyName}
+• Implementation costs: $[XX,XXX]
+
+Year 1 Projections:
+• Q1: $[XX,XXX]
+• Q2: $[XX,XXX]
+• Q3: $[XXX,XXX]
+• Q4: $[XXX,XXX]
+• Total Year 1 Revenue: $[X.X]M
+
+Years 2-3 Quarterly Projections:
+• Year 2: $[X.X]M
+• Year 3: $[X.X]M
+
+Optimistic Scenario
+────────────────────────
+
+Assumptions:
+• Customer adoption rate: [X]% in Year 1
+• Average revenue per customer: $[XXX]/month
+• Partnership revenue share: [XX]% to ${companyName}
+• Implementation costs: $[XX,XXX]
+
+Year 1 Projections:
+• Q1: $[XX,XXX]
+• Q2: $[XXX,XXX]
+• Q3: $[XXX,XXX]
+• Q4: $[X.X]M
+• Total Year 1 Revenue: $[X.X]M
+
+ROI Analysis:
+• Break-even Timeline: [X] months
+• 3-Year NPV: $[X.X]M
+• IRR: [XX]%
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+SUCCESS METRICS & GOVERNANCE
+
+Key Performance Indicators
+────────────────────────
+
+Partnership Health Metrics:
+• Integration uptime: >99.5%
+• Customer satisfaction score: >8.5/10
+• Support ticket resolution time: <24 hours
+• API response time: <200ms
+
+Business Performance Metrics:
+• Monthly recurring revenue growth: [X]% month-over-month
+• Customer adoption rate: [X]% of eligible customers
+• Revenue per partnership customer: $[XXX]/month
+• Customer lifetime value increase: [X]%
+
+Review Cadence
+────────────────────────
+
+Weekly Operational Reviews:
+• Technical performance and issue resolution
+• Customer support and satisfaction tracking
+• Immediate tactical adjustments
+
+Monthly Business Reviews:
+• Financial performance against targets
+• Customer adoption and engagement metrics
+• Product feedback and improvement opportunities
+
+Quarterly Strategic Reviews:
+• Partnership strategic alignment assessment
+• Market opportunity evaluation and expansion planning
+• Competitive landscape analysis and positioning
+
+Escalation Processes
+────────────────────────
+
+Level 1: Operational Issues
+• Technical problems, support escalations
+• Response time: <4 hours
+• Resolution team: Technical leads from both companies
+
+Level 2: Business Issues
+• Performance concerns, customer complaints
+• Response time: <24 hours
+• Resolution team: Partnership managers and business leads
+
+Level 3: Strategic Issues
+• Partnership direction, major conflicts
+• Response time: <72 hours
+• Resolution team: C-level executives from both companies
+
+Exit Strategies
+────────────────────────
+
+Planned Exit Scenarios:
+• Natural contract expiration with evaluation for renewal
+• Strategic pivot requiring partnership restructuring
+• Acquisition by third party affecting partnership dynamics
+
+Unplanned Exit Triggers:
+• Persistent technical integration failures
+• Irreconcilable business model conflicts
+• Regulatory or compliance issues
+• Material breach of partnership agreement
+
+Exit Process:
+• 90-day notice period for contract termination
+• Customer transition plan and support continuity
+• Data migration and technical disconnection procedures
+• Post-partnership relationship management and potential future collaboration
+
+RECOMMENDATION: [PROCEED/PROCEED WITH MODIFICATIONS/DO NOT PROCEED]
+
+Based on the comprehensive analysis, the ${companyName} × ${partnerName} partnership shows [overall assessment]. The [XX/60] viability score indicates [interpretation]. Primary recommendation is to [specific next steps] with particular attention to [key areas requiring focus].
+
+Focus on implementing the clean slate approach and using professional consulting formatting throughout the analysis.`;
+
+  try {
+    const response = await openai.chat.completions.create({
+      model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
+      messages: [
+        {
+          role: "system",
+          content: "You are a senior partnership strategy consultant specializing in technology company alliances. Generate comprehensive partnership viability analyses with McKinsey-level depth, specific financial modeling, and actionable implementation roadmaps. Use real industry benchmarks and partnership examples where relevant.\n\nCRITICAL FORMATTING RULES:\n- Use ONLY plain text formatting - NO LaTeX, NO HTML, NO markdown\n- Use simple symbols: × for multiplication, = for equals, ━ for separators\n- Use plain parentheses () for groupings\n- All content must be formatted for clean copy/paste into Google Docs\n- Generate 2,000-2,500 words of strategic partnership analysis"
+        },
+        {
+          role: "user",
+          content: prompt
+        }
+      ],
+      temperature: 0.3,
+      max_tokens: 8000
+    });
+
+    let reportContent = response.choices[0].message.content;
+    
+    // Clean any LaTeX formatting that might slip through
+    if (reportContent) {
+      reportContent = reportContent
+        .replace(/\\text\{([^}]+)\}/g, '$1')  // Remove \text{} wrappers
+        .replace(/\\times/g, '×')             // Replace LaTeX times with multiplication symbol
+        .replace(/\\cdot/g, '×')              // Replace LaTeX cdot with multiplication symbol
+        .replace(/\\div/g, '÷')               // Replace LaTeX div with division symbol
+        .replace(/\\equals/g, '=')            // Replace LaTeX equals
+        .replace(/\\\(/g, '(')                // Replace LaTeX parentheses
+        .replace(/\\\)/g, ')')                // Replace LaTeX parentheses
+        .replace(/\\,/g, ',')                 // Replace LaTeX comma spacing
+        .replace(/\\\$/g, '$')                // Replace escaped dollar signs
+        .replace(/\\&/g, '&');                // Replace escaped ampersands
+    }
+    
+    return {
+      report: reportContent
+    };
+  } catch (error) {
+    console.error('Error generating partnership viability analysis:', error);
+    throw new Error('Failed to generate partnership viability analysis');
+  }
+}
+
 export async function generateGoDecision(sprintData: any, allModuleData: any) {
   try {
     const prompt = `
