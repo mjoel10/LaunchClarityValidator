@@ -656,10 +656,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(400).json({ message: "Missing sprint or intake data" });
       }
       
-      // Filter completed modules with reports
-      const completedModules = modules.filter(module => 
-        module.isCompleted && (module.aiAnalysis as any)?.report
-      );
+      // Filter completed modules (don't filter by report presence - let OpenAI function handle data extraction)
+      const completedModules = modules.filter(module => module.isCompleted);
+      
+      console.log('=== API ROUTE DEBUG ===');
+      console.log('Total modules:', modules.length);
+      console.log('Completed modules:', completedModules.length);
+      console.log('All module types:', modules.map(m => ({ type: m.moduleType, completed: m.isCompleted })));
       
       if (completedModules.length < 3) {
         return res.status(400).json({ 
