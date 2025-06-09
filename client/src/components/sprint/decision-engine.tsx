@@ -1,8 +1,12 @@
+import { useState } from 'react';
+import { useMutation } from '@tanstack/react-query';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Target, TrendingUp, AlertTriangle, CheckCircle2, XCircle, RotateCcw } from 'lucide-react';
+import { Target, TrendingUp, AlertTriangle, CheckCircle2, XCircle, RotateCcw, FileText, Copy, Download } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
+import { apiRequest } from '@/lib/queryClient';
 
 interface DecisionEngineProps {
   sprintId: number;
@@ -12,50 +16,48 @@ interface DecisionEngineProps {
 }
 
 export default function DecisionEngine({ sprintId, tier, modules, intakeData }: DecisionEngineProps) {
+  const [analysisReport, setAnalysisReport] = useState<string | null>(null);
+  const [recommendation, setRecommendation] = useState<string | null>(null);
+  const [confidence, setConfidence] = useState<number | null>(null);
+  const [modulesAnalyzed, setModulesAnalyzed] = useState<number>(0);
+  const { toast } = useToast();
+
   const completedModules = modules?.filter(m => m.isCompleted) || [];
   const totalModules = modules?.length || 1;
   const completionRate = (completedModules.length / totalModules) * 100;
-  
-  // Analyze key signals from completed modules
-  const analyzeSignals = () => {
-    const signals = {
-      marketValidation: 0,
-      customerDemand: 0,
-      businessViability: 0,
-      riskLevel: 0
-    };
+  // Generate comprehensive decision analysis
+  const generateAnalysisMutation = useMutation({
+    mutationFn: async () => {
+      const response = await apiRequest("POST", `/api/sprints/${sprintId}/generate-decision`);
+      return response.json();
+    },
+    onSuccess: (data) => {
+      setAnalysisReport(data.report);
+      setRecommendation(data.recommendation);
+      setConfidence(data.confidence);
+      setModulesAnalyzed(data.modulesAnalyzed);
+      toast({
+        title: "Analysis Complete",
+        description: `Generated comprehensive ${data.recommendation} recommendation based on ${data.modulesAnalyzed} modules.`,
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        title: "Analysis Failed",
+        description: error.message || "Failed to generate decision analysis",
+        variant: "destructive",
+      });
+    },
+  });
 
-    completedModules.forEach(module => {
-      const data = module.generatedData;
-      if (!data) return;
-
-      // Extract signals based on module type
-      switch (module.moduleType) {
-        case 'market_simulation':
-          signals.marketValidation += data.marketSize > 1000000 ? 20 : 10;
-          break;
-        case 'demand_test_tracker':
-          signals.customerDemand += data.conversionRate > 0.05 ? 25 : 5;
-          break;
-        case 'business_model_simulator':
-          signals.businessViability += data.breakEvenMonths < 18 ? 20 : 0;
-          break;
-        case 'enhanced_market_intel':
-          signals.marketValidation += data.competitorCount < 5 ? 15 : 5;
-          break;
-        case 'async_interviews':
-          signals.customerDemand += data.positiveResponses > 70 ? 20 : 10;
-          break;
-        case 'full_interview_suite':
-          signals.customerDemand += data.willingnessToPay > 0.6 ? 25 : 10;
-          break;
-      }
-    });
-
-    // Calculate risk based on negative indicators
-    signals.riskLevel = Math.max(0, 100 - signals.marketValidation - signals.customerDemand);
-    
-    return signals;
+  const copyReport = () => {
+    if (analysisReport) {
+      navigator.clipboard.writeText(analysisReport);
+      toast({
+        title: "Report Copied",
+        description: "The decision analysis report has been copied to your clipboard.",
+      });
+    }
   };
 
   // Calculate decision based on tier, completion, and signal analysis

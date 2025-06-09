@@ -2322,61 +2322,313 @@ Focus on implementing the clean slate approach and using professional consulting
   }
 }
 
-export async function generateGoDecision(sprintData: any, allModuleData: any) {
-  try {
-    const prompt = `
-You are the LaunchClarity Analysis Engine. Make a Go/Defer/Kill recommendation based on all sprint data:
+export async function generateGoDecision(sprintData: any, completedModules: any[]) {
+  if (!openai) {
+    throw new Error('OpenAI client not initialized');
+  }
 
-Sprint Tier: ${sprintData.tier}
-Market Simulation Results: ${JSON.stringify(allModuleData.marketSimulation)}
-Risk Assessment: ${JSON.stringify(allModuleData.riskAssessment)}
-Competitive Analysis: ${JSON.stringify(allModuleData.competitiveIntel)}
+  const companyName = sprintData.intakeData?.companyName || 'Your Company';
+  const industry = sprintData.intakeData?.industry || 'Technology';
+  const targetCustomer = sprintData.intakeData?.targetCustomerDescription || 'target customers';
+  const sprintTier = sprintData.tier || 'discovery';
+  const isPartnership = sprintData.intakeData?.isPartnershipEvaluation;
+  const partnerName = sprintData.intakeData?.potentialPartnerName || '';
 
-Provide a comprehensive decision recommendation with rationale.
+  // Extract all completed module reports
+  const moduleReports = {};
+  let totalModules = 0;
+  let completedCount = 0;
 
-Respond with JSON in this exact format:
-{
-  "recommendation": "Go",
-  "confidence": 75,
-  "rationale": "Strong market validation with manageable risks",
-  "keyFactors": [
-    "68% positive market response",
-    "Clear competitive advantage",
-    "Manageable technical risks"
-  ],
-  "conditions": [
-    "Secure experienced technical co-founder",
-    "Validate pricing with 50+ prospects",
-    "Build MVP within 6 months"
-  ],
-  "nextSteps": [
-    "Conduct 25 customer discovery interviews",
-    "Build technical prototype", 
-    "Develop go-to-market strategy"
-  ],
-  "resourceRequirements": {
-    "funding": "$500,000",
-    "timeline": "6 months",
-    "team": "3-4 people"
-  },
-  "alternativeScenarios": [
-    {
-      "scenario": "Pivot to B2B2C model",
-      "rationale": "Reduce customer acquisition costs",
-      "probability": 30
+  completedModules.forEach(module => {
+    totalModules++;
+    if (module.isCompleted && module.aiAnalysis?.report) {
+      completedCount++;
+      moduleReports[module.moduleType] = module.aiAnalysis.report;
     }
-  ]
-}`;
+  });
 
+  const completionRate = (completedCount / totalModules) * 100;
+
+  if (completedCount < 3) {
+    throw new Error('Insufficient data: At least 3 completed modules required for decision analysis');
+  }
+
+  // Build comprehensive prompt with all module data
+  let moduleAnalysisText = '';
+  Object.entries(moduleReports).forEach(([moduleType, report]) => {
+    moduleAnalysisText += `\n\n=== ${moduleType.toUpperCase().replace(/_/g, ' ')} ===\n${report}\n`;
+  });
+
+  const prompt = `Generate a comprehensive GO/PIVOT/KILL decision analysis of 7-10 pages for ${companyName} based on ${completedCount} completed validation modules.
+
+COMPANY CONTEXT:
+- Company: ${companyName}
+- Industry: ${industry}
+- Target Market: ${targetCustomer}
+- Sprint Tier: ${sprintTier}
+- Completion Rate: ${completionRate.toFixed(1)}%
+${isPartnership ? `- Partnership Context: Evaluating collaboration with ${partnerName}` : ''}
+
+COMPLETED MODULE REPORTS:
+${moduleAnalysisText}
+
+CRITICAL REQUIREMENTS:
+- Generate 7-10 pages (3,500-5,000 words) of comprehensive decision analysis
+- Provide clear GO/PIVOT/KILL recommendation with confidence percentage
+- Synthesize insights across all ${completedCount} completed modules
+- Identify patterns, contradictions, and cross-module validation
+- Include specific next steps and implementation roadmap
+- Use data-driven reasoning with specific evidence from module reports
+- Address risks and mitigation strategies
+
+FORMAT WITH EXACT PROFESSIONAL CONSULTING STANDARD:
+
+STRATEGIC DECISION ANALYSIS
+${companyName}${isPartnership ? ` × ${partnerName} Partnership` : ''} Go/Pivot/Kill Assessment
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+EXECUTIVE SUMMARY
+
+Based on comprehensive analysis of ${completedCount} validation modules, this strategic assessment evaluates the viability of ${companyName}'s business proposition in the ${industry} sector. The analysis synthesizes market intelligence, competitive positioning, risk factors, and customer validation data to provide a data-driven recommendation.
+
+${isPartnership ? `The partnership evaluation with ${partnerName} adds strategic complexity requiring careful assessment of collaboration benefits versus independent execution risks.` : ''}
+
+RECOMMENDATION: [GO/PIVOT/KILL]
+CONFIDENCE LEVEL: [XX]%
+RATIONALE: [2-3 sentence summary of key reasoning]
+
+KEY DECISION FACTORS:
+• Market Opportunity: [Specific finding from market sizing/competitive analysis]
+• Customer Validation: [Specific finding from customer voice simulation]
+• Competitive Position: [Specific finding from competitive intelligence]
+• Risk Profile: [Specific finding from risk assessment]
+• Implementation Feasibility: [Cross-module assessment]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CROSS-MODULE SYNTHESIS
+
+Data Convergence Analysis
+────────────────────────
+
+[Analyze where multiple modules provide supporting or conflicting evidence on key business assumptions. Identify patterns across market sizing, competitive intelligence, customer voice, and risk assessment that either strengthen or weaken the business case.]
+
+Validation Strength Assessment
+────────────────────────
+
+[Evaluate the quality and consistency of validation data across modules. Rate the reliability of insights and highlight areas where multiple data sources confirm or contradict each other.]
+
+Critical Assumption Validation
+────────────────────────
+
+[Cross-reference the original assumptions from intake with findings across all modules. Provide specific evidence for which assumptions are validated, challenged, or require further investigation.]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+MODULE-BY-MODULE DECISION IMPACT
+
+[For each completed module, extract the 3-5 most decision-relevant insights and their impact on the GO/PIVOT/KILL recommendation]
+
+Market Sizing Analysis Impact
+────────────────────────
+
+Key Insights:
+• [Specific market size finding and implication]
+• [Specific growth trend and implication]
+• [Specific competitive landscape finding]
+
+Decision Relevance: [High/Medium/Low impact on recommendation]
+
+Competitive Intelligence Impact
+────────────────────────
+
+Key Insights:
+• [Specific competitive positioning finding]
+• [Specific market gap or opportunity]
+• [Specific competitive threat or advantage]
+
+Decision Relevance: [High/Medium/Low impact on recommendation]
+
+[Continue for all completed modules]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+RISK-ADJUSTED RECOMMENDATION
+
+Primary Recommendation: [GO/PIVOT/KILL]
+────────────────────────
+
+Confidence Level: [XX]%
+
+Supporting Evidence:
+• [Specific data point from modules supporting this recommendation]
+• [Specific data point from modules supporting this recommendation]
+• [Specific data point from modules supporting this recommendation]
+
+Contradicting Evidence:
+• [Specific concerns or negative findings from modules]
+• [Specific risks or challenges identified]
+
+Risk Mitigation Requirements:
+• [Specific action required to address identified risks]
+• [Specific action required to address identified risks]
+• [Specific action required to address identified risks]
+
+Alternative Scenario Analysis
+────────────────────────
+
+PIVOT Option: [If recommendation is GO, what would trigger a PIVOT?]
+KILL Triggers: [What specific conditions would warrant stopping the initiative?]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+IMPLEMENTATION ROADMAP
+
+Immediate Next Steps (Days 1-30)
+────────────────────────
+
+[Based on the recommendation, provide specific, actionable next steps with owners and timelines]
+
+• [Specific action item based on module findings]
+• [Specific action item based on module findings]
+• [Specific action item based on module findings]
+
+Short-term Objectives (Days 31-90)
+────────────────────────
+
+[Medium-term actions required to execute the recommendation]
+
+• [Specific milestone or objective]
+• [Specific milestone or objective]
+• [Specific milestone or objective]
+
+Long-term Strategic Moves (3-12 months)
+────────────────────────
+
+[Strategic initiatives required for long-term success]
+
+• [Strategic initiative based on analysis]
+• [Strategic initiative based on analysis]
+• [Strategic initiative based on analysis]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+MONITORING & SUCCESS METRICS
+
+Key Performance Indicators
+────────────────────────
+
+Based on module findings, track these metrics to validate the decision:
+
+Market Metrics:
+• [Specific metric from market analysis with target]
+• [Specific metric from market analysis with target]
+
+Customer Metrics:
+• [Specific metric from customer validation with target]
+• [Specific metric from customer validation with target]
+
+Competitive Metrics:
+• [Specific metric from competitive analysis with target]
+• [Specific metric from competitive analysis with target]
+
+Decision Review Triggers
+────────────────────────
+
+Schedule decision reviews when:
+• [Specific condition that would warrant reassessment]
+• [Specific condition that would warrant reassessment]
+• [Specific condition that would warrant reassessment]
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+APPENDIX: MODULE SUMMARY
+
+[Brief 2-3 sentence summary of each completed module's key findings]
+
+${Object.keys(moduleReports).map(moduleType => `
+${moduleType.replace(/_/g, ' ').toUpperCase()}:
+[2-3 sentence summary of this module's key findings and implications]
+`).join('')}
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+FINAL RECOMMENDATION
+
+After comprehensive analysis of ${completedCount} validation modules covering market opportunity, competitive landscape, customer validation, and risk assessment, the recommended course of action for ${companyName} is:
+
+[CLEAR, DEFINITIVE RECOMMENDATION WITH SPECIFIC REASONING]
+
+This recommendation is based on [specific cross-module evidence] and carries a [XX]% confidence level based on [specific data quality and convergence factors].
+
+Focus on cross-module synthesis, data-driven insights, and actionable recommendations. Ensure all analysis references specific findings from the actual module reports provided.`;
+
+  try {
     const response = await openai.chat.completions.create({
-      model: "gpt-4o",
-      messages: [{ role: "user", content: prompt }],
-      response_format: { type: "json_object" },
+      model: "gpt-4o", // the newest OpenAI model is "gpt-4o" which was released May 13, 2024. do not change this unless explicitly requested by the user
+      messages: [
+        {
+          role: "system",
+          content: "You are a senior strategy consultant specializing in business validation and go-to-market decisions. Generate comprehensive strategic decision analyses that synthesize multiple data sources into actionable recommendations. Your analysis must provide specific, evidence-based reasoning for GO/PIVOT/KILL decisions with clear implementation roadmaps.\n\nCRITICAL FORMATTING RULES:\n- Use ONLY plain text formatting - NO LaTeX, NO HTML, NO markdown\n- Use simple symbols: × for multiplication, = for equals, ━ for separators\n- Use plain parentheses () for groupings\n- All content must be formatted for clean copy/paste into Google Docs\n- Generate 3,500-5,000 words of comprehensive strategic analysis"
+        },
+        {
+          role: "user",
+          content: prompt
+        }
+      ],
+      temperature: 0.3,
+      max_tokens: 16000
     });
 
-    return JSON.parse(response.choices[0].message.content || '{}');
+    let decisionContent = response.choices[0].message.content;
+    
+    // Clean any LaTeX formatting that might slip through
+    if (decisionContent) {
+      decisionContent = decisionContent
+        .replace(/\\text\{([^}]+)\}/g, '$1')  // Remove \text{} wrappers
+        .replace(/\\times/g, '×')             // Replace LaTeX times with multiplication symbol
+        .replace(/\\cdot/g, '×')              // Replace LaTeX cdot with multiplication symbol
+        .replace(/\\div/g, '÷')               // Replace LaTeX div with division symbol
+        .replace(/\\equals/g, '=')            // Replace LaTeX equals
+        .replace(/\\\(/g, '(')                // Replace LaTeX parentheses
+        .replace(/\\\)/g, ')')                // Replace LaTeX parentheses
+        .replace(/\\,/g, ',')                 // Replace LaTeX comma spacing
+        .replace(/\\\$/g, '$')                // Replace escaped dollar signs
+        .replace(/\\&/g, '&');                // Replace escaped ampersands
+    }
+    
+    // Extract structured recommendation data for UI components
+    const extractRecommendation = (content: string) => {
+      const lines = content.split('\n');
+      let recommendation = 'GO';
+      let confidence = 75;
+      
+      for (const line of lines) {
+        if (line.includes('RECOMMENDATION:')) {
+          const match = line.match(/RECOMMENDATION:\s*(GO|PIVOT|KILL)/i);
+          if (match) recommendation = match[1].toUpperCase();
+        }
+        if (line.includes('CONFIDENCE LEVEL:')) {
+          const match = line.match(/CONFIDENCE LEVEL:\s*(\d+)%/);
+          if (match) confidence = parseInt(match[1]);
+        }
+      }
+      
+      return { recommendation, confidence };
+    };
+    
+    const { recommendation, confidence } = extractRecommendation(decisionContent);
+    
+    return {
+      report: decisionContent,
+      recommendation,
+      confidence,
+      completionRate,
+      modulesAnalyzed: completedCount
+    };
   } catch (error) {
-    console.error('Error generating go decision:', error);
-    throw new Error("Failed to generate go/defer/kill decision");
+    console.error('Error generating strategic decision analysis:', error);
+    throw new Error('Failed to generate strategic decision analysis');
   }
 }

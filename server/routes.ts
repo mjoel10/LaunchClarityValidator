@@ -642,6 +642,46 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
+  // Generate comprehensive decision analysis
+  app.post("/api/sprints/:id/generate-decision", async (req, res) => {
+    try {
+      const sprintId = Number(req.params.id);
+      
+      // Get sprint data and intake information
+      const sprint = await storage.getSprintById(sprintId);
+      const intakeData = await storage.getIntakeDataBySprintId(sprintId);
+      const modules = await storage.getSprintModules(sprintId);
+      
+      if (!sprint || !intakeData) {
+        return res.status(400).json({ message: "Missing sprint or intake data" });
+      }
+      
+      // Filter completed modules with reports
+      const completedModules = modules.filter(module => 
+        module.isCompleted && (module.aiAnalysis as any)?.report
+      );
+      
+      if (completedModules.length < 3) {
+        return res.status(400).json({ 
+          message: `Insufficient data: At least 3 completed modules required for decision analysis. Currently have ${completedModules.length} completed modules.` 
+        });
+      }
+      
+      // Generate comprehensive decision analysis
+      const sprintData = {
+        ...sprint,
+        intakeData
+      };
+      
+      const decisionAnalysis = await generateGoDecision(sprintData, completedModules);
+      
+      res.json(decisionAnalysis);
+    } catch (error: any) {
+      console.error('Error generating decision analysis:', error);
+      res.status(500).json({ message: "Failed to generate decision analysis: " + error.message });
+    }
+  });
+
   // AI Analysis routes
   app.post("/api/modules/:id/regenerate-analysis", async (req, res) => {
     try {
