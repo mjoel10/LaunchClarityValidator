@@ -2334,52 +2334,86 @@ export async function generateGoDecision(sprintData: any, completedModules: any[
   const isPartnership = sprintData.intakeData?.isPartnershipEvaluation;
   const partnerName = sprintData.intakeData?.potentialPartnerName || '';
 
-  // Extract all completed module reports
+  // Extract all completed module reports with comprehensive data extraction
   const moduleReports = {};
-  let totalModules = 0;
+  let totalModules = completedModules.length;
   let completedCount = 0;
 
+  console.log('=== DECISION ENGINE DEBUG ===');
+  console.log('Total modules provided:', totalModules);
+  console.log('Module types found:', completedModules.map(m => m.moduleType));
+
   completedModules.forEach(module => {
-    totalModules++;
-    if (module.isCompleted && module.aiAnalysis?.report) {
+    if (module.isCompleted) {
       completedCount++;
-      moduleReports[module.moduleType] = module.aiAnalysis.report;
+      console.log(`Processing module: ${module.moduleType}, has aiAnalysis:`, !!module.aiAnalysis);
+      
+      // Extract report content from different possible locations
+      let reportContent = null;
+      
+      if (module.aiAnalysis?.report) {
+        reportContent = module.aiAnalysis.report;
+      } else if (module.aiAnalysis?.playbook) {
+        reportContent = module.aiAnalysis.playbook;
+      } else if (module.generatedData) {
+        reportContent = JSON.stringify(module.generatedData, null, 2);
+      } else if (module.aiAnalysis) {
+        reportContent = JSON.stringify(module.aiAnalysis, null, 2);
+      }
+      
+      if (reportContent) {
+        moduleReports[module.moduleType] = reportContent;
+        console.log(`Found report content for ${module.moduleType}, length:`, reportContent.length);
+      } else {
+        console.log(`No report content found for ${module.moduleType}`);
+      }
     }
   });
 
   const completionRate = (completedCount / totalModules) * 100;
+  console.log('Completed modules with reports:', Object.keys(moduleReports).length);
+  console.log('Module types with reports:', Object.keys(moduleReports));
 
-  if (completedCount < 3) {
-    throw new Error('Insufficient data: At least 3 completed modules required for decision analysis');
+  if (Object.keys(moduleReports).length < 3) {
+    throw new Error(`Insufficient data: At least 3 completed modules with reports required for decision analysis. Found ${Object.keys(moduleReports).length} modules with reports: ${Object.keys(moduleReports).join(', ')}`);
   }
 
   // Build comprehensive prompt with all module data
   let moduleAnalysisText = '';
   Object.entries(moduleReports).forEach(([moduleType, report]) => {
-    moduleAnalysisText += `\n\n=== ${moduleType.toUpperCase().replace(/_/g, ' ')} ===\n${report}\n`;
+    const moduleTitle = moduleType.toUpperCase().replace(/_/g, ' ');
+    moduleAnalysisText += `\n\n━━━ ${moduleTitle} MODULE REPORT ━━━\n${report}\n━━━ END ${moduleTitle} ━━━\n`;
   });
 
-  const prompt = `Generate a comprehensive GO/PIVOT/KILL decision analysis of 7-10 pages for ${companyName} based on ${completedCount} completed validation modules.
+  const prompt = `You are a senior strategy consultant conducting a comprehensive GO/PIVOT/KILL decision analysis for ${companyName}. 
+
+CRITICAL DATA AUTHENTICITY REQUIREMENTS:
+- Extract ONLY authentic insights from the actual module reports provided below
+- Use REAL data points, metrics, and findings from each module - NO FABRICATED NUMBERS
+- Cite specific modules when referencing insights (e.g., "Market Sizing Analysis shows...")
+- Cross-reference findings between modules to identify data convergence or contradictions
+- Base confidence percentage on actual data quality and convergence across modules
 
 COMPANY CONTEXT:
 - Company: ${companyName}
 - Industry: ${industry}
 - Target Market: ${targetCustomer}
-- Sprint Tier: ${sprintTier}
-- Completion Rate: ${completionRate.toFixed(1)}%
+- Sprint Tier: ${sprintTier} (${sprintTier === 'discovery' ? 'DESK RESEARCH ONLY - NO IMPLEMENTATION ROADMAP' : 'INCLUDES IMPLEMENTATION PLANNING'})
+- Modules Analyzed: ${Object.keys(moduleReports).length} completed modules
 ${isPartnership ? `- Partnership Context: Evaluating collaboration with ${partnerName}` : ''}
 
-COMPLETED MODULE REPORTS:
+ACTUAL MODULE REPORTS TO ANALYZE:
 ${moduleAnalysisText}
 
-CRITICAL REQUIREMENTS:
-- Generate 7-10 pages (3,500-5,000 words) of comprehensive decision analysis
-- Provide clear GO/PIVOT/KILL recommendation with confidence percentage
-- Synthesize insights across all ${completedCount} completed modules
-- Identify patterns, contradictions, and cross-module validation
-- Include specific next steps and implementation roadmap
-- Use data-driven reasoning with specific evidence from module reports
-- Address risks and mitigation strategies
+ANALYSIS REQUIREMENTS:
+- Generate 7-10 pages analyzing these ${Object.keys(moduleReports).length} specific modules
+- Extract real findings from each module report (not generic assumptions)
+- Provide GO/PIVOT/KILL recommendation based on actual data convergence
+- Calculate confidence percentage based on data quality and consistency across modules
+- Identify specific contradictions or supporting evidence between modules
+- Reference which module provided each key insight
+${sprintTier === 'discovery' ? '- NO IMPLEMENTATION ROADMAP (Discovery tier focuses on initial validation only)' : '- Include implementation roadmap and next steps'}
+- Focus on cross-module synthesis using authentic data points
 
 FORMAT WITH EXACT PROFESSIONAL CONSULTING STANDARD:
 
@@ -2390,20 +2424,20 @@ ${companyName}${isPartnership ? ` × ${partnerName} Partnership` : ''} Go/Pivot/
 
 EXECUTIVE SUMMARY
 
-Based on comprehensive analysis of ${completedCount} validation modules, this strategic assessment evaluates the viability of ${companyName}'s business proposition in the ${industry} sector. The analysis synthesizes market intelligence, competitive positioning, risk factors, and customer validation data to provide a data-driven recommendation.
+Based on comprehensive analysis of ${Object.keys(moduleReports).length} validation modules (${Object.keys(moduleReports).map(m => m.replace(/_/g, ' ')).join(', ')}), this strategic assessment evaluates the viability of ${companyName}'s business proposition in the ${industry} sector. The analysis synthesizes authentic findings from completed validation modules to provide a data-driven recommendation.
 
-${isPartnership ? `The partnership evaluation with ${partnerName} adds strategic complexity requiring careful assessment of collaboration benefits versus independent execution risks.` : ''}
+${isPartnership ? `The partnership evaluation with ${partnerName} requires assessment based on actual partnership analysis data from the completed modules.` : ''}
 
-RECOMMENDATION: [GO/PIVOT/KILL]
-CONFIDENCE LEVEL: [XX]%
-RATIONALE: [2-3 sentence summary of key reasoning]
+RECOMMENDATION: [GO/PIVOT/KILL - based on actual data convergence]
+CONFIDENCE LEVEL: [XX]% - calculated from data quality and consistency across modules
+RATIONALE: [2-3 sentence summary citing specific module findings]
 
-KEY DECISION FACTORS:
-• Market Opportunity: [Specific finding from market sizing/competitive analysis]
-• Customer Validation: [Specific finding from customer voice simulation]
-• Competitive Position: [Specific finding from competitive intelligence]
-• Risk Profile: [Specific finding from risk assessment]
-• Implementation Feasibility: [Cross-module assessment]
+KEY DECISION FACTORS (with module citations):
+• Market Opportunity: [Extract specific data from Market Sizing Analysis module]
+• Customer Validation: [Extract specific data from Customer Voice Simulation module]
+• Competitive Position: [Extract specific data from Competitive Intelligence module]
+• Risk Profile: [Extract specific data from Risk Assessment module]
+• Validation Strength: [Assessment based on actual module completion and data quality]
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -2481,7 +2515,7 @@ Alternative Scenario Analysis
 PIVOT Option: [If recommendation is GO, what would trigger a PIVOT?]
 KILL Triggers: [What specific conditions would warrant stopping the initiative?]
 
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+${sprintTier !== 'discovery' ? `━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 IMPLEMENTATION ROADMAP
 
@@ -2510,7 +2544,7 @@ Long-term Strategic Moves (3-12 months)
 
 • [Strategic initiative based on analysis]
 • [Strategic initiative based on analysis]
-• [Strategic initiative based on analysis]
+• [Strategic initiative based on analysis]` : ''}
 
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
@@ -2556,13 +2590,24 @@ ${moduleType.replace(/_/g, ' ').toUpperCase()}:
 
 FINAL RECOMMENDATION
 
-After comprehensive analysis of ${completedCount} validation modules covering market opportunity, competitive landscape, customer validation, and risk assessment, the recommended course of action for ${companyName} is:
+After comprehensive analysis of ${Object.keys(moduleReports).length} validation modules (${Object.keys(moduleReports).map(m => m.replace(/_/g, ' ')).join(', ')}), the recommended course of action for ${companyName} is:
 
-[CLEAR, DEFINITIVE RECOMMENDATION WITH SPECIFIC REASONING]
+[CLEAR, DEFINITIVE RECOMMENDATION WITH SPECIFIC REASONING FROM ACTUAL MODULE DATA]
 
-This recommendation is based on [specific cross-module evidence] and carries a [XX]% confidence level based on [specific data quality and convergence factors].
+This recommendation is based on [cite specific evidence from actual module reports] and carries a [XX]% confidence level calculated from [specific data quality assessment across the ${Object.keys(moduleReports).length} completed modules].
 
-Focus on cross-module synthesis, data-driven insights, and actionable recommendations. Ensure all analysis references specific findings from the actual module reports provided.`;
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+CRITICAL INSTRUCTIONS FOR ANALYSIS:
+1. Extract ONLY real data points from the provided module reports
+2. Reference specific modules when citing insights (e.g., "Risk Assessment identifies...")
+3. Calculate confidence based on actual data convergence between modules
+4. Identify real contradictions or supportive evidence across modules
+5. Base ALL metrics and findings on actual report content - NO FABRICATED DATA
+6. Focus on cross-module synthesis using authentic insights
+7. Ensure module count (${Object.keys(moduleReports).length}) matches actual modules analyzed
+
+Generate comprehensive analysis using ONLY the authentic data from these specific module reports.`;
 
   try {
     const response = await openai.chat.completions.create({
@@ -2625,7 +2670,7 @@ Focus on cross-module synthesis, data-driven insights, and actionable recommenda
       recommendation,
       confidence,
       completionRate,
-      modulesAnalyzed: completedCount
+      modulesAnalyzed: Object.keys(moduleReports).length
     };
   } catch (error) {
     console.error('Error generating strategic decision analysis:', error);
